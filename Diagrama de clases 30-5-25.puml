@@ -4,8 +4,30 @@ class Habitacion{
   string: id
   integer: capacidad
   float: precio
-  estado 
-  'HAY QUE HACER UN ENUM'
+}
+
+enum EstadoHabitacion {
+
+}
+
+class IndividualEstandar {
+
+}
+
+class DobleEstandar {
+
+}
+
+class DobleSuperior {
+
+}
+
+class SFP {
+
+}
+
+class SuiteDoble {
+
 }
 
 class Piso{
@@ -160,13 +182,13 @@ interface InterfazFacturas{
   BuscarFactura(): List
 }
 
-Piso *-- Habitacion
-Reserva -- Huesped
-Reserva o-- Habitacion
-Servicio -- Reserva
-Factura ..> Reserva : Use
-Factura *-- DetalleFactura
-Pago --* Factura  
+Piso "1" *-- "0..N" Habitacion
+Reserva "1..N" -- "0..N" Huesped
+Reserva "0..N" o-- "1..N" Habitacion
+Servicio "0..N" -- "0..N" Reserva
+Factura "0..1" ..> "1" Reserva : Use
+Factura "1" *-- "1..N" DetalleFactura
+Pago "0..N" --* "1" Factura  
 (Pago, Factura) .. Comprobante
 
 class Comprobante{
@@ -176,12 +198,12 @@ class Comprobante{
 Pago <|-- Tarjeta
 Pago <|-- Efectivo
 Pago <|-- Cheque
-Factura *-- NotaDeCredito
+Factura "1" *-- "0..N" NotaDeCredito
 Tarjeta <|-- Debito
 Tarjeta <|-- Credito
 Persona <|-- PersonaJuridica
 Persona <|-- PersonaFisica
-Persona *-- Contacto
+Persona "1" *-- "0..N" Contacto
 PersonaFisica <|-- Huesped
 
 InterfazHabitaciones <.. Habitacion
@@ -196,5 +218,10 @@ InterfazHuespedes <|.. InterfazGeneral
 InterfazUsuarios <|.. InterfazGeneral
 Usuario ..> InterfazUsuarios
 
-@enduml
+Habitacion <|-- IndividualEstandar
+Habitacion <|-- DobleEstandar
+Habitacion <|-- DobleSuperior
+Habitacion <|-- SFP
+Habitacion <|-- SuiteDoble
 
+@enduml
