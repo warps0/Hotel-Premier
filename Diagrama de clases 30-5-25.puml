@@ -126,23 +126,25 @@ class InterfazGeneral {
 
 interface InterfazUsuarios{
   Autenticar(): Error
+  CrearUsuario(): Usuario
+  ModificarUsuario(): Error
+  BorrarUsuario(): Error
+  BuscarUsuario(): List
 }
 
 interface InterfazHuespedes{
-  ObtenerHuespedes(nombre, apellido, tipo_dni, dni): List
-  DarAltaDeHuesped(): Error
-  DarBajaDeHuesped(): Error
+  CrearHuesped(): Huesped
   ModificarHuesped(): Error
+  BorrarHuesped(): Error
+  BuscarHuesped(nombre, apellido, tipo_dni, dni): List
 }
 
 interface InterfazHabitaciones{
-  ObtenerHabitaciones(): List
-  ObtenerHabitaciones(Piso): List
-  ObtenerHabitaciones(Huesped): List
-  ObtenerHabitaciones(Servicio): List 
-  HabitacionesDisponibles(fecha_ingreso,fecha_egreso): List
-  HabitacionesDisponibles(Piso, fecha_ingreso,fecha_egreso): List
-}
+  CrearHabitacion(): Habitacion
+  ModificarHabitacion(): Error
+  BorrarHabitacion(): Error
+  BuscarHabitacion(fecha_ingreso, fecha_egreso, Piso, Huesped, Servicio): List
+  }
 
 interface InterfazReservas{
   CrearReserva(): Reserva
