@@ -1,0 +1,198 @@
+@startuml
+
+class Habitacion{
+  string: id
+  integer: capacidad
+  float: precio
+  estado 
+  'HAY QUE HACER UN ENUM'
+}
+
+class Piso{
+  integer: id
+}
+
+class Huesped{
+  
+}
+
+class Reserva{
+  fecha_ingreso
+  fecha_egreso
+  
+  'Reserva a nombre de'
+  nombre
+  apellido
+  telefono
+}
+
+
+class Servicio {
+  costo_total
+  'ESPECIALIZAR LOS SERVICIOS'
+  
+  calcularCosto()
+}
+
+class Factura {
+  fecha_emision
+  costo_habitacion
+  costo_servicios
+  'TRATAR LOS TIPOS DE FACTURAS!'
+}
+
+class DetalleFactura {
+  nombre
+  cantidad
+  precio
+  
+  calcularPrecio()
+}
+
+class Pago {
+  monto_total
+  moneda
+}
+
+class Tarjeta{
+  numero
+  titular
+  emision
+  vencimiento
+  cod_seg
+  banco
+}
+
+class Credito{
+  
+}
+
+class Debito{
+
+}
+
+class Efectivo{
+  
+}
+
+class Cheque{
+  numero_ord
+  firma
+  banco
+  fecha_cobro
+}
+
+abstract class Persona {
+  nombre
+  pos_f_iva
+  id_fiscal 
+  'CUIT/CUIL'
+  nacionalidad
+  ocupacion
+}
+
+class Contacto {
+  telefono
+  correo
+  direccion
+}
+
+class PersonaFisica{
+  apellido
+  fecha_nac
+  tipo_dni
+  dni
+}
+
+class PersonaJuridica {
+
+}
+
+class Usuario {
+
+}
+
+class InterfazGeneral {
+  ObtenerResponsableDePago(): Error
+  ReservarHabitacion(): Error
+  MostrarEstadoHabitaciones(): Error
+  CancelarReserva(): Error
+  Facturar(): Error
+  GestionarListados(): Error
+  OcuparHabitacion(): Error
+  IngresarPago(): Error
+  IngresarNotaDeCredito(): Error
+}
+
+interface InterfazUsuarios{
+  Autenticar(): Error
+}
+
+interface InterfazHuespedes{
+  ObtenerHuespedes(nombre, apellido, tipo_dni, dni): List
+  DarAltaDeHuesped(): Error
+  DarBajaDeHuesped(): Error
+  ModificarHuesped(): Error
+}
+
+interface InterfazHabitaciones{
+  ObtenerHabitaciones(): List
+  ObtenerHabitaciones(Piso): List
+  ObtenerHabitaciones(Huesped): List
+  ObtenerHabitaciones(Servicio): List 
+  HabitacionesDisponibles(fecha_ingreso,fecha_egreso): List
+  HabitacionesDisponibles(Piso, fecha_ingreso,fecha_egreso): List
+}
+
+interface InterfazReservas{
+  CrearReserva(): Reserva
+  ModificarReserva(): Error
+  BorrarReserva(): Error
+  BuscarReserva(fecha_ingreso, fecha_egreso, Huesped): List
+}
+
+interface InterfazFacturas{
+  CrearFactura(): Factura
+  ModificarFactura(): Error
+  BorrarFactura(): Error
+  BuscarFactura(): List
+}
+
+Piso *-- Habitacion
+Reserva -- Huesped
+Reserva o-- Habitacion
+Servicio -- Reserva
+Factura ..> Reserva : Use
+Factura *-- DetalleFactura
+Pago --* Factura  
+(Pago, Factura) .. Comprobante
+
+class Comprobante{
+  
+}
+
+Pago <|-- Tarjeta
+Pago <|-- Efectivo
+Pago <|-- Cheque
+Factura *-- NotaDeCredito
+Tarjeta <|-- Debito
+Tarjeta <|-- Credito
+Persona <|-- PersonaJuridica
+Persona <|-- PersonaFisica
+Persona *-- Contacto
+PersonaFisica <|-- Huesped
+
+InterfazHabitaciones <.. Habitacion
+InterfazFacturas <.. Factura
+InterfazReservas <.. Reserva
+InterfazHuespedes <.. Huesped
+
+InterfazHabitaciones <|.. InterfazGeneral  
+InterfazFacturas <|.. InterfazGeneral
+InterfazReservas <|.. InterfazGeneral
+InterfazHuespedes <|.. InterfazGeneral
+InterfazUsuarios <|.. InterfazGeneral
+Usuario ..> InterfazUsuarios
+
+@enduml
+
