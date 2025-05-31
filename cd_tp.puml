@@ -1,0 +1,246 @@
+@startuml
+
+class Habitacion{
+  string: id
+  integer: capacidad
+  float: precio
+  estado: EstadoHabitacion
+}
+
+enum EstadoHabitacion {
+  DISPONIBLE
+  FUERA_DE_SERVICIO
+}
+
+class Error {
+  msg: string
+  codigo: string
+}
+
+class IndividualEstandar {
+
+}
+
+class DobleEstandar {
+
+}
+
+class DobleSuperior {
+
+}
+
+class SFP {
+
+}
+
+class SuiteDoble {
+
+}
+
+class Piso{
+  id: Integer
+}
+
+class Huesped{
+  
+}
+
+class Reserva{
+  fecha_ingreso: Date
+  fecha_egreso: Date
+  
+  'Reserva a nombre de'
+  nombre: String
+  apellido: String
+  telefono: String
+}
+
+class Estadia {
+  costos{[Servicio, costo]} : List
+  obtenerCosto([Servicio]): Integer
+}
+
+
+class Servicio {
+  costo_total: Integer
+  'ESPECIALIZAR LOS SERVICIOS'
+  
+  calcularCosto(): Integer
+}
+
+class Factura {
+  fecha_emision: Date
+  costo_habitacion: Integer
+  costo_servicios: Integer
+  tipo: Char
+}
+
+class DetalleFactura {
+  nombre_producto: String
+  cantidad_producto: Integer
+  precio_producto_unitario: Float
+  costo_total: Float
+}
+
+class NotaDeCredito {
+  descuento: integer
+  AplicarDescuento(): Error
+  
+}
+
+class Pago {
+  monto_total
+  moneda
+}
+
+class Tarjeta{
+  numero
+  titular
+  emision
+  vencimiento
+  cod_seg
+  banco
+}
+
+class Credito{
+  
+}
+
+class Debito{
+
+}
+
+class Efectivo{
+  
+}
+
+class Cheque{
+  numero_ord
+  firma
+  banco
+  fecha_cobro
+}
+
+abstract class Persona {
+  nombre
+  pos_f_iva
+  id_fiscal 
+  'CUIT/CUIL'
+  nacionalidad
+  ocupacion
+}
+
+class Contacto {
+  telefono
+  correo
+  direccion
+}
+
+class PersonaFisica{
+  apellido
+  fecha_nac
+  tipo_dni
+  dni
+}
+
+class PersonaJuridica {
+
+}
+
+class Usuario {
+  nombre_usuario: String
+  contrasenia: String
+}
+
+class InterfazGeneral {
+  ObtenerResponsableDePago(): Error
+  ReservarHabitacion(): Error
+  MostrarEstadoHabitaciones(): Error
+  CancelarReserva(): Error
+  Facturar(): Error
+  GestionarListados(): Error
+  OcuparHabitacion(): Error
+  IngresarPago(): Error
+  IngresarNotaDeCredito(): Error
+}
+
+interface InterfazUsuarios{
+  Autenticar(): Error
+  CrearUsuario(): Usuario
+  ModificarUsuario(): Error
+  BorrarUsuario(): Error
+  BuscarUsuario(): List
+}
+
+interface InterfazHuespedes{
+  CrearHuesped(): Huesped
+  ModificarHuesped(): Error
+  BorrarHuesped(): Error
+  BuscarHuesped(nombre, apellido, tipo_dni, dni): List
+}
+
+interface InterfazHabitaciones{
+  CrearHabitacion(): Habitacion
+  ModificarHabitacion(): Error
+  BorrarHabitacion(): Error
+  BuscarHabitacion(fecha_ingreso, fecha_egreso, Piso, Huesped, Servicio): List
+  }
+
+interface InterfazReservas{
+  CrearReserva(): Reserva
+  ModificarReserva(): Error
+  BorrarReserva(): Error
+  BuscarReserva(fecha_ingreso, fecha_egreso, Huesped): List
+}
+
+interface InterfazFacturas{
+  CrearFactura(): Factura
+  ModificarFactura(): Error
+  BorrarFactura(): Error
+  BuscarFactura(): List
+}
+
+Piso "1" *-- "0..N" Habitacion
+Reserva "1..N" -- "0..N" Huesped
+Reserva "0..N" o-- "1..N" Habitacion
+Reserva "0..1" -- "1" Estadia
+Servicio "0..N"--"0..N" Estadia
+Factura "0..1" ..> "1" Estadia : Use
+Factura "1" *-- "1..N" DetalleFactura
+Pago "0..N" --* "1" Factura  
+(Pago, Factura) .. Comprobante
+
+class Comprobante{
+  
+}
+
+Pago <|-- Tarjeta
+Pago <|-- Efectivo
+Pago <|-- Cheque
+Factura "1" *-- "0..N" NotaDeCredito
+Tarjeta <|-- Debito
+Tarjeta <|-- Credito
+Persona <|-- PersonaJuridica
+Persona <|-- PersonaFisica
+Persona "1" *-- "0..N" Contacto
+PersonaFisica <|-- Huesped
+
+InterfazHabitaciones ..> Habitacion
+InterfazFacturas ..> Factura
+InterfazReservas ..> Reserva
+InterfazHuespedes ..> Huesped
+
+InterfazHabitaciones <|.. InterfazGeneral  
+InterfazFacturas <|.. InterfazGeneral
+InterfazReservas <|.. InterfazGeneral
+InterfazHuespedes <|.. InterfazGeneral
+InterfazUsuarios <|.. InterfazGeneral
+Usuario ..> InterfazUsuarios
+
+Habitacion <|-- IndividualEstandar
+Habitacion <|-- DobleEstandar
+Habitacion <|-- DobleSuperior
+Habitacion <|-- SFP
+Habitacion <|-- SuiteDoble
+
+@enduml
