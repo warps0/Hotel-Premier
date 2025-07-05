@@ -1,0 +1,15 @@
+title Diagrama de Estado - Pago
+@startuml
+hide empty description
+[*] --> Ingresado : se cargan los datos del pago
+
+Ingresado --> Validado : los datos son correctos y completos
+Ingresado --> Rechazado : datos invalidos
+
+Validado --> Acreditado : se acredita el monto y se vincula a factura
+
+Acreditado --> [*]
+Rechazado --> [*]
+@enduml
+
+

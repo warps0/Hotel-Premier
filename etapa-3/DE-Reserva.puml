@@ -1,0 +1,17 @@
+title Diagrama de Estado - Reserva
+@startuml
+hide empty description
+[*] --> Creada : se registra la reserva
+
+Creada --> PendienteConfirmacion : requiere validación
+
+PendienteConfirmacion --> Confirmada : validación exitosa
+PendienteConfirmacion --> Cancelada : cancelada por el cliente o el hotel
+
+Confirmada --> Cancelada : cancelación antes del inicio
+Confirmada --> Finalizada : Check-out
+
+Cancelada --> [*]
+Finalizada --> [*]
+@enduml
+

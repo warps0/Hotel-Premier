@@ -1,0 +1,16 @@
+title Diagrama de Estado - Factura
+@startuml
+hide empty description
+[*] --> Generada : creacion
+Generada --> PendienteDePago : se emite
+PendienteDePago --> ParcialmentePagada : se registra un pago parcial
+PendienteDePago --> Pagada : pago total en una sola transaccion
+PendienteDePago --> Anulada : nota de credito total
+
+ParcialmentePagada --> ParcialmentePagada : se registra otro pago parcial
+ParcialmentePagada --> Pagada : pagos cubren el total
+ParcialmentePagada --> Anulada : nota de credito total
+
+Pagada --> [*]
+Anulada --> [*]
+@enduml

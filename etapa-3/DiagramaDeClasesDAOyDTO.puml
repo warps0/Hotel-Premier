@@ -1,0 +1,364 @@
+@startuml
+
+'Hotel'
+
+abstract class Habitacion{
+  id: String
+  capacidad: Integer
+  precio: Float
+  estado: EstadoHabitacion
+}
+
+class Evento {
+  revisar!
+}
+
+Habitacion -l- Evento
+
+enum EstadoHabitacion {
+  DISPONIBLE
+  FUERA_DE_SERVICIO
+}
+
+enum EstadoReserva {
+  ACTIVA
+  FINALIZADA
+  CANCELADA
+}
+
+class Error {
+  msg: string
+  codigo: string
+}
+
+class IndividualEstandar {
+
+}
+
+class DobleEstandar {
+
+}
+
+class DobleSuperior {
+
+}
+
+class SuperiorFamilyPlan {
+
+}
+
+class SuiteDoble {
+
+}
+
+class Piso{
+  id: Integer
+  
+  agregarHabitacion(): Error
+  eliminarHabitacion(): Error
+  obtenerHabitaciones(): List
+}
+
+class Reserva {
+  estado: EstadoReserva
+  fecha_creacion: Date
+  responsable: Huesped
+  nombre: String
+  apellido: String
+  telefono: Integer
+  fecha_inicio: Date
+  fecha_fin: Date
+}
+
+class Estadia {
+  fecha_ingreso: Date
+  fecha_egreso: Date
+  
+  costos{[Servicio, costo]} : List
+  obtenerCosto([Servicio]): Integer
+}
+
+
+class Servicio {
+  costo_total: Integer
+  'ESPECIALIZAR LOS SERVICIOS'
+  
+  calcularCosto(): Integer
+}
+
+'Finanzas'
+
+class Factura {
+  fecha_emision: Date
+  costo_habitacion: Integer
+  costo_servicios: Integer
+  tipo: Char
+}
+
+class DetalleFactura {
+  nombre_producto: String
+  cantidad_producto: Integer
+  precio_producto_unitario: Float
+  costo_total: Float
+}
+
+class NotaDeCredito {
+  descuento: Integer
+  AplicarDescuento(): Error
+  
+}
+
+abstract class Pago {
+  monto_total: Float
+  moneda: String
+}
+
+class Comprobante{
+  
+}
+
+class Tarjeta{
+  numero: Integer
+  titular: String
+  vencimiento: Date
+  cod_seg: Integer
+  banco: String
+}
+
+class Credito{
+  
+}
+
+class Debito{
+
+}
+
+class Efectivo{
+  
+}
+
+class Cheque{
+  numero_ord: Integer
+  banco: String
+  fecha_cobro: Date
+}
+
+'Personas'
+
+abstract class Persona {
+  nombre: String
+  pos_f_iva: String
+  'CUIT/CUIL': Integer
+  nacionalidad: String
+  ocupacion: String
+}
+
+class Contacto {
+  telefono: Integer
+  correo: String
+  direccion: String
+}
+
+class Huesped{
+  apellido: String
+  fecha_nac: Date
+  tipo_dni: Integer
+  dni: Integer
+}
+
+class PersonaJuridica {
+
+}
+
+class ResponsableDePago {
+
+}
+
+'DAOs & DTOs'
+
+class GestorPagos{
+  IngresarPago(): Error
+  IngresarNotaDeCredito(): Error
+}
+class PagosDTO{
+  monto_total: Float
+  moneda: String
+}
+class ChequeDTO{
+  numero_ord: Integer
+  banco: String
+  fecha_cobro: Date
+}
+class TarjetaDTO{
+  numero: Integer
+  titular: String
+  vencimiento: Date
+  cod_seg: Integer
+  banco: String
+}
+
+
+interface PagosDAO{
+  CrearPago(): Pago
+  ModificarPago(): Error
+  BorrarPago(): Error
+  BuscarPago(fact: Factura): List
+}
+
+GestorPagos ..> Pago
+GestorPagos ..> PagosDAO
+PagosDAO ..> PagosDTO
+PagosDAO ..> ChequeDTO
+PagosDAO ..> TarjetaDTO
+
+interface HuespedesDAO {
+  CrearHuesped(): Huesped
+  ModificarHuesped(): Error
+  BorrarHuesped(): Error
+  BuscarHuesped(nombre, apellido, tipo_dni, dni): List
+}
+
+class GestorHuespedes {
+  buscarHuesped()
+  darDeAltaHuesped()
+}
+class HuespedesDTO {
+  nombre: String
+  pos_f_iva: String
+  'CUIT/CUIL': Integer
+  nacionalidad: String
+  ocupacion: String
+  apellido: String
+  fecha_nac: Date
+  tipo_dni: Integer
+  dni: Integer
+}
+class ContactoDTO{
+  telefono: Integer
+  correo: String
+  direccion: String
+}
+
+GestorHuespedes ..> Huesped
+GestorHuespedes ..> HuespedesDAO
+HuespedesDAO ..> HuespedesDTO
+HuespedesDAO ..> ContactoDTO
+
+interface HabitacionesDAO {
+  CrearHabitacion(): Habitacion
+  ModificarHabitacion(): Error
+  BorrarHabitacion(): Error
+  BuscarHabitacion(fecha_ingreso, fecha_egreso, Piso, Huesped, Servicio): List
+}
+
+class GestorHabitaciones {
+  MostrarEstadoHabitaciones(): Error
+  GestionarListados(): Error
+  OcuparHabitacion(): Error
+}
+class HabitacionesDTO {
+  id: String
+  capacidad: Integer
+  precio: Float
+  estado: EstadoHabitacion
+}
+
+GestorHabitaciones ..> Habitacion
+GestorHabitaciones ..> HabitacionesDAO
+HabitacionesDAO ..> HabitacionesDTO
+
+
+interface ReservasDAO {
+  CrearReserva(): Reserva
+  ModificarReserva(): Error
+  BorrarReserva(): Error
+  BuscarReserva(fecha_ingreso, fecha_egreso, Huesped): List
+}
+
+class GestorReservas {
+  ReservarHabitacion(): Error
+  CancelarReserva(): Error
+}
+class ReservasDTO {
+  estado: EstadoReserva
+  responsable: Huesped
+  nombre: String
+  apellido: String
+  telefono: Integer
+}
+
+GestorReservas ..> Reserva
+GestorReservas ..> GestorHabitaciones
+GestorReservas ..> ReservasDAO
+ReservasDAO ..> ReservasDTO
+
+
+interface FacturasDAO {
+  CrearFactura(): Factura
+  ModificarFactura(): Error
+  BorrarFactura(): Error
+  BuscarFactura(): List
+}
+
+class GestorFacturas {
+  DarDeAltaResponsableDePago()
+  ObtenerResponsableDePago(): Error
+  Facturar(): Error
+}
+
+class FacturasDTO {
+  fecha_emision: Date
+  costo_habitacion: Integer
+  costo_servicios: Integer
+  tipo: Char
+}
+
+class DetalleFacturaDTO {
+  nombre_producto: String
+  cantidad_producto: Integer
+  precio_producto_unitario: Float
+  costo_total: Float
+}
+class NotaDeCreditoDTO {
+  descuento: Integer
+}
+
+GestorFacturas ..> Factura
+GestorFacturas ..> FacturasDAO
+FacturasDAO ..> FacturasDTO
+FacturasDTO ..> DetalleFacturaDTO
+FacturasDAO ..> NotaDeCreditoDTO
+
+'Relaciones'
+
+Piso "1" *-- "0..N" Habitacion
+
+Estadia "1..N" -- "1..N" Huesped
+Reserva "0..N" o-- "1..N" Habitacion
+
+Reserva "1" -- "0..N" Estadia
+Servicio "0..N"--"0..N" Estadia
+Factura "0..1" .r.> "1" Estadia
+Factura "1" *-- "1..N" DetalleFactura
+Pago "0..N" --* "1" Factura
+(Pago, Factura) .. Comprobante
+ResponsableDePago --* Factura
+
+Pago <|-- Tarjeta
+Pago <|-- Efectivo
+Pago <|-- Cheque
+Factura "1" *-- "0..N" NotaDeCredito
+Tarjeta <|-- Debito
+Tarjeta <|-- Credito
+Persona <|-- PersonaJuridica
+Persona <|-- Huesped
+Persona "1" *-- "0..N" Contacto
+Persona -- ResponsableDePago
+
+Habitacion <|-- IndividualEstandar
+Habitacion <|-- DobleEstandar
+Habitacion <|-- DobleSuperior
+Habitacion <|-- SuperiorFamilyPlan
+Habitacion <|-- SuiteDoble
+
+@enduml
