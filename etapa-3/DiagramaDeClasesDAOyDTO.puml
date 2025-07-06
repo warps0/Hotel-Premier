@@ -6,17 +6,24 @@ abstract class Habitacion{
   id: String
   capacidad: Integer
   precio: Float
+}
+
+class Historial {
+
+}
+
+class Estado {
+  fecha_inicio: Date
+  fecha_fin: Date
   estado: EstadoHabitacion
 }
 
-class Evento {
-  revisar!
-}
-
-Habitacion -l- Evento
+Habitacion o-- Historial
+Historial *-- Estado
 
 enum EstadoHabitacion {
-  DISPONIBLE
+  OCUPADA
+  RESERVADA
   FUERA_DE_SERVICIO
 }
 
@@ -256,11 +263,11 @@ class GestorHabitaciones {
   GestionarListados(): Error
   OcuparHabitacion(): Error
 }
+
 class HabitacionesDTO {
   id: String
   capacidad: Integer
   precio: Float
-  estado: EstadoHabitacion
 }
 
 GestorHabitaciones ..> Habitacion
