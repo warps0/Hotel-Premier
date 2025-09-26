@@ -1,0 +1,80 @@
+@startuml DS-CU09
+title Diagrama de Secuencia - CU09: Dar de Alta Huésped
+
+hide footbox
+' ### Actores y particupantes ###
+actor Conserje
+participant UI [
+    =UI - Dar de Alta Huésped
+]
+participant GestorPersona [
+    =:GestorPersona
+]
+participant PersonaDAO [
+    =:PersonaDAO
+]
+participant Huesped [
+    =Huesped
+]
+database Personas
+
+Conserje -> UI : Solicita trabajar con datos\nde un nuevo huésped
+activate UI
+
+    UI -> Conserje : Presenta la pantalla en blanco\npara cargar los datos personales
+    Conserje -> UI : Ingresar datos personales
+
+    alt datosCompletos=false
+        UI -> Conserje : Mostrar mensaje de los campos faltantes
+        deactivate UI
+    end
+
+    activate UI
+    alt
+        Conserje -> UI : Cancelar
+        UI -> Conserje : Regresa a la pantalla principal
+    end
+    deactivate UI
+
+
+activate UI
+UI -> GestorPersona : \tbuscarHuesped(tipo_dni, dni)
+activate GestorPersona
+
+GestorPersona -> PersonaDAO : buscarHuesped(tipo_dni, dni)
+activate PersonaDAO
+
+alt p!=null
+    PersonaDAO --> GestorPersona
+    deactivate PersonaDAO
+    GestorPersona --> UI : Mostrar mensaje "¡CUIDADO! El número de documento ya existen en el sistema"
+    deactivate GestorPersona
+    UI -> Conserje : Mostrar opciones "Aceptar igualmente" y "Corregir"
+    Conserje -> UI : Elegir opción
+    alt opcion=Corregir
+        UI -> Conserje : Solicitar reingreso de datos
+        deactivate UI
+    else opcion=Aceptar igualmente
+    GestorPersona -> PersonaDAO : crearHuesped(Persona)
+    activate GestorPersona
+    activate PersonaDAO
+    end
+else p=null 
+
+    PersonaDAO -> Huesped** : <<create>>
+    activate Huesped
+    PersonaDAO -> Personas : save(Huesped)
+    Personas --> PersonaDAO
+    deactivate Huesped
+    PersonaDAO --> GestorPersona
+end
+GestorPersona -> UI : Mostrar mensaje "El huésped <nombre> <apellido> ha sido cargado \nsatisfactoriamente cargado al sistema. ¿Desea cargar otro?"
+activate UI
+UI -> Conserje : Mostrar opciones "Sí" y "No"
+Conserje -> UI : Elegir opción
+alt opcion=Sí
+    UI -> Conserje : Volver a cargar huésped
+    deactivate UI
+end
+
+@enduml
