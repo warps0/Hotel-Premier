@@ -1,0 +1,66 @@
+@startuml DS-CU05
+
+title Diagrama de Secuencia - CU05: Mostrar Estado de Habitaciones
+
+actor "Conserje"
+participant "UI - MostrarEstadoHabitaciones"
+participant "GestorHabitacion"
+participant "HabitacionDAO"
+
+Conserje -> "UI - MostrarEstadoHabitaciones" : Solicita mostrar estado de habitaciones
+activate "UI - MostrarEstadoHabitaciones"
+
+
+"UI - MostrarEstadoHabitaciones" -> Conserje : Mostrar pantalla para aplicar rango de fechas
+Conserje -> "UI - MostrarEstadoHabitaciones" : Ingresar Fechas
+
+
+"UI - MostrarEstadoHabitaciones" -> GestorHabitacion : f:=mostrarEstadoHabitaciones(Date: desde, Date: hasta)
+activate GestorHabitacion
+
+deactivate "UI - MostrarEstadoHabitaciones"
+
+
+alt Fecha Desde Invalida
+
+GestorHabitacion -> "UI - MostrarEstadoHabitaciones" : mostrar mensaje("Fecha desde invalida")
+deactivate GestorHabitacion
+activate "UI - MostrarEstadoHabitaciones"
+"UI - MostrarEstadoHabitaciones" -> Conserje : Solicita reingresar datos
+deactivate "UI - MostrarEstadoHabitaciones"
+
+
+else Fecha Hasta Invalida
+
+GestorHabitacion -[hidden]> "UI - MostrarEstadoHabitaciones"
+
+activate GestorHabitacion
+GestorHabitacion -> "UI - MostrarEstadoHabitaciones" : mostrar mensaje("Fecha hasta invalida")
+
+activate "UI - MostrarEstadoHabitaciones"
+"UI - MostrarEstadoHabitaciones" -> Conserje : Solicita reingresar datos
+
+deactivate GestorHabitacion
+deactivate "UI - MostrarEstadoHabitaciones"
+
+
+else Flujo Principal
+
+GestorHabitacion -[hidden]> HabitacionDAO
+
+activate GestorHabitacion
+GestorHabitacion --> HabitacionDAO
+
+activate HabitacionDAO
+HabitacionDAO --> GestorHabitacion
+
+deactivate HabitacionDAO
+
+activate "UI - MostrarEstadoHabitaciones"
+GestorHabitacion -> "UI - MostrarEstadoHabitaciones" : mostrarGrillaHabitaciones()
+
+deactivate GestorHabitacion
+deactivate "UI - MostrarEstadoHabitaciones"
+
+end
+@enduml

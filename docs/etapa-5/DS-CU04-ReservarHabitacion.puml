@@ -1,0 +1,98 @@
+@startuml
+hide footbox
+actor Conserje
+participant InterfazUsuario
+participant GestorReserva
+participant ReservaDAO
+participant Reserva
+database ReservaBD
+
+Conserje -> InterfazUsuario: Desea reservar habitaciones a nombre de un huesped
+activate InterfazUsuario
+
+InterfazUsuario -> Conserje: Navegar a CU5 Mostrar Estado de Habitaciones
+deactivate InterfazUsuario
+
+alt Flujo Principal
+
+  Conserje -> InterfazUsuario: seleccionar habitacion/es + rango de fechas
+  activate InterfazUsuario
+
+  InterfazUsuario -> GestorReserva: f:= ReservarHabitacion(ListaHabitaciones)
+  activate GestorReserva
+
+  GestorReserva -> ReservaDAO: f:= ReservarHabitacion(ListaHabitaciones)
+  activate ReservaDAO
+
+  ReservaDAO --> GestorReserva: HabitacionesReservadas
+  deactivate ReservaDAO
+
+  GestorReserva --> InterfazUsuario: Se muestran las habitaciones seleccionadas pintadas con RESERVADA
+  deactivate GestorReserva
+
+  InterfazUsuario -> Conserje: Solicita presionar ACEPTAR o RECHAZAR
+  
+  alt No hay habitaciones disponibles (Paso 3.A)
+    InterfazUsuario --> Conserje: "No hay habitaciones disponibles..."
+    InterfazUsuario --> Conserje: Fin del caso de uso
+    
+  end
+
+  alt Selecciona habitación no disponible (Paso 3.B)
+    InterfazUsuario --> Conserje: "Habitación no disponible en el periodo indicado"
+    InterfazUsuario --> Conserje: volver a selección
+  end
+
+  Conserje -> InterfazUsuario: Presiona ACEPTAR
+  InterfazUsuario -> Conserje: Solicita datos huésped (apellido, nombre, teléfono)
+  Conserje -> InterfazUsuario: Completa los 3 campos
+
+  InterfazUsuario -> GestorReserva: f:= CrearReserva(apellido,nombre,telefono)
+  activate GestorReserva
+
+  GestorReserva -> ReservaDAO: f:= CrearReserva(...)
+  activate ReservaDAO
+
+  ReservaDAO --> Reserva**: <<create>>
+  activate Reserva
+
+  Reserva -> ReservaDAO:
+  deactivate Reserva
+  
+  ReservaDAO -> ReservaBD: GuardarReserva()
+  activate ReservaBD
+
+  ReservaBD --> ReservaDAO: Reserva guardada
+  deactivate ReservaBD
+
+  ReservaDAO --> GestorReserva: confirmación
+  deactivate ReservaDAO
+
+  GestorReserva --> InterfazUsuario: confirmación
+  deactivate GestorReserva
+  
+
+  InterfazUsuario --> Conserje: "Reserva registrada con éxito"
+  deactivate InterfazUsuario
+
+end 
+
+alt Uno de los campos no fue completado (Paso 9.A)
+  InterfazUsuario -[hidden]> Conserje
+  activate InterfazUsuario
+  InterfazUsuario -> Conserje: Mensaje de error + foco en campo faltante
+  InterfazUsuario -> Conserje: Se vuelve a pedir datos
+  deactivate InterfazUsuario
+end
+  
+
+alt Se rechaza la reserva (Paso 7.A)
+InterfazUsuario -[hidden]> Conserje
+  activate InterfazUsuario
+  Conserje -> InterfazUsuario: Presiona CANCELAR
+  InterfazUsuario -> Conserje: Revertir cambios y finalizar
+  deactivate InterfazUsuario
+end
+  
+
+@enduml
