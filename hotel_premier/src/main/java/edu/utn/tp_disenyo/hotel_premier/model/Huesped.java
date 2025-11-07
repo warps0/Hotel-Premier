@@ -1,5 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
+@Entity
+@Table(name = "huesped")
 public class Huesped extends Persona {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nombre;
     private String apellido;
     private String docIdentidad;

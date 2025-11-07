@@ -11,8 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public abstract class Persona {
-    private Long id;
+public abstract class Persona { // Si no es @Entity, sirve igual? NO
+
     private String posIva;
     private String nacionalidad;
     private String ocupacion;
