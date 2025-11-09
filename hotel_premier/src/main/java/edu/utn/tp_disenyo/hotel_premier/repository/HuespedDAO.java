@@ -17,7 +17,7 @@ public interface HuespedDAO extends JpaRepository<Huesped, Long> {
     public List<Huesped> findByNombre(String nombre);
     public List<Huesped> findByApellido(String apellido);
     public List<Huesped> findByDocIdentidad(String docIdentidad);
-
+    //public List<Huesped> findByContacto(Contacto contacto);
     // public List<Persona> findByNombre(String nombre); TODO: EnumTipoDoc
 
 }

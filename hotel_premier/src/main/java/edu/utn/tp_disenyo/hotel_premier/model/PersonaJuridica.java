@@ -19,5 +19,5 @@ public class PersonaJuridica extends Persona {
     private Long id;
     private String razonSocial; //Nombre
 
-    //TODO: toString, comparator
+    //TODO: comparator
 }
