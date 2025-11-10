@@ -1,5 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 //import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-//@Entity
-//@Table(name = "huesped")
+@Entity
+@Table(name = "huesped")
 public class Huesped extends Persona {
 /*
     @Id

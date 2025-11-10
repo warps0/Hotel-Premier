@@ -14,9 +14,9 @@ import lombok.Setter;
 @Table(name = "persona_juridica")
 public class PersonaJuridica extends Persona {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+   // @Id
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // private Long id;
     private String razonSocial; //Nombre
 
     //TODO: comparator
