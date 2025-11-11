@@ -1,36 +1,51 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
+import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.service.HuespedService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-
+import java.util.List;
 
 @RestController
 @RequestMapping("/huesped")
 public class HuespedController {
+
+    private final HuespedService service;
+
     @Autowired
-    private HuespedService huespedService;
-
-    @GetMapping("/")
-    public String helloWorld() {
-        return new String("Hello world!");
+    public HuespedController(HuespedService service) {
+        this.service = service;
     }
-    
 
-    @PostMapping("/crearHuesped")
-    public Huesped postMethodName(@RequestBody Huesped huesped) throws Exception {
-        //TODO: process POST request with HuespedDTO
-        // Esto para que el servicio y repositorio sean los encargados de manejar el objeto persistente
-      
-        return huespedService.createHuesped(huesped);
+    @GetMapping
+    public ResponseEntity<List<Huesped>> getAll() {
+        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
-    
-    //TODO: Servicio, Excepciones
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Huesped> getById(@PathVariable Long id) throws HuespedNotFoundException {
+        return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Huesped> create(@RequestBody Huesped huesped) throws Exception {
+        return new ResponseEntity<>(service.create(huesped), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Huesped> update(@PathVariable Long id, @RequestBody Huesped huesped) throws HuespedNotFoundException {
+        return new ResponseEntity<>(service.update(id, huesped), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws HuespedNotFoundException {
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
