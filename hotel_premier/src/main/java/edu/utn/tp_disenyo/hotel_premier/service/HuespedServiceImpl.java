@@ -26,7 +26,7 @@ public class HuespedServiceImpl implements HuespedService {
 
     // TODO: Manejar excepciones para el método create
     @Override
-    public Huesped create(@NonNull Huesped huesped) throws Exception {
+    public Huesped create(@NonNull Huesped huesped) throws HuespedNotSavedException {
 
         return Optional.ofNullable(repository.save(huesped)).orElseThrow(
             () -> new HuespedNotSavedException()

@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
+import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.service.HuespedService;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Primary
@@ -35,8 +37,26 @@ public class HuespedViewController {
     // TODO: Implementar la vista de "El usuario se ha cargado correctamente."
 
     @PostMapping("/huesped")
-    public String submitForm(@ModelAttribute Huesped formHuesped, Model model) throws Exception {
+    public String submitForm(@ModelAttribute Huesped formHuesped, RedirectAttributes redirectAttributes) throws HuespedNotSavedException {
+        if(huespedService.existsByDocumento(formHuesped.getDocIdentidad(), formHuesped.getTipoDoc())){
+            // ERROR HUESPED DUPLICADO - FLUJO ALTERNATIVO
+
+            return "redirect:/huesped/alta/confirmacion";
+        }
+
+        // FLUJO PRINCIPAL
         huespedService.create(formHuesped);
-        return "exitoAltaHuesped"; // Display a result page
+
+        redirectAttributes.addFlashAttribute("nombreCompleto", formHuesped.getNombre() + " " + formHuesped.getApellido());
+        redirectAttributes.addFlashAttribute("huespedGuardado", true);
+
+        return "exitoAltaHuesped";
     }
+
+    @GetMapping("/huesped/alta/confirmacion")
+    public String confirmarHuesped() {
+        //TODO: /huesped/alta/confirmacion HTML
+        return new String();
+    }
+    
 }
