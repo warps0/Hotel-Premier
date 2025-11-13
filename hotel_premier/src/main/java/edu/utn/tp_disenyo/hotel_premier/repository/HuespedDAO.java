@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.repository;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
+import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,9 @@ public interface HuespedDAO extends JpaRepository<Huesped, Long> {
     public List<Huesped> findByNombre(String nombre);
     public List<Huesped> findByApellido(String apellido);
     public List<Huesped> findByDocIdentidad(String docIdentidad);
+
+    // Existe un huésped con el documento pasado como argumento?
+    boolean existsByDocIdentidadAndTipoDoc(String docIdentidad, TipoDoc tipoDoc);
+
     //public List<Huesped> findByContacto(Contacto contacto);
 }
