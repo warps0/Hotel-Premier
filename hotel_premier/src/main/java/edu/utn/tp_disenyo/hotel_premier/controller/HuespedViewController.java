@@ -18,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @Primary
 public class HuespedViewController {
-    @Autowired
+
     HuespedService huespedService;
+
+    @Autowired
+    public HuespedViewController(HuespedService huespedService) {
+        this.huespedService = huespedService;
+    }
 
     @GetMapping("/huesped/alta")
     public String altaHuesped(Model model) {
