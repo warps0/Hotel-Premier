@@ -15,11 +15,5 @@ public interface HuespedService {
     public Huesped getById(Long id) throws HuespedNotFoundException;
     public Huesped update(Long id, Huesped huesped) throws HuespedNotFoundException;
     public void deleteById(Long id) throws HuespedNotFoundException;
-    private Huesped formToHuesped(MultiValueMap<String, String> formData) {
-        Huesped nuevo = new Huesped();
 
-        
-
-        return nuevo;
-    }
 }
