@@ -27,5 +27,4 @@ public abstract class Persona {
     @JoinColumn(name = "contactoId")
     private Contacto mediosDeContacto; // List ES UNA INTERFAZ, dónde decimos qué implementación? (Probablemente en el DAO)
     
-    //TODO: lista contactos
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
+import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -27,7 +28,7 @@ public class HuespedServiceImpl implements HuespedService {
     public Huesped create(@NonNull Huesped huesped) throws Exception {
 
         return Optional.ofNullable(repository.save(huesped)).orElseThrow(
-            () -> new Exception("Error al crear HUESPED")
+            () -> new HuespedNotSavedException()
         );
     }
 
