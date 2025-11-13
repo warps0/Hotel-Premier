@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
+import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -58,4 +59,10 @@ public class HuespedServiceImpl implements HuespedService {
         Huesped huesped = repository.findById(id).orElseThrow(() -> new HuespedNotFoundException());
         repository.delete(huesped);
     }
+
+    @Override
+    public boolean existsByDocumento(String docIdentidad, TipoDoc tipoDoc) {
+        return repository.existsByDocIdentidadAndTipoDoc(docIdentidad, tipoDoc);
+    }
+
 }
