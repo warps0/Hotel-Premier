@@ -23,6 +23,6 @@ public class Contacto {
     private String telefono;
     private String correo;
     private String domicilio; // Refactorizamos nombre para mejor comprensión vs 'dirección'
-
-    //TODO: comparator
+    private String pais;
+    private String localidad;
 }

@@ -40,6 +40,4 @@ public class Huesped extends Persona {
     public int hashCode() {
         return Objects.hashCode(docIdentidad);
     }
-
-    //TODO: EnumTipoDoc
 }

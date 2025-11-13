@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface HuespedDAO extends JpaRepository<Huesped, Long> {
-
     public List<Huesped> findByPosIva(String posIva);
     public List<Huesped> findByFechaNacimiento(LocalDate fechaNacimiento);
     public List<Huesped> findByNacionalidad(String nacionalidad);
@@ -18,6 +17,4 @@ public interface HuespedDAO extends JpaRepository<Huesped, Long> {
     public List<Huesped> findByApellido(String apellido);
     public List<Huesped> findByDocIdentidad(String docIdentidad);
     //public List<Huesped> findByContacto(Contacto contacto);
-    // public List<Persona> findByNombre(String nombre); TODO: EnumTipoDoc
-
 }

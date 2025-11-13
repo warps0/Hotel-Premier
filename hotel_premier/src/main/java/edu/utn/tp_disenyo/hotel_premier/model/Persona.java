@@ -1,9 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.ArrayList;
-//import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,5 +27,5 @@ public abstract class Persona {
     @JoinColumn(name = "contactoId")
     private Contacto mediosDeContacto; // List ES UNA INTERFAZ, dónde decimos qué implementación? (Probablemente en el DAO)
     
-    //TODO: lista contactos, comparator
+    //TODO: lista contactos
 }

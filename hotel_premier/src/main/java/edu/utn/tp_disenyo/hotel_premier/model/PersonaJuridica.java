@@ -33,6 +33,4 @@ public class PersonaJuridica extends Persona {
     public int hashCode() {
         return Objects.hashCode(razonSocial);
     }
-
-    //TODO: comparator
 }

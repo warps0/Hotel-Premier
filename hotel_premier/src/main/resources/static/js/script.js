@@ -1,32 +1,42 @@
 document.addEventListener("DOMContentLoaded", function() {
   const nacionalidades = [
-    "Afgana", "Albanesa", "Alemana", "Andorrana", "Angoleña", "Antiguana",
-    "Argentina", "Armenia", "Australiana", "Austriaca", "Bahameña", "Bangladesí",
-    "Barbadense", "Belga", "Beliceña", "Beninesa", "Bielorrusa", "Boliviana",
-    "Bosnia", "Botsuana", "Brasileña", "Británica", "Búlgara", "Camboyana",
-    "Camerunesa", "Canadiense", "Chilena", "China", "Colombiana", "Congoleña",
-    "Costarricense", "Croata", "Cubana", "Checa", "Danesa", "Dominicana",
-    "Ecuatoriana", "Egipcia", "Salvadoreña", "Emiratí", "Eslovaca", "Eslovena",
-    "Española", "Estadounidense", "Estonia", "Etíope", "Filipina", "Finlandesa",
-    "Francesa", "Griega", "Guatemalteca", "Haitiana", "Hondureña", "Húngara",
-    "India", "Indonesia", "Irlandesa", "Islandesa", "Israelí", "Italiana",
-    "Jamaicana", "Japonesa", "Jordana", "Kazaja", "Keniana", "Letona", "Libanesa",
-    "Libia", "Lituana", "Luxemburguesa", "Malasia", "Maliense", "Marroquí",
-    "Mexicana", "Moldava", "Monegasca", "Mongola", "Namibia", "Nepalesa", 
-    "Neozelandesa", "Nicaragüense", "Nigeriana", "Noruega", "Panameña", "Paraguaya",
-    "Peruana", "Polaca", "Portuguesa", "Puertorriqueña", "Qatarí", "Rumana",
-    "Rusa", "Saudí", "Senegalesa", "Serbia", "Singapurense", "Siria", "Somalí",
-    "Sudafricana", "Sudanesa", "Sueca", "Suiza", "Tailandesa", "Tanzana", 
-    "Tunecina", "Turca", "Ucraniana", "Uruguaya", "Venezolana", "Vietnamita", 
-    "Yemení", "Zambiana", "Zimbabuense"
+    "Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda",
+    "Argentina", "Armenia", "Australia", "Austria", "Bahamas", "Bangladés",
+    "Barbados", "Bélgica", "Belice", "Benín", "Bielorrusia", "Bolivia",
+    "Bosnia y Herzegovina", "Botsuana", "Brasil", "Reino Unido", "Bulgaria", "Camboya",
+    "Camerún", "Canadá", "Chile", "China", "Colombia", "Congo",
+    "Costa Rica", "Croacia", "Cuba", "República Checa", "Dinamarca", "República Dominicana",
+    "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos", "Eslovaquia", "Eslovenia",
+    "España", "Estados Unidos", "Estonia", "Etiopía", "Filipinas", "Finlandia",
+    "Francia", "Grecia", "Guatemala", "Haití", "Honduras", "Hungría",
+    "India", "Indonesia", "Irlanda", "Islandia", "Israel", "Italia",
+    "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia", "Letonia", "Líbano",
+    "Libia", "Lituania", "Luxemburgo", "Malasia", "Mali", "Marruecos",
+    "México", "Moldavia", "Mónaco", "Mongolia", "Namibia", "Nepal",
+    "Nueva Zelanda", "Nicaragua", "Nigeria", "Noruega", "Panamá", "Paraguay",
+    "Perú", "Polonia", "Portugal", "Puerto Rico", "Catar", "Rumania",
+    "Rusia", "Arabia Saudita", "Senegal", "Serbia", "Singapur", "Siria", "Somalia",
+    "Sudáfrica", "Sudán", "Suecia", "Suiza", "Tailandia", "Tanzania",
+    "Túnez", "Turquía", "Ucrania", "Uruguay", "Venezuela", "Vietnam",
+    "Yemen", "Zambia", "Zimbabue"
   ];
 
+  const paises = nacionalidades;
+
   const select = document.getElementById("nacionalidad");
+  const altSelect = document.getElementById("pais");
 
   nacionalidades.forEach(nac => {
     const option = document.createElement("option");
     option.value = nac;
     option.textContent = nac;
     select.appendChild(option);
+  });
+
+  paises.forEach(nac => {
+    const option = document.createElement("option");
+    option.value = nac;
+    option.textContent = nac;
+    altSelect.appendChild(option);
   });
 });

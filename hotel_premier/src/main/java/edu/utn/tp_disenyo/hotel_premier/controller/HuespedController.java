@@ -3,9 +3,7 @@ package edu.utn.tp_disenyo.hotel_premier.controller;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
@@ -14,7 +12,7 @@ import edu.utn.tp_disenyo.hotel_premier.service.HuespedService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/huesped")
+@RequestMapping("/rest/huesped")
 public class HuespedController {
 
     private final HuespedService service;
@@ -36,7 +34,7 @@ public class HuespedController {
 
 
     @PostMapping
-    public ResponseEntity<Huesped> create(@ModelAttribute Huesped huesped) throws Exception {
+    public ResponseEntity<Huesped> create(@RequestBody Huesped huesped) throws Exception {
         return new ResponseEntity<>(service.create(huesped), HttpStatus.CREATED);
     }
 

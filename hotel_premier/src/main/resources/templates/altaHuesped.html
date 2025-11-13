@@ -70,25 +70,16 @@
                        required>
             </div>
 
-<!--            <div class="form-group">-->
-<!--                <label for="nacionalidad">Nacionalidad: *</label>-->
-<!--                <select id="nacionalidad" name="nacionalidad" th:field="*{nacionalidad}">-->
-<!--                        <option value="">Seleccione una nacionalidad</option>-->
-<!--                        <option th:each="nac : ${nacionalidades}"-->
-<!--                            th:value="${nac}"-->
-<!--                            th:text="${nac}">-->
-<!--                        </option>-->
-<!--                </select>-->
-<!--            </div>-->
-        
-<!--            <div class="form-group">-->
-<!--                <label for="CUIT">CUIT: </label>-->
-<!--                <input type="text"-->
-<!--                       id="CUIT"-->
-<!--                       name="CUIT"-->
-<!--                       th:field="*{CUIT}"-->
-<!--                       placeholder="escriba un CUIT aquí">-->
-<!--            </div>-->
+            <div class="form-group">
+                <label for="nacionalidad">Nacionalidad: *</label>
+                <select id="nacionalidad" name="nacionalidad" th:field="*{nacionalidad}">
+                        <option value="">Seleccione una nacionalidad</option>
+                        <option th:each="nac : ${nacionalidades}"
+                            th:value="${nac}"
+                            th:text="${nac}">
+                        </option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="documento">Posición frente al IVA: *</label>
@@ -113,7 +104,7 @@
                        placeholder="escriba una ocupación aquí"
                        required>
             </div>
-
+<!-- CONTACTO -->
             <div class="form-group">
                 <label for="ocupacion">Dirección:</label>
             </div>
@@ -128,74 +119,26 @@
                        required>
             </div>
 
-<!--            <div class="form-group">-->
-<!--                <label for="numero">Número: *</label>-->
-<!--                <input type="text"-->
-<!--                       id="numero"-->
-<!--                       name="numero"-->
-<!--                       th:field="*{numero}"-->
-<!--                       placeholder="escriba un número"-->
-<!--                       required>-->
-<!--            </div>-->
+            <div class="form-group">
+                <label for="pais">País: *</label>
+                <select id="pais" name="pais" th:field="*{mediosDeContacto.pais}">
+                        <option value="">Seleccione una país</option>
+                        <option th:each="nac : ${nacionalidades}"
+                            th:value="${nac}"
+                            th:text="${nac}">
+                        </option>
+                </select>
+            </div>
 
-<!--            <div class="form-group">-->
-<!--                <label for="piso">Piso: </label>-->
-<!--                <input type="text"-->
-<!--                       id="piso"-->
-<!--                       name="piso"-->
-<!--                       th:field="*{piso}"-->
-<!--                       placeholder="escriba un número">-->
-<!--            </div>-->
-
-<!--            <div class="form-group">-->
-<!--                <label for="departamento">Departamento: </label>-->
-<!--                <input type="text"-->
-<!--                       id="departamento"-->
-<!--                       name="departamento"-->
-<!--                       th:field="*{departamento}"-->
-<!--                       placeholder="escriba un departamento">-->
-<!--            </div>-->
-
-<!--            <div class="form-group">-->
-<!--                <label for="codigoPostal">Código postal: *</label>-->
-<!--                <input type="text"-->
-<!--                       id="codigoPostal"-->
-<!--                       name="codigoPostal"-->
-<!--                       th:field="*{codigoPostal}"-->
-<!--                       placeholder="escriba un código postal"-->
-<!--                       required>-->
-<!--            </div>-->
-
-<!--            <div class="form-group">-->
-<!--                <label for="localidad">Localidad: *</label>-->
-<!--                <input type="text"-->
-<!--                       id="localidad"-->
-<!--                       name="localidad"-->
-<!--                       th:field="*{localidad-->
-<!--                       placeholder="escriba una localidad"-->
-<!--                       required>-->
-<!--            </div>-->
-
-<!--            <div class="form-group">-->
-<!--                <label for="provincia">Provincia: *</label>-->
-<!--                <input type="text"-->
-<!--                       id="provincia"-->
-<!--                       name="provincia"-->
-<!--                       th:field="*{provincia}"-->
-<!--                       placeholder="escriba una provincia"-->
-<!--                       required>-->
-<!--            </div>-->
-
-<!--            <div class="form-group">-->
-<!--                <label for="pais">País: *</label>-->
-<!--                <select id="pais" name="pais" th:field="*{pais}">-->
-<!--                        <option value="">Seleccione un país</option>-->
-<!--                        <option th:each="nac : ${nacionalidades}"-->
-<!--                            th:value="${nac}"-->
-<!--                            th:text="${nac}">-->
-<!--                        </option>-->
-<!--                </select>-->
-<!--            </div>-->
+            <div class="form-group">
+                <label for="provincia">Localidad: *</label>
+                <input type="text"
+                       id="localidad"
+                       name="localidad"
+                       th:field="*{mediosDeContacto.localidad}"
+                       placeholder="escriba una localidad"
+                       required>
+            </div>
 
             <div class="form-group">
                 <label for="telefono">Teléfono: *</label>
