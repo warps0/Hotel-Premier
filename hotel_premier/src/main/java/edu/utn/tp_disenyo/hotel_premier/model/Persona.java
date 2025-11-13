@@ -25,6 +25,6 @@ public abstract class Persona {
     private LocalDate fechaNacimiento;
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "contactoId")
-    private Contacto mediosDeContacto; // List ES UNA INTERFAZ, dónde decimos qué implementación? (Probablemente en el DAO)
+    private Contacto mediosDeContacto;
     
 }
