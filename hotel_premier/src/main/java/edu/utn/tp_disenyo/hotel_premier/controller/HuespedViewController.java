@@ -30,10 +30,6 @@ public class HuespedViewController {
 
     @PostMapping(path = "/huesped", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String guardarHuesped(@RequestParam MultiValueMap<String, String> formData) {
-        
-        //huespedService.create();
-
         return "exitoAltaHuesped";
     }
-
 }

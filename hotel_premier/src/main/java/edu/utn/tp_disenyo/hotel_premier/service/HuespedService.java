@@ -5,6 +5,8 @@ import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 
 import java.util.List;
 
+import org.springframework.util.MultiValueMap;
+
 public interface HuespedService {
 
     // TODO: Manejar excepciones para el método create
@@ -13,5 +15,11 @@ public interface HuespedService {
     public Huesped getById(Long id) throws HuespedNotFoundException;
     public Huesped update(Long id, Huesped huesped) throws HuespedNotFoundException;
     public void deleteById(Long id) throws HuespedNotFoundException;
+    private Huesped formToHuesped(MultiValueMap<String, String> formData) {
+        Huesped nuevo = new Huesped();
 
+        
+
+        return nuevo;
+    }
 }
