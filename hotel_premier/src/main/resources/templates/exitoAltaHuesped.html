@@ -14,9 +14,12 @@
     <div class="popup">
         <p>El huésped <b th:text="${nombreCompleto}"></b> ha sido satisfactoriamente cargado al sistema.<br>¿Desea cargar otro?</p>
         <div class="popup-buttons">
-            <button class="btn-popup no">NO</button>
+            <a href="http://localhost:8080/home">
+                <button class="btn-popup no">NO</button>
+            </a>
             <a href="http://localhost:8080/huesped/alta">
-            <button class="btn-popup si">SI</button> </a>
+                <button class="btn-popup si">SI</button> 
+            </a>
         </div>
     </div>
 
