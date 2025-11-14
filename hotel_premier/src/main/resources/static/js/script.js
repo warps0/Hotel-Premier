@@ -46,14 +46,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-const overlay = document.getElementById('overlay');
-    const cargarBtn = document.getElementById('cargar');
-    const noBtn = document.getElementById('noBtn');
-    const siBtn = document.getElementById('siBtn');
-
-    cargarBtn.addEventListener('click', () => {
-      setTimeout(() => {
-        overlay.style.display = 'flex';
-      }, 500);
-    });
-

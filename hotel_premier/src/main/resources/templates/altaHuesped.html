@@ -22,36 +22,22 @@
 
             <div class="form-group">
                 <label for="nombre">Nombre: *</label>
-                <input type="text"
-                       id="nombre"
-                       name="nombre"
-                       th:field="*{nombre}"
-                       placeholder="escriba un nombre aquí"
-                       required>
+                <input type="text" id="nombre" name="nombre" th:field="*{nombre}" placeholder="escriba un nombre aquí"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="apellido">Apellido: *</label>
-                <input type="text"
-                       id="apellido"
-                       name="apellido"
-                       th:field="*{apellido}"
-                       placeholder="escriba un apellido aquí"
-                       required>
+                <input type="text" id="apellido" name="apellido" th:field="*{apellido}"
+                    placeholder="escriba un apellido aquí" required>
             </div>
 
             <div class="form-group">
                 <label for="documento">Documento: *</label>
                 <div class="group">
-                    <input type="text"
-                           id="documento"
-                           name="documento"
-                           th:field="*{docIdentidad}"
-                           placeholder="escriba un documento aquí"
-                           required>
-                    <select id="tipoDocumento"
-                            name="tipoDocumento"
-                            th:field="*{tipoDoc}">
+                    <input type="text" id="documento" name="documento" th:field="*{docIdentidad}"
+                        placeholder="escriba un documento aquí" required>
+                    <select id="tipoDocumento" name="tipoDocumento" th:field="*{tipoDoc}">
                         <option value=DNI>DNI</option>
                         <option value=LE>LE</option>
                         <option value=LC>LC</option>
@@ -63,29 +49,21 @@
 
             <div class="form-group">
                 <label for="fechaNacimiento">Fecha de nacimiento: *</label>
-                <input type="date"
-                       id="fechaNacimiento"
-                       name="fechaNacimiento"
-                       th:field="*{fechaNacimiento}"
-                       required>
+                <input type="date" id="fechaNacimiento" name="fechaNacimiento" th:field="*{fechaNacimiento}" required>
             </div>
 
             <div class="form-group">
                 <label for="nacionalidad">Nacionalidad: *</label>
                 <select id="nacionalidad" name="nacionalidad" th:field="*{nacionalidad}">
-                        <option th:each="nac : ${nacionalidades}"
-                            th:value="${nac}"
-                            th:text="${nac}">
-                        </option>
+                    <option th:each="nac : ${nacionalidades}" th:value="${nac}" th:text="${nac}">
+                    </option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="documento">Posición frente al IVA: *</label>
                 <div class="group">
-                    <select id="posIva"
-                            name="posIva"
-                            th:field="*{posIva}">
+                    <select id="posIva" name="posIva" th:field="*{posIva}">
                         <option value="consumidorFinal">Consumidor Final</option>
                         <option value="responsableInscripto">Responsable Inscripto</option>
                         <option value="monotributista">Monotributista</option>
@@ -96,62 +74,41 @@
 
             <div class="form-group">
                 <label for="ocupacion">Ocupacion: *</label>
-                <input type="text"
-                       id="ocupacion"
-                       name="ocupacion"
-                       th:field="*{ocupacion}"
-                       placeholder="escriba una ocupación aquí"
-                       required>
+                <input type="text" id="ocupacion" name="ocupacion" th:field="*{ocupacion}"
+                    placeholder="escriba una ocupación aquí" required>
             </div>
 
             <div class="form-group">
                 <label for="calle">Dirección: *</label>
-                <input type="text"
-                       id="calle"
-                       name="calle"
-                       th:field="*{mediosDeContacto.domicilio}"
-                       placeholder="escriba una calle"
-                       required>
+                <input type="text" id="calle" name="calle" th:field="*{mediosDeContacto.domicilio}"
+                    placeholder="escriba una calle" required>
             </div>
 
             <div class="form-group">
                 <label for="pais">País: *</label>
                 <select id="pais" name="pais" th:field="*{mediosDeContacto.pais}">
-                        <option value="">Seleccione una país</option>
-                        <option th:each="nac : ${nacionalidades}"
-                            th:value="${nac}"
-                            th:text="${nac}">
-                        </option>
+                    <option value="">Seleccione una país</option>
+                    <option th:each="nac : ${nacionalidades}" th:value="${nac}" th:text="${nac}">
+                    </option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="provincia">Localidad: *</label>
-                <input type="text"
-                       id="localidad"
-                       name="localidad"
-                       th:field="*{mediosDeContacto.localidad}"
-                       placeholder="escriba una localidad"
-                       required>
+                <input type="text" id="localidad" name="localidad" th:field="*{mediosDeContacto.localidad}"
+                    placeholder="escriba una localidad" required>
             </div>
 
             <div class="form-group">
                 <label for="telefono">Teléfono: *</label>
-                <input type="text"
-                       id="telefono"
-                       name="telefono"
-                       th:field="*{mediosDeContacto.telefono}"
-                       placeholder="escriba un telefono"
-                       required>
+                <input type="text" id="telefono" name="telefono" th:field="*{mediosDeContacto.telefono}"
+                    placeholder="escriba un telefono" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email: </label>
-                <input type="email"
-                       id="email"
-                       name="email"
-                       th:field="*{mediosDeContacto.correo}"
-                       placeholder="escriba un email">
+                <input type="email" id="email" name="email" th:field="*{mediosDeContacto.correo}"
+                    placeholder="escriba un email">
             </div>
 
             <button type="submit" class="btn-form btn-siguiente"> Siguiente </button>
@@ -159,13 +116,12 @@
         </fieldset>
 
         <div class="botones">
-            <a href="http://localhost:8080/home">
-                <button type="button" class="btn-form btn-cancelar">Cancelar</button>
-            </a>
+            <button onclick="botonCancelar('¿Desea cancelar el alta del huésped?')" type="button" class="btn-form btn-cancelar">Cancelar</button>
         </div>
     </form>
 
     <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/botonCancelar.js}"></script>
 
 </body>
 

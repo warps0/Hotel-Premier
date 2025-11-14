@@ -42,6 +42,11 @@ public class HuespedViewController {
         return "advertenciaDNI";
     }
 
+    @GetMapping({"/", "/home"})
+    public String home() {
+        return "index";
+    }
+
     @PostMapping("/huesped")
     public String submitForm(@ModelAttribute Huesped formHuesped, RedirectAttributes redirectAttributes) throws HuespedNotSavedException {
         try{
