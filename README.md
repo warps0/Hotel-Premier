@@ -85,6 +85,14 @@ http://localhost:8080/
 | POST | `/huesped` | Guardar nuevo huésped |
 | GET | `/huesped/exito` | Confirmación de alta exitosa |
 
+## Base de datos
+
+- **URL**: `jdbc:h2:mem:hotelpremier`
+- **Usuario**: `conserje`
+- **Contraseña**: vacía
+
+---
+
 ## Modelos de Datos
 
 ### Huésped
