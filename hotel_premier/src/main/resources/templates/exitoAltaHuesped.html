@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Premier</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="popup">
+            <p>El huésped <b th:text="${nombreCompleto}"></b> ha sido satisfactoriamente cargado al sistema.<br>¿Desea cargar otro?</p>
+            <div class="popup-buttons">
+                <a href="http://localhost:8080/home">
+                    <button class="btn-popup no">NO</button>
+                </a>
+                <a href="http://localhost:8080/huesped/alta">
+                    <button class="btn-popup si">SI</button> 
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Premier</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="popup">
+            <p> <b>¡CUIDADO!</b> El tipo y número de documento ya existen en el sistema. ¿Desea continuar o corregir los datos? </p>
+            <div class="popup-buttons">
+                <button class="btn-popup no" onclick="window.history.back()">Corregir</button>
+
+                <form action="http://localhost:8080/huesped/forzarCreacion" th:object="${huesped}" method="POST">
+                    <!-- Atributos escondidos para preservar el huesped cargado anteriormente -->
+                    <!-- Huesped -->
+                        <input type="hidden" th:field="*{nombre}" />
+                        <input type="hidden" th:field="*{apellido}" />
+                        <input type="hidden" th:field="*{docIdentidad}" />
+                        <input type="hidden" th:field="*{tipoDoc}" />
+                    <!-- Persona -->
+                        <input type="hidden" th:field="*{id}" />
+                        <input type="hidden" th:field="*{posIva}" />
+                        <input type="hidden" th:field="*{nacionalidad}" />
+                        <input type="hidden" th:field="*{ocupacion}" />
+                        <input type="hidden" th:field="*{fechaNacimiento}" />
+                        <input type="hidden" th:field="*{mediosDeContacto.id}" />
+                    <!-- Contacto -->
+                        <input type="hidden" th:field="*{mediosDeContacto.telefono}" />
+                        <input type="hidden" th:field="*{mediosDeContacto.correo}" />
+                        <input type="hidden" th:field="*{mediosDeContacto.domicilio}" />
+                        <input type="hidden" th:field="*{mediosDeContacto.pais}" />
+                        <input type="hidden" th:field="*{mediosDeContacto.localidad}" />
+                    <button type="submit" class="btn-popup si">Continuar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+
+</body>
+
+</html>
+
+
+<!--<div class="botones">-->
+<!--    <button class="no" id="noBtn">Corregir</button>-->
+<!--    <button class="si" id="siBtn">Aceptar igualmente</button>-->
+<!--</div>-->
