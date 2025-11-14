@@ -3,6 +3,7 @@ package edu.utn.tp_disenyo.hotel_premier.service;
 import java.util.List;
 import java.util.Optional;
 
+import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
@@ -63,6 +64,16 @@ public class HuespedServiceImpl implements HuespedService {
     @Override
     public boolean existsByDocumento(String docIdentidad, TipoDoc tipoDoc) {
         return repository.existsByDocIdentidadAndTipoDoc(docIdentidad, tipoDoc);
+    }
+
+    public Huesped tryToCreate(Huesped huesped) throws HuespedDuplicatedException{
+        if(this.existsByDocumento(huesped.getDocIdentidad(), huesped.getTipoDoc())){
+            //#1 ERROR HUESPED DUPLICADO - FLUJO ALTERNATIVO
+
+            throw new HuespedDuplicatedException();
+        }
+
+        return repository.save(huesped);
     }
 
 }
