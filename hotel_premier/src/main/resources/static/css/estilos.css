@@ -1,7 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
     background-color: #f5f5f5;
+    padding: 20px;
 }
 
 h1 {
@@ -10,17 +16,18 @@ h1 {
     margin-bottom: 10px;
 }
 
+/* ======= OVERLAY Y POPUP DE CONFIRMACIÓN ======= */
 .overlay {
-  display: none; /* ← OCULTO por defecto */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center; /* Se aplicará cuando sea flex */
-  align-items: center; /* Se aplicará cuando sea flex */
-  z-index: 1000;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .popup {
@@ -30,20 +37,57 @@ h1 {
     text-align: center;
     width: 350px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    /* NO necesitas justify-content aquí */
 }
 
 .popup p {
     font-size: 17px;
     margin-bottom: 25px;
+    line-height: 1.5;
 }
 
+/* Botones del popup (NO y SI) */
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-popup {
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    width: 100px;
+    height: 45px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, opacity 0.2s;
+}
+
+.btn-popup:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.btn-popup.no {
+    background-color: #f8b7b7;
+    color: #333;
+}
+
+.btn-popup.si {
+    background-color: #b9f3b3;
+    color: #333;
+}
+
+/* ======= INSTRUCCIONES ======= */
 .instrucciones {
     text-align: center;
     margin-bottom: 30px;
     font-size: 14px;
+    color: #333;
 }
 
+/* ======= FORMULARIO ======= */
 fieldset {
     background-color: white;
     border: 2px solid #333;
@@ -55,6 +99,7 @@ fieldset {
 legend {
     font-weight: bold;
     padding: 0 10px;
+    font-size: 16px;
 }
 
 .form-group {
@@ -65,15 +110,19 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    font-size: 14px;
 }
 
 input[type="text"],
 input[type="date"],
-input[type="email"] {
+input[type="email"],
+input[type="tel"] {
     padding: 8px;
     font-size: 14px;
     border: 1px solid #666;
-    width: 250px;
+    width: 100%;
+    max-width: 250px;
+    border-radius: 3px;
 }
 
 .group {
@@ -82,51 +131,76 @@ input[type="email"] {
     gap: 10px;
 }
 
+.group input {
+    flex: 1;
+}
+
 select {
     padding: 8px;
     font-size: 14px;
     border: 1px solid #666;
+    border-radius: 3px;
+    background-color: white;
 }
 
-.botones {
-    margin-top: 30px;
-    text-align: left;
+/* ======= BOTONES DEL FORMULARIO ======= */
+/* Botón Siguiente (dentro del fieldset) */
+.btn-siguiente {
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 10px 30px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, background-color 0.2s;
+    background-color: white;
+    display: block;
+    margin: 30px auto 0;
+}
+
+.btn-siguiente:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+}
+
+/* Contenedor del botón Cancelar (fuera del form) */
+.form-buttons {
+    margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 15px;
 }
 
-button {
-    font-size: 18px;
+/* Botón Cancelar */
+.btn-cancelar {
+    font-size: 16px;
     font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    width: 80px;
-    height: 40px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 10px 30px;
     cursor: pointer;
-    transition: transform 0.1s ease-in-out;
+    transition: transform 0.1s ease-in-out, background-color 0.2s;
+    background-color: white;
 }
 
-button:hover {
+.btn-cancelar:hover {
     transform: scale(1.05);
+    background-color: #f0f0f0;
 }
 
-.no {
-    background-color: #f8b7b7;
-}
-
-.si {
-    background-color: #b9f3b3;
-}
-
+/* ======= BOTÓN DE CARGAR (opcional, si lo tienes) ======= */
 #cargar {
-    margin: 100px auto;
+    margin: 50px auto;
     display: block;
-    padding: 10px 25px;
+    padding: 12px 30px;
     font-size: 18px;
     cursor: pointer;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+#cargar:hover {
+    background-color: #0056b3;
 }
