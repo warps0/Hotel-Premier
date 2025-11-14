@@ -18,4 +18,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(HuespedDuplicatedException.class)
+    public ResponseEntity<String> handleHuespedDuplicated(HuespedDuplicatedException exception){
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

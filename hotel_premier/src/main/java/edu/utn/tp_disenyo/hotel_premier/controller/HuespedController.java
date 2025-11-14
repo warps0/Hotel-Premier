@@ -2,7 +2,6 @@ package edu.utn.tp_disenyo.hotel_premier.controller;
 
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,6 @@ public class HuespedController {
 
     private final HuespedService service;
 
-    @Autowired
     public HuespedController(HuespedService service) {
         this.service = service;
     }
