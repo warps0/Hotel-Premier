@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
+import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import org.springframework.util.MultiValueMap;
 public interface HuespedService {
 
     // TODO: Manejar excepciones para el método create
-    public Huesped create(Huesped huesped) throws Exception;
+    public Huesped create(Huesped huesped) throws HuespedNotSavedException;
     public List<Huesped> getAll();
     public Huesped getById(Long id) throws HuespedNotFoundException;
     public Huesped update(Long id, Huesped huesped) throws HuespedNotFoundException;
