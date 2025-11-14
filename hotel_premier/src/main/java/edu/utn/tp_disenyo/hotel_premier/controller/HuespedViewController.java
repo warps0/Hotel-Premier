@@ -39,7 +39,7 @@ public class HuespedViewController {
     @PostMapping("/huesped")
     public String submitForm(@ModelAttribute Huesped formHuesped, RedirectAttributes redirectAttributes) throws HuespedNotSavedException {
         if(huespedService.existsByDocumento(formHuesped.getDocIdentidad(), formHuesped.getTipoDoc())){
-            // ERROR HUESPED DUPLICADO - FLUJO ALTERNATIVO
+            //TODO: #1 ERROR HUESPED DUPLICADO - FLUJO ALTERNATIVO
 
             return "redirect:/huesped/alta/confirmacion";
         }
@@ -55,7 +55,7 @@ public class HuespedViewController {
 
     @GetMapping("/huesped/alta/confirmacion")
     public String confirmarHuesped() {
-        //TODO: /huesped/alta/confirmacion HTML
+        //TODO: #1 /huesped/alta/confirmacion HTML
         return new String();
     }
     
