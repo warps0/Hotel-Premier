@@ -33,10 +33,27 @@ document.addEventListener("DOMContentLoaded", function() {
     select.appendChild(option);
   });
 
+  select.value = "Argentina";
+
   paises.forEach(nac => {
     const option = document.createElement("option");
     option.value = nac;
     option.textContent = nac;
     altSelect.appendChild(option);
   });
+
+  altSelect.value = "Argentina";
+
 });
+
+const overlay = document.getElementById('overlay');
+    const cargarBtn = document.getElementById('cargar');
+    const noBtn = document.getElementById('noBtn');
+    const siBtn = document.getElementById('siBtn');
+
+    cargarBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        overlay.style.display = 'flex';
+      }, 500);
+    });
+
