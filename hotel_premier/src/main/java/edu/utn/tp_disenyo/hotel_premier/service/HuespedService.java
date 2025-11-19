@@ -8,7 +8,6 @@ import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import java.util.List;
 
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
-import org.springframework.util.MultiValueMap;
 
 public interface HuespedService {
 
