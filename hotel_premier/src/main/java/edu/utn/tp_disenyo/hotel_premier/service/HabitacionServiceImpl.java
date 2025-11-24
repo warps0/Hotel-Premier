@@ -37,8 +37,8 @@ public class HabitacionServiceImpl implements HabitacionService{
     }
 
     @Override
-    public Habitacion getById(Long id) throws Exception {
-        return Optional.ofNullable(repository.getOne(id)).orElseThrow(
+    public Optional<Habitacion> getById(Long id) throws Exception {
+        return Optional.ofNullable(repository.findById(id)).orElseThrow(
                 () -> new Exception() //HabitacionNotFoundException()
         );
     }

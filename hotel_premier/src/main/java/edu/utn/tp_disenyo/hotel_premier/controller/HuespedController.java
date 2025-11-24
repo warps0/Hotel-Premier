@@ -1,5 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class HuespedController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Huesped>> getAll() {
+    public ResponseEntity<List<HuespedDTO>> getAll() {
         return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 

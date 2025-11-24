@@ -1,15 +1,16 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
@@ -35,8 +36,17 @@ public class HuespedServiceImpl implements HuespedService {
     }
 
     @Override
-    public List<Huesped> getAll() {
-        return repository.findAll();
+    public List<HuespedDTO> getAll() {
+        List<Huesped> huespedes = repository.findAll();
+        List<HuespedDTO> huespedDTOs = new ArrayList<>();
+
+        for (Huesped huesped : huespedes) {
+            huespedDTOs.add(
+                new HuespedDTO(huesped.getId(), huesped.getNombre(), huesped.getApellido(), huesped.getDocIdentidad(), huesped.getTipoDoc())
+            );
+        }
+
+        return huespedDTOs;
     }
 
     @Override
