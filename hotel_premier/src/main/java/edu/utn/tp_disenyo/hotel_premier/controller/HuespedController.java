@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/huesped")
+@CrossOrigin(origins = "http://localhost:3000")
 public class HuespedController {
 
     private final HuespedService service;
@@ -23,8 +24,13 @@ public class HuespedController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HuespedDTO>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<HuespedDTO>> getAll(
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String apellido,
+        @RequestParam(required = false) String documento,
+        @RequestParam(required = false) TipoDoc tipoDoc 
+    ) {
+        return new ResponseEntity<>(service.getAll(nombre, apellido, documento, tipoDoc), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

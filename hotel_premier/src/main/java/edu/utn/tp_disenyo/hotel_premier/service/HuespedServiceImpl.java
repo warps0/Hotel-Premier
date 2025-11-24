@@ -36,16 +36,43 @@ public class HuespedServiceImpl implements HuespedService {
     }
 
     @Override
-    public List<HuespedDTO> getAll() {
+    public List<HuespedDTO> getAll(String nombre, String apellido, String documento, TipoDoc tipoDoc) {
         List<Huesped> huespedes = repository.findAll();
         List<HuespedDTO> huespedDTOs = new ArrayList<>();
 
-        for (Huesped huesped : huespedes) {
-            huespedDTOs.add(
-                new HuespedDTO(huesped.getId(), huesped.getNombre(), huesped.getApellido(), huesped.getDocIdentidad(), huesped.getTipoDoc())
-            );
-        }
+        if(nombre != null || apellido != null || documento != null || tipoDoc != null){
+            List<Huesped> huespedesPorNombre = new ArrayList<>();
+            List<Huesped> huespedesPorApellido = new ArrayList<>();
+            List<Huesped> huespedesPorTipoDoc = new ArrayList<>();
+            List<Huesped> huespedesPorDoc = new ArrayList<>();
+            
+            if(nombre != null){
+                huespedesPorNombre = repository.findByNombre(nombre);
+            }
 
+            if(apellido != null){
+                huespedesPorApellido = repository.findByApellido(apellido);
+            }
+
+            if(documento != null){
+                huespedesPorDoc = repository.findByDocIdentidad(documento);
+            }
+
+            if(tipoDoc != null){
+                huespedesPorTipoDoc = repository.findByTipoDoc(tipoDoc);
+            }
+
+            huespedes = huespedesPorNombre;
+            huespedes.retainAll(huespedesPorApellido);
+            huespedes.retainAll(huespedesPorDoc);
+            huespedes.retainAll(huespedesPorTipoDoc);
+    }
+    
+    for (Huesped huesped : huespedes) {
+        huespedDTOs.add(
+            new HuespedDTO(huesped.getId(), huesped.getNombre(), huesped.getApellido(), huesped.getDocIdentidad(), huesped.getTipoDoc())
+        );
+    }
         return huespedDTOs;
     }
 

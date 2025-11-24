@@ -14,7 +14,7 @@ public interface HuespedService {
 
     // TODO: Manejar excepciones para el método create
     public Huesped create(Huesped huesped) throws HuespedNotSavedException;
-    public List<HuespedDTO> getAll();
+    public List<HuespedDTO> getAll(String nombre, String apellido, String documento, TipoDoc tipoDoc);
     public Huesped getById(Long id) throws HuespedNotFoundException;
     public Huesped update(Long id, Huesped huesped) throws HuespedNotFoundException;
     public void deleteById(Long id) throws HuespedNotFoundException;
