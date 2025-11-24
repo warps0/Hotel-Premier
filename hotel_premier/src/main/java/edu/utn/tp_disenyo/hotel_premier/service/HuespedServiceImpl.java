@@ -37,10 +37,10 @@ public class HuespedServiceImpl implements HuespedService {
 
     @Override
     public List<HuespedDTO> getAll(String nombre, String apellido, String documento, TipoDoc tipoDoc) {
-        List<Huesped> huespedes = repository.findAll();
+        List<Huesped> huespedes = new ArrayList<>();
         List<HuespedDTO> huespedDTOs = new ArrayList<>();
 
-        if(nombre != null || apellido != null || documento != null || tipoDoc != null){
+        if(nombre != null || apellido != null || documento != null || tipoDoc != null){ 
             List<Huesped> huespedesPorNombre = new ArrayList<>();
             List<Huesped> huespedesPorApellido = new ArrayList<>();
             List<Huesped> huespedesPorTipoDoc = new ArrayList<>();
@@ -67,7 +67,10 @@ public class HuespedServiceImpl implements HuespedService {
             huespedes.retainAll(huespedesPorDoc);
             huespedes.retainAll(huespedesPorTipoDoc);
     }
-    
+    else if(nombre == null && apellido == null && documento == null && tipoDoc == null){
+        huespedes = repository.findAll();
+    }
+
     for (Huesped huesped : huespedes) {
         huespedDTOs.add(
             new HuespedDTO(huesped.getId(), huesped.getNombre(), huesped.getApellido(), huesped.getDocIdentidad(), huesped.getTipoDoc())
