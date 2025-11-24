@@ -40,7 +40,8 @@ public class HuespedServiceImpl implements HuespedService {
         List<Huesped> huespedes = new ArrayList<>();
         List<HuespedDTO> huespedDTOs = new ArrayList<>();
 
-        if(nombre != null || apellido != null || documento != null || tipoDoc != null){ 
+        if(nombre != null || apellido != null || documento != null || tipoDoc != null){
+            System.out.println("Hey!"); 
             List<Huesped> huespedesPorNombre = new ArrayList<>();
             List<Huesped> huespedesPorApellido = new ArrayList<>();
             List<Huesped> huespedesPorTipoDoc = new ArrayList<>();
