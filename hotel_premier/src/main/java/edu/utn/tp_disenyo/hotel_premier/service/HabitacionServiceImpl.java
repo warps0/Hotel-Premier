@@ -76,7 +76,7 @@ public class HabitacionServiceImpl implements HabitacionService{
         return repository.findByCapacidad(capacidad);
     }
 
-    public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin){
+    public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
         List<Habitacion> habitaciones = this.getAll();
         List<HabitacionDTO> listaDTO = new ArrayList<>();
 
@@ -85,7 +85,7 @@ public class HabitacionServiceImpl implements HabitacionService{
             listaDTO.add(habitacionDTO);
         }
 
-        for(HabitacionDTO habitacion : listaDTO){
+        for(HabitacionDTO habitacion : listaDTO) {
             //TODO: Filtrar historialEstado en base a fechaInicio y fechaFin
         }
         return listaDTO;

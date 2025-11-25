@@ -15,7 +15,6 @@ import java.util.List;
 public class HabitacionDTO {
     private Long id;
     private TipoHabitacion tipoHabitacion;
+    //TODO: Ordenado por fechaInicio
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
-
-
 }

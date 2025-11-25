@@ -1,8 +1,12 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
@@ -41,7 +45,6 @@ public class HuespedServiceImpl implements HuespedService {
         List<HuespedDTO> huespedDTOs = new ArrayList<>();
 
         if(nombre != null || apellido != null || documento != null || tipoDoc != null){
-            System.out.println("Hey!"); 
             List<Huesped> huespedesPorNombre = new ArrayList<>();
             List<Huesped> huespedesPorApellido = new ArrayList<>();
             List<Huesped> huespedesPorTipoDoc = new ArrayList<>();
@@ -63,20 +66,52 @@ public class HuespedServiceImpl implements HuespedService {
                 huespedesPorTipoDoc = repository.findByTipoDoc(tipoDoc);
             }
 
-            huespedes = huespedesPorNombre;
-            huespedes.retainAll(huespedesPorApellido);
-            huespedes.retainAll(huespedesPorDoc);
-            huespedes.retainAll(huespedesPorTipoDoc);
-    }
-    else if(nombre == null && apellido == null && documento == null && tipoDoc == null){
-        huespedes = repository.findAll();
-    }
+            //huespedes = Stream.concat(huespedesPorNombre.stream(), huespedesPorApellido.stream()).distinct().collect(Collectors.toList());
+            //huespedes = Stream.concat(huespedes.stream(), huespedesPorDoc.stream()).distinct().collect(Collectors.toList());
+            //huespedes = Stream.concat(huespedes.stream(), huespedesPorTipoDoc.stream()).distinct().collect(Collectors.toList());
 
-    for (Huesped huesped : huespedes) {
-        huespedDTOs.add(
-            new HuespedDTO(huesped.getId(), huesped.getNombre(), huesped.getApellido(), huesped.getDocIdentidad(), huesped.getTipoDoc())
-        );
-    }
+            /*
+                Nueva estrategia: 
+                    #1 Unificar o Intersectar hNombre con hApellido
+                    #2 Unificar o Intersectar hDoc con hTipoDoc
+
+                    #3 Unificar o Intersectar hNombre con hDoc
+            */
+
+           // #1
+           if(!huespedesPorNombre.isEmpty() && !huespedesPorApellido.isEmpty()) { // INTERSECTAR
+            huespedesPorNombre.retainAll(huespedesPorApellido);
+           }
+           else { // UNIFICAR
+            Stream.concat(huespedesPorNombre.stream(), huespedesPorApellido.stream()).distinct().collect(Collectors.toList());
+           }
+
+           // #2
+           if(!huespedesPorDoc.isEmpty() && !huespedesPorTipoDoc.isEmpty()) { // INTERSECTAR
+            huespedesPorDoc.retainAll(huespedesPorTipoDoc);
+           }
+           else { // UNIFICAR
+            Stream.concat(huespedesPorDoc.stream(), huespedesPorTipoDoc.stream()).distinct().collect(Collectors.toList());
+           }
+
+           // #3
+           if(!huespedesPorNombre.isEmpty() && !huespedesPorDoc.isEmpty()) { // INTERSECTAR
+            huespedesPorNombre.retainAll(huespedesPorDoc);
+           }
+           else { // UNIFICAR
+            Stream.concat(huespedesPorNombre.stream(), huespedesPorDoc.stream()).distinct().collect(Collectors.toList());
+           }
+        }
+        else {
+            huespedes = repository.findAll();
+        }
+
+        for (Huesped huesped : huespedes) {
+            huespedDTOs.add(
+                new HuespedDTO(huesped.getId(), huesped.getNombre(), huesped.getApellido(), huesped.getDocIdentidad(), huesped.getTipoDoc()
+            ));
+        }        
+        
         return huespedDTOs;
     }
 

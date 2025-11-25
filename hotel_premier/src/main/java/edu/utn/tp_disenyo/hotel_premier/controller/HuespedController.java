@@ -30,6 +30,7 @@ public class HuespedController {
         @RequestParam(required = false) String documento,
         @RequestParam(required = false) TipoDoc tipoDoc 
     ) {
+        //TODO: ¿Objecto Filter?
         return new ResponseEntity<>(service.getAll(nombre, apellido, documento, tipoDoc), HttpStatus.OK);
     }
 
