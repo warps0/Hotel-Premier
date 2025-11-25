@@ -37,7 +37,11 @@ public class HuespedViewController {
         return "exitoAltaHuesped";
     }
 
-    //huesped/buscar --> buscarHuesped
+    // /huesped/buscar --> buscarHuesped
+    @GetMapping("/huesped/buscar")
+    public String buscarHuesped() {
+        return "buscarHuesped";
+    }
     //habitaciones/reservar --> reservarHabitacion
     //habitaciones/estado --> verEstadoHabitaciones
     //habitaciones/ocupar --> ocuparHabitacion
