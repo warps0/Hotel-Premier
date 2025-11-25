@@ -87,6 +87,8 @@ public class HabitacionServiceImpl implements HabitacionService{
 
         for(HabitacionDTO habitacion : listaDTO) {
             //TODO: Filtrar historialEstado en base a fechaInicio y fechaFin
+            // Busco aproximación por izq mas cercana fechaInicio
+            // Busco aproximación por der mas cercana fechaFin
         }
         return listaDTO;
     }

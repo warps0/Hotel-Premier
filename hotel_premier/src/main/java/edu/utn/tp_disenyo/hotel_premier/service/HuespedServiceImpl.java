@@ -66,10 +66,6 @@ public class HuespedServiceImpl implements HuespedService {
                 huespedesPorTipoDoc = repository.findByTipoDoc(tipoDoc);
             }
 
-            //huespedes = Stream.concat(huespedesPorNombre.stream(), huespedesPorApellido.stream()).distinct().collect(Collectors.toList());
-            //huespedes = Stream.concat(huespedes.stream(), huespedesPorDoc.stream()).distinct().collect(Collectors.toList());
-            //huespedes = Stream.concat(huespedes.stream(), huespedesPorTipoDoc.stream()).distinct().collect(Collectors.toList());
-
             /*
                 Nueva estrategia: 
                     #1 Unificar o Intersectar hNombre con hApellido
@@ -78,12 +74,12 @@ public class HuespedServiceImpl implements HuespedService {
                     #3 Unificar o Intersectar hNombre con hDoc
             */
 
-           // #1
+           // #1 TODO: Comportamiento extraño CASO 'Matias' 'Ramonda'
            if(!huespedesPorNombre.isEmpty() && !huespedesPorApellido.isEmpty()) { // INTERSECTAR
             huespedesPorNombre.retainAll(huespedesPorApellido);
            }
            else { // UNIFICAR
-            Stream.concat(huespedesPorNombre.stream(), huespedesPorApellido.stream()).distinct().collect(Collectors.toList());
+            huespedesPorNombre = Stream.concat(huespedesPorNombre.stream(), huespedesPorApellido.stream()).distinct().collect(Collectors.toList());
            }
 
            // #2
@@ -91,7 +87,7 @@ public class HuespedServiceImpl implements HuespedService {
             huespedesPorDoc.retainAll(huespedesPorTipoDoc);
            }
            else { // UNIFICAR
-            Stream.concat(huespedesPorDoc.stream(), huespedesPorTipoDoc.stream()).distinct().collect(Collectors.toList());
+            huespedesPorDoc = Stream.concat(huespedesPorDoc.stream(), huespedesPorTipoDoc.stream()).distinct().collect(Collectors.toList());
            }
 
            // #3
@@ -99,7 +95,7 @@ public class HuespedServiceImpl implements HuespedService {
             huespedesPorNombre.retainAll(huespedesPorDoc);
            }
            else { // UNIFICAR
-            Stream.concat(huespedesPorNombre.stream(), huespedesPorDoc.stream()).distinct().collect(Collectors.toList());
+            huespedes = Stream.concat(huespedesPorNombre.stream(), huespedesPorDoc.stream()).distinct().collect(Collectors.toList());
            }
         }
         else {
