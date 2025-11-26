@@ -1,6 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,29 +10,29 @@ import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
-import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
-import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
 import io.micrometer.common.lang.NonNull;
 
 @Service
 public class ReservaServiceImpl implements ReservaService {
     private final ReservaDAO reservaRepository;
-    private final HuespedDAO huespedRepository;
-    private final HabitacionDAO habitacionRepository;
+    private final HuespedService huespedService;
+    private final HabitacionService habitacionService;
 
-    public ReservaServiceImpl(ReservaDAO rRep, HuespedDAO hRep, HabitacionDAO habRep) {
+    public ReservaServiceImpl(ReservaDAO rRep, HuespedService hServ, HabitacionService habServ) {
         this.reservaRepository = rRep;
-        this.huespedRepository = hRep;
-        this.habitacionRepository = habRep;
+        this.huespedService = hServ;
+        this.habitacionService = habServ;
     }
 
     @Override
     public Reserva create(@NonNull ReservaCreateDTO reservaDTO) throws Exception {
-        Huesped responsable = huespedRepository.findById(reservaDTO.getResponsableId())
-        .orElseThrow(() -> new RuntimeException("Huesped no encontrado"));
-
-        List<Habitacion> habitaciones = habitacionRepository.findAllById(reservaDTO.getHabitacionesIds());
+        Huesped responsable = huespedService.getById(reservaDTO.getResponsableId());
+        List<Habitacion> habitaciones = new ArrayList<>();
+        for(Long habitacionId: reservaDTO.getHabitacionesIds()){
+            habitaciones.add(habitacionService.getById(habitacionId).get());
+        }
+        //List<Habitacion> habitaciones = habitacionService.findAllById(reservaDTO.getHabitacionesIds());
 
         Reserva reserva = new Reserva(
             reservaDTO.getEstado(),
@@ -52,21 +52,30 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public Reserva getById(Long id) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    public Optional<Reserva> getById(Long id) throws Exception {
+        return Optional.ofNullable(reservaRepository.findById(id)).orElseThrow(
+                () -> new Exception() //ReservaNotFoundException()
+        );
     }
 
     @Override
     public Reserva update(Long id, Reserva reserva) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        Reserva reservaActualizada = reservaRepository.findById(id).orElseThrow( () -> new Exception()); //ReservaNotFoundException()
+
+        reservaActualizada.setEstado(reserva.getEstado());
+        reservaActualizada.setHabitaciones(reserva.getHabitaciones());
+        reservaActualizada.setFechaInicio(reserva.getFechaInicio());
+        reservaActualizada.setFechaFin(reserva.getFechaFin());
+        reservaActualizada.setFechaCreacion(reserva.getFechaCreacion());
+        reservaActualizada.setResponsable(reserva.getResponsable());
+
+        return reservaRepository.save(reservaActualizada);
     }
 
     @Override
     public void deleteById(Long id) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        Reserva reservaBorrada = reservaRepository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
+        reservaRepository.delete(reservaBorrada);
     }
 
 }
