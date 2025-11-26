@@ -15,5 +15,5 @@ public interface HabitacionDAO extends JpaRepository<Habitacion, Long> {
     List<Habitacion> findByPiso(Piso piso);
     List<Habitacion> findByCapacidad(Integer capacidad);
     //¿List<EstadoHabitacion>?
-    List<Habitacion> findByStartDateBetween(LocalDateTime fechaInicio, LocalDateTime fechaFin);
+    //List<Habitacion> findByStartDateBetween(LocalDateTime fechaInicio, LocalDateTime fechaFin);
 }
