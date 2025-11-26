@@ -25,7 +25,6 @@ public class HuespedServiceImpl implements HuespedService {
 
     private final HuespedDAO repository;
 
-    @Autowired
     public HuespedServiceImpl(HuespedDAO repository) {
         this.repository = repository;
     }
