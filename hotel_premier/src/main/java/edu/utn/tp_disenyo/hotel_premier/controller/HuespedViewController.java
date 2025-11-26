@@ -37,6 +37,15 @@ public class HuespedViewController {
         return "exitoAltaHuesped";
     }
 
+    // /huesped/buscar --> buscarHuesped
+    @GetMapping("/huesped/buscar")
+    public String buscarHuesped() {
+        return "buscarHuesped";
+    }
+    //habitaciones/reservar --> reservarHabitacion
+    //habitaciones/estado --> verEstadoHabitaciones
+    //habitaciones/ocupar --> ocuparHabitacion
+
     @GetMapping("/huesped/duplicado")
     public String confirmarHuesped(@ModelAttribute("huesped") Huesped formHuesped, Model model) {
         return "advertenciaDNI";

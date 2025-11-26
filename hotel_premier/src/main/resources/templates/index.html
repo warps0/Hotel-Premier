@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +11,23 @@
 </head>
 
 <body>
-    <h1>Bienvenido a Hotel Premier</h1>
-    <img th:src="@{/img/hotel_premier_logo.svg}" alt="Imagen del Hotel" class="imagen-hotel">
 
+    <h1 class="titulo">Bienvenido a Hotel Premier</h1>
 
-        <a href="http://localhost:8080/huesped/alta">
-            <button class="btn-altaHuesped">Dar de Alta un Huésped</button>
-        </a>
+    <div class="layout">
+        <img th:src="@{/img/hotel_premier_logo.svg}" alt="Imagen del Hotel" class="imagen-hotel">
 
-    
+        <div class="menu-container">
+            <h1>Huésped</h1>
+            <a href="http://localhost:8080/huesped/alta" class="btn-home">Dar de Alta un Huésped</a>
+            <a href="http://localhost:8080/huesped/buscar" class="btn-home">Buscar huésped</a>
+            <h1>Habitación</h1>
+            <a href="http://localhost:8080/habitaciones/reservar" class="btn-home">Reservar Habitación</a>
+            <a href="http://localhost:8080/habitaciones/estado" class="btn-home">Mostrar estado de habitaciones</a>
+            <a href="http://localhost:8080/habitaciones/ocupar" class="btn-home">Ocupar habitación</a>
+        </div>
+    </div>
 
-    
+</body>
+
 </html>
