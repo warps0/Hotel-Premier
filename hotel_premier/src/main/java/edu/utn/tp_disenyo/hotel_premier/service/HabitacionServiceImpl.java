@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
+import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
@@ -89,7 +90,24 @@ public class HabitacionServiceImpl implements HabitacionService{
             //TODO: Filtrar historialEstado en base a fechaInicio y fechaFin
             // Busco aproximación por izq mas cercana fechaInicio
             // Busco aproximación por der mas cercana fechaFin
+            int fromIdex = -1;
+            int toIndex = -1;
+            
+            for(EstadoHabitacion e: habitacion.getHistorialEstado()){
+                if(e.getFechaInicio().isBefore(fechaInicio)){
+                    fromIdex = habitacion.getHistorialEstado().indexOf(e);
+                }
+                else if(e.getFechaFin().isAfter(fechaFin)){
+                    toIndex = habitacion.getHistorialEstado().indexOf(e);
+                }
+            }
+            // JWT SECRET KEY
+            if(fromIdex != -1 && toIndex != -1){
+                List<EstadoHabitacion> subList = habitacion.getHistorialEstado().subList(fromIdex, toIndex);
+                habitacion.setHistorialEstado(subList);
+            }
         }
+
         return listaDTO;
     }
 }

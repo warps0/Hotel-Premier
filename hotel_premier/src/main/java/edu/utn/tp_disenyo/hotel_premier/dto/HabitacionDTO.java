@@ -17,4 +17,8 @@ public class HabitacionDTO {
     private TipoHabitacion tipoHabitacion;
     //TODO: Ordenado por fechaInicio
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
+
+    public void setHistorialEstado(List<EstadoHabitacion> sublist) {
+        this.historialEstado = sublist;
+    }
 }
