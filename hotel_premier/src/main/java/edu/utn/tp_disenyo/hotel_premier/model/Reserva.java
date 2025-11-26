@@ -4,12 +4,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -30,9 +36,17 @@ public class Reserva {
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     
+    @ManyToOne
+    @JoinColumn(name = "responsable_id")
     private Huesped responsable;
 
-    @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JsonManagedReference
+    @JoinTable(
+        name = "reserva_habitacion",
+        joinColumns = @JoinColumn(name = "reserva_id"),
+        inverseJoinColumns = @JoinColumn(name = "habitacion_id")
+    )
     private List<Habitacion> habitaciones = new ArrayList<>();
     
     public Reserva(EstadoReserva estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, Huesped responsable) {
@@ -43,5 +57,15 @@ public class Reserva {
 
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+    }
+
+    public void addHabitacion(Habitacion habitacion) {
+        habitaciones.add(habitacion);
+        habitacion.getReservas().add(this);
+    }
+
+    public void removeHabitacion(Habitacion habitacion) {
+        habitaciones.remove(habitacion);
+        habitacion.getReservas().remove(this);
     }
 }
