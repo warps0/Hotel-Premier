@@ -36,4 +36,14 @@ public class Habitacion {
     //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
+
+    public void addEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+        historialEstado.add(estadoHabitacion);
+        estadoHabitacion.setHabitacion(this);
+    }
+
+    public void removeEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+        historialEstado.remove(estadoHabitacion);
+        estadoHabitacion.setHabitacion(null);
+    }
 }
