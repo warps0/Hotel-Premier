@@ -1,10 +1,13 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
-
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
+import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.service.HuespedService;
+import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
+import java.util.List;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -37,35 +41,79 @@ public class HuespedViewController {
         return "exitoAltaHuesped";
     }
 
-    // /huesped/buscar --> buscarHuesped
     @GetMapping("/huesped/buscar")
-    public String buscarHuesped() {
+public String buscarHuesped(
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String apellido,
+        @RequestParam(required = false) String documento,
+        @RequestParam(required = false) TipoDoc tipoDocumento,
+        @RequestParam(required = false, defaultValue = "false") boolean buscar,
+        Model model) {
+    
+    // Si no se ha presionado buscar, mostrar solo el formulario
+    if (!buscar) {
         return "buscarHuesped";
     }
-    //habitaciones/reservar --> reservarHabitacion
-    //habitaciones/estado --> verEstadoHabitaciones
-    //habitaciones/ocupar --> ocuparHabitacion
+    
+    // Limpiar parámetros vacíos
+    nombre = (nombre != null && nombre.trim().isEmpty()) ? null : nombre;
+    apellido = (apellido != null && apellido.trim().isEmpty()) ? null : apellido;
+    documento = (documento != null && documento.trim().isEmpty()) ? null : documento;
+    tipoDocumento = (tipoDocumento != null) ? tipoDocumento : null;
+    
+    // Hacer la búsqueda (con o sin filtros)
+    List<HuespedDTO> resultados = huespedService.getAll(nombre, apellido, documento, tipoDocumento);
+    
+    model.addAttribute("resultados", resultados);
+    model.addAttribute("nombre", nombre);
+    model.addAttribute("apellido", apellido);
+    model.addAttribute("docIdentidad", documento);
+    model.addAttribute("tipoDoc", tipoDocumento);
+    
+    return "seleccionarHuesped";
+}
+
+@PostMapping("/huesped/seleccionar")
+public String seleccionarHuesped(
+        @RequestParam Long huespedId, 
+        RedirectAttributes redirectAttributes) throws HuespedNotFoundException {
+    
+    Huesped huespedSeleccionado = huespedService.getById(huespedId);
+    redirectAttributes.addFlashAttribute("huespedSeleccionado", huespedSeleccionado);
+    
+    // Redirigir a donde necesites con el huésped seleccionado
+    return "redirect:/habitaciones/reservar";
+}
+
+    // habitaciones/reservar --> reservarHabitacion
+    // habitaciones/estado --> verEstadoHabitaciones
+    @GetMapping("/habitaciones/estado")
+    public String mostrarEstadoHabitaciones(Model model) {
+        return "verEstadoHabitaciones"; 
+}
+    // habitaciones/ocupar --> ocuparHabitacion
 
     @GetMapping("/huesped/duplicado")
     public String confirmarHuesped(@ModelAttribute("huesped") Huesped formHuesped, Model model) {
         return "advertenciaDNI";
     }
 
-    @GetMapping({"/", "/home"})
+    @GetMapping({ "/", "/home" })
     public String home() {
         return "index";
     }
 
     @PostMapping("/huesped")
-    public String submitForm(@ModelAttribute Huesped formHuesped, RedirectAttributes redirectAttributes) throws HuespedNotSavedException {
-        try{
+    public String submitForm(@ModelAttribute Huesped formHuesped, RedirectAttributes redirectAttributes)
+            throws HuespedNotSavedException {
+        try {
             huespedService.tryToCreate(formHuesped);
 
-            redirectAttributes.addFlashAttribute("nombreCompleto", formHuesped.getNombre() + " " + formHuesped.getApellido());
+            redirectAttributes.addFlashAttribute("nombreCompleto",
+                    formHuesped.getNombre() + " " + formHuesped.getApellido());
 
             return "redirect:/huesped/exito";
-        }
-        catch(HuespedDuplicatedException e){
+        } catch (HuespedDuplicatedException e) {
 
             redirectAttributes.addFlashAttribute("huesped", formHuesped);
             return "redirect:/huesped/duplicado";
@@ -74,10 +122,12 @@ public class HuespedViewController {
     }
 
     @PostMapping("/huesped/forzarCreacion")
-    public String forzarCreacion(@ModelAttribute("huesped") Huesped formHuesped, RedirectAttributes redirectAttributes) throws HuespedNotSavedException {
+    public String forzarCreacion(@ModelAttribute("huesped") Huesped formHuesped, RedirectAttributes redirectAttributes)
+            throws HuespedNotSavedException {
         huespedService.create(formHuesped);
 
-        redirectAttributes.addFlashAttribute("nombreCompleto", formHuesped.getNombre() + " " + formHuesped.getApellido());
+        redirectAttributes.addFlashAttribute("nombreCompleto",
+                formHuesped.getNombre() + " " + formHuesped.getApellido());
 
         return "redirect:/huesped/exito";
     }
