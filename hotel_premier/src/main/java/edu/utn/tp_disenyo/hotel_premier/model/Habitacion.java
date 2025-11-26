@@ -24,6 +24,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "habitacion")
 public class Habitacion {
+    //TODO: Agregar número habitación EJ 101, 102, ..., etc
+    //¿Implementar patrón factory?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +33,7 @@ public class Habitacion {
     private Float precio;
     private TipoHabitacion tipoHabitacion;
     private Piso piso;
+    //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
 }
