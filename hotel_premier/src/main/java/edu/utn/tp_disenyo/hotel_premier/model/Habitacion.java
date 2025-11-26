@@ -3,6 +3,8 @@ package edu.utn.tp_disenyo.hotel_premier.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import jakarta.persistence.CascadeType;
@@ -10,7 +12,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,5 +39,10 @@ public class Habitacion {
     private Piso piso;
     //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("fechaInicio ASC")
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "habitaciones")
+    @JsonBackReference
+    private List<Reserva> reservas;
 }
