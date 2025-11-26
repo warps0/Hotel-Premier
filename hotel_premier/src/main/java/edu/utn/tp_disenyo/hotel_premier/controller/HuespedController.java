@@ -1,5 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/huesped")
+@CrossOrigin(origins = "http://localhost:3000")
 public class HuespedController {
 
     private final HuespedService service;
@@ -22,8 +24,14 @@ public class HuespedController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Huesped>> getAll() {
-        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<HuespedDTO>> getAll(
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String apellido,
+        @RequestParam(required = false) String documento,
+        @RequestParam(required = false) TipoDoc tipoDoc 
+    ) {
+        //TODO: ¿Objecto Filter?
+        return new ResponseEntity<>(service.getAll(nombre, apellido, documento, tipoDoc), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

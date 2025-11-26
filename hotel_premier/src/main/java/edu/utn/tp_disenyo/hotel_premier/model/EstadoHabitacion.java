@@ -3,6 +3,8 @@ package edu.utn.tp_disenyo.hotel_premier.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 
 import jakarta.persistence.Entity;
@@ -33,7 +35,8 @@ public class EstadoHabitacion {
     private Estado estado;
 
     @Transient
-    private DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    @JsonIgnore
+    private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @ManyToOne
     @JoinColumn(name = "habitacion_id")
