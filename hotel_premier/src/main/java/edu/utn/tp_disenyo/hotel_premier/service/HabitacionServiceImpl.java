@@ -65,14 +65,14 @@ public class HabitacionServiceImpl implements HabitacionService{
     public Habitacion agregarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
         Habitacion habitacion = this.getById(idHabitacion).get();
 
-        habitacion.addEstadoHabitacion(estadoHabitacion);
+        //habitacion.addEstadoHabitacion(estadoHabitacion);
         return repository.save(habitacion);
     }
 
     public Habitacion borrarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
         Habitacion habitacion = this.getById(idHabitacion).get();
 
-        habitacion.removeEstadoHabitacion(estadoHabitacion);
+        //habitacion.removeEstadoHabitacion(estadoHabitacion);
         return repository.save(habitacion);
     }
 

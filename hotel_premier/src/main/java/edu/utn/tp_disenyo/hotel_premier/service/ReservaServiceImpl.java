@@ -41,7 +41,7 @@ public class ReservaServiceImpl implements ReservaService {
             responsable
         );
 
-        habitaciones.forEach(reserva::addHabitacion);
+        //habitaciones.forEach(reserva::addHabitacion);
 
         return reservaRepository.save(reserva);
     }

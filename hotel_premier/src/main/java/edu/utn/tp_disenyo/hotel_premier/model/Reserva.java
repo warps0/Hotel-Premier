@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,15 +36,17 @@ public class Reserva {
     @JoinColumn(name = "responsable_id")
     private Huesped responsable;
 
+    
     @ManyToMany
-    @JsonManagedReference
+    //@JsonManagedReference
     @JoinTable(
         name = "reserva_habitacion",
         joinColumns = @JoinColumn(name = "reserva_id"),
         inverseJoinColumns = @JoinColumn(name = "habitacion_id")
     )
     private List<Habitacion> habitaciones = new ArrayList<>();
-    
+
+
     public Reserva(EstadoReserva estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, Huesped responsable) {
         this.fechaCreacion = LocalDateTime.now();
         
@@ -57,6 +57,7 @@ public class Reserva {
         this.fechaFin = fechaFin;
     }
 
+    /*
     public void addHabitacion(Habitacion habitacion) {
         habitaciones.add(habitacion);
         habitacion.getReservas().add(this);
@@ -66,4 +67,5 @@ public class Reserva {
         habitaciones.remove(habitacion);
         habitacion.getReservas().remove(this);
     }
+    */
 }

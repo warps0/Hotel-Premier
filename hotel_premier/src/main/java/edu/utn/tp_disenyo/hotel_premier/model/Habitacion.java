@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
@@ -43,6 +44,10 @@ public class Habitacion {
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
 
     @ManyToMany(mappedBy = "habitaciones")
+    private List<Reserva> reservas = new ArrayList<>();
+    /*
+    @ManyToMany(mappedBy = "habitaciones")
     @JsonBackReference
     private List<Reserva> reservas;
+    */
 }
