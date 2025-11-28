@@ -13,12 +13,7 @@ import java.util.Objects;
 @Setter
 @Getter
 @Entity
-@Table(name = "persona_juridica")
 public class PersonaJuridica extends Persona {
-
-   // @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
-   // private Long id;
     private String razonSocial; //Nombre
 
     // Dos personas jurídicas son iguales si tienen la misma razón social

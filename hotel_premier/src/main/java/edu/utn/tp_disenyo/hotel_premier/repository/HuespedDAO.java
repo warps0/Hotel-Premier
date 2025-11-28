@@ -17,6 +17,7 @@ public interface HuespedDAO extends JpaRepository<Huesped, Long> {
     public List<Huesped> findByNombre(String nombre);
     public List<Huesped> findByApellido(String apellido);
     public List<Huesped> findByDocIdentidad(String docIdentidad);
+    public List<Huesped> findByTipoDoc(TipoDoc tipoDoc);
 
     // Existe un huésped con el documento pasado como argumento?
     boolean existsByDocIdentidadAndTipoDoc(String docIdentidad, TipoDoc tipoDoc);
