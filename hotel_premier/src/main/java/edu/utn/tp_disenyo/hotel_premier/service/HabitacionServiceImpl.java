@@ -6,8 +6,7 @@ import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
-import io.micrometer.common.lang.NonNull;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,13 +19,14 @@ public class HabitacionServiceImpl implements HabitacionService{
 
     private final HabitacionDAO repository;
 
+    @Autowired
     public HabitacionServiceImpl(HabitacionDAO repository) {
         this.repository = repository;
     }
 
 
     @Override
-    public Habitacion create(@NonNull Habitacion habitacion) throws Exception {
+    public Habitacion create(Habitacion habitacion) throws Exception {
         return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
                 () -> new Exception() //HabitacionNotFoundException()
         );
@@ -60,6 +60,20 @@ public class HabitacionServiceImpl implements HabitacionService{
         habitacionActualizada.setPiso(habitacion.getPiso());
         habitacionActualizada.setHistorialEstado(habitacion.getHistorialEstado());
 
+    }
+
+    public Habitacion agregarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
+        Habitacion habitacion = this.getById(idHabitacion).get();
+
+        habitacion.addEstadoHabitacion(estadoHabitacion);
+        return repository.save(habitacion);
+    }
+
+    public Habitacion borrarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
+        Habitacion habitacion = this.getById(idHabitacion).get();
+
+        habitacion.removeEstadoHabitacion(estadoHabitacion);
+        return repository.save(habitacion);
     }
 
     @Override
