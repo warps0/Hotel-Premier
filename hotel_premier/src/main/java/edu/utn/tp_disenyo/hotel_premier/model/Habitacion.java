@@ -3,9 +3,6 @@ package edu.utn.tp_disenyo.hotel_premier.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import jakarta.persistence.CascadeType;
@@ -50,4 +47,14 @@ public class Habitacion {
     @JsonBackReference
     private List<Reserva> reservas;
     */
+
+    public void addEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+        System.out.println(estadoHabitacion);
+        this.historialEstado.add(estadoHabitacion);
+    }
+
+    public void removeEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+        // TODO: ¿estadoHabitacion == historialEstado.at(X)? ;B
+        this.historialEstado.remove(estadoHabitacion);
+    }
 }
