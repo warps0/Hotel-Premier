@@ -15,6 +15,7 @@ import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 
 public interface HabitacionService {
     //TODO: Excepciones habitación
+    public String initHabitaciones() throws Exception;
     public Habitacion create(TipoHabitacion tipo) throws Exception;
     public List<Habitacion> getAll();
     public Optional<Habitacion> getById(Long id) throws Exception;

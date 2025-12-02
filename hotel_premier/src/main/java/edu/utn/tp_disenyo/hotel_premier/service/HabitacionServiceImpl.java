@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion.*;
+
 @Service
 public class HabitacionServiceImpl implements HabitacionService {
 
@@ -25,6 +27,27 @@ public class HabitacionServiceImpl implements HabitacionService {
         this.repository = repository;
     }
 
+    @Override
+    public String initHabitaciones() throws Exception {
+        for (int i = 0; i < 10; i++) {
+            this.create(INDIVIDUAL_ESTANDAR);
+        }
+        for (int i = 0; i < 18; i++) {
+            this.create(DOBLE_ESTANDAR);
+        }
+        for (int i = 0; i < 8; i++) {
+            this.create(DOBLE_SUPERIOR);
+        }
+        for (int i = 0; i < 10; i++) {
+            this.create(SUPERIOR_FAMILY_PLAN);
+        }
+
+        for (int i = 0; i < 2; i++) {
+            this.create(SUPERIOR_FAMILY_PLAN);
+        }
+
+        return "god no?";
+    }
 
     // TODO: HabitacionCreateDTO
     @Override

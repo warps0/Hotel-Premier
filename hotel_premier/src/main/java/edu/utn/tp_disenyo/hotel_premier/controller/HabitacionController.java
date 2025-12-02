@@ -26,6 +26,11 @@ class HabitacionController {
         this.service = service;
     }
 
+    @PostMapping("/init")
+    public ResponseEntity<String> initHabitaciones() throws Exception {
+        return new ResponseEntity<>(service.initHabitaciones(), HttpStatus.CREATED);
+    }
+
     @GetMapping
     public List<Habitacion> getAll() {
         return service.getAll();
