@@ -32,8 +32,11 @@ class HabitacionController {
     }
 
     @GetMapping
-    public List<Habitacion> getAll() {
-        return service.getAll();
+    public List<Habitacion> getAll(@RequestParam(required = false) TipoHabitacion tipo) {
+        if(tipo == null) {
+            return service.getAll();
+        }
+        else return service.findByTipoHabitacion(tipo);
     }
 
     @PostMapping
