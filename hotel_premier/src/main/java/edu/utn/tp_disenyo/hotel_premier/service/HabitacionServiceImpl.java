@@ -43,7 +43,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         }
 
         for (int i = 0; i < 2; i++) {
-            this.create(SUPERIOR_FAMILY_PLAN);
+            this.create(SUITE_DOBLE);
         }
 
         return "god no?";
