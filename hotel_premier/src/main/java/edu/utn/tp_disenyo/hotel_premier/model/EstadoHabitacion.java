@@ -39,6 +39,6 @@ public class EstadoHabitacion {
     private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @ManyToOne
-    @JoinColumn(name = "habitacion")
+    @JoinColumn(name = "habitacion_id")
     private Habitacion habitacion;
 }

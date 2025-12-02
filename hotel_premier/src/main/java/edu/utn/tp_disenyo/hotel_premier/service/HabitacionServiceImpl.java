@@ -3,6 +3,7 @@ package edu.utn.tp_disenyo.hotel_premier.service;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
+import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
@@ -19,7 +20,6 @@ public class HabitacionServiceImpl implements HabitacionService{
 
     private final HabitacionDAO repository;
 
-    @Autowired
     public HabitacionServiceImpl(HabitacionDAO repository) {
         this.repository = repository;
     }
@@ -28,6 +28,7 @@ public class HabitacionServiceImpl implements HabitacionService{
     @Override
     public Habitacion create(Habitacion habitacion) throws Exception {
         habitacion.setHistorialEstado(new ArrayList<EstadoHabitacion>());
+        habitacion.setReservas(new ArrayList<Reserva>());
         System.out.println(habitacion.getHistorialEstado());
         return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
                 () -> new Exception() //HabitacionNotFoundException()
