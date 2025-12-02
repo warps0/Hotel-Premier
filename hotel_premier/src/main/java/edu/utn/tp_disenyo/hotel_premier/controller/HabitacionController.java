@@ -5,6 +5,7 @@ import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.service.HabitacionService;
 
+import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +32,9 @@ class HabitacionController {
     }
 
     @PostMapping
-    public ResponseEntity<Habitacion> create(@RequestBody Habitacion habitacion) 
+    public ResponseEntity<Habitacion> create(@RequestParam TipoHabitacion tipo)
     throws Exception {
-        return new ResponseEntity<Habitacion>(service.create(habitacion), HttpStatus.CREATED);
+        return new ResponseEntity<Habitacion>(service.create(tipo), HttpStatus.CREATED);
     }
 
     @GetMapping("/buscar")

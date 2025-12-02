@@ -28,16 +28,24 @@ import lombok.Setter;
 public class Habitacion {
     //TODO: Agregar número habitación EJ 101, 102, ..., etc
     //¿Implementar patrón factory?
+
+    public static int cont_ind_estandar = 100;
+    public static int cont_doble_estandar = 200;
+    public static int cont_doble_superior = 300;
+    public static int cont_superior_family = 400;
+    public static int cont_suite = 500;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer capacidad;
     private Float precio;
     private TipoHabitacion tipoHabitacion;
-    private Piso piso;
+    // private Piso piso; erase una vez...
+    private int numeroHabitacion;
     //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("fechaInicio ASC")
+    //@OrderBy("fechaInicio ASC")
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
 
     @ManyToMany(mappedBy = "habitaciones")

@@ -3,6 +3,7 @@ package edu.utn.tp_disenyo.hotel_premier.service;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
+import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Piso;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class HabitacionServiceImpl implements HabitacionService{
+public class HabitacionServiceImpl implements HabitacionService {
 
     private final HabitacionDAO repository;
 
@@ -25,13 +26,51 @@ public class HabitacionServiceImpl implements HabitacionService{
     }
 
 
+    // TODO: HabitacionCreateDTO
     @Override
-    public Habitacion create(Habitacion habitacion) throws Exception {
+    public Habitacion create(TipoHabitacion tipo) throws Exception {
+        Habitacion habitacion = new Habitacion();
+        habitacion.setTipoHabitacion(tipo);
+
+        int cantHabitacionesDeTipo = repository.countByTipoHabitacion(tipo);
+        cantHabitacionesDeTipo++; // Incremento en uno, creo la primera habitación
+
+        // Forzar listas de estados y reservas vacías
         habitacion.setHistorialEstado(new ArrayList<EstadoHabitacion>());
         habitacion.setReservas(new ArrayList<Reserva>());
 
+        // Precio, capacidad, numero POR TIPO de habitación
+        // Atado con alambre, se debería hacer un factory ;)
+        switch(tipo) {
+            case INDIVIDUAL_ESTANDAR:
+                habitacion.setPrecio(50800F);
+                habitacion.setCapacidad(1);
+                habitacion.setNumeroHabitacion(Habitacion.cont_ind_estandar + cantHabitacionesDeTipo);
+                break;
+            case DOBLE_ESTANDAR:
+                habitacion.setPrecio(70230F);
+                habitacion.setCapacidad(2);
+                habitacion.setNumeroHabitacion(Habitacion.cont_doble_estandar + cantHabitacionesDeTipo);
+                break;
+            case DOBLE_SUPERIOR:
+                habitacion.setPrecio(90560F);
+                habitacion.setCapacidad(2);
+                habitacion.setNumeroHabitacion(Habitacion.cont_doble_superior + cantHabitacionesDeTipo);
+                break;
+            case SUPERIOR_FAMILY_PLAN:
+                habitacion.setPrecio(110500F);
+                habitacion.setCapacidad(5);
+                habitacion.setNumeroHabitacion(Habitacion.cont_superior_family + cantHabitacionesDeTipo);
+                break;
+            case SUITE_DOBLE:
+                habitacion.setPrecio(128600F);
+                habitacion.setCapacidad(2);
+                habitacion.setNumeroHabitacion(Habitacion.cont_suite + cantHabitacionesDeTipo);
+                break;
+        }
+
         return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
-                () -> new Exception() //HabitacionNotFoundException()
+                () -> new Exception() // EntityNotSavedException()
         );
     }
 
@@ -61,7 +100,7 @@ public class HabitacionServiceImpl implements HabitacionService{
         habitacionActualizada.setCapacidad(habitacion.getCapacidad());
         habitacionActualizada.setPrecio(habitacion.getPrecio());
         habitacionActualizada.setTipoHabitacion(habitacion.getTipoHabitacion());
-        habitacionActualizada.setPiso(habitacion.getPiso());
+        // habitacionActualizada.setPiso(habitacion.getPiso());
         habitacionActualizada.setHistorialEstado(habitacion.getHistorialEstado());
 
     }
@@ -89,16 +128,17 @@ public class HabitacionServiceImpl implements HabitacionService{
         return repository.findByTipoHabitacion(tipoHabitacion);
     }
 
-    @Override
-    public List<Habitacion> findByPiso(Piso piso) {
-        return repository.findByPiso(piso);
-    }
+//    @Override
+//    public List<Habitacion> findByPiso(Piso piso) {
+//        return repository.findByPiso(piso);
+//    }
 
     @Override
     public List<Habitacion> findByCapacidad(Integer capacidad) {
         return repository.findByCapacidad(capacidad);
     }
 
+    @Override
     public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime inputInicio, LocalDateTime inputFin) {
         return this.getAll()
         .stream()
