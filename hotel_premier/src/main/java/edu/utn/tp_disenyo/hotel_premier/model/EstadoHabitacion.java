@@ -3,6 +3,7 @@ package edu.utn.tp_disenyo.hotel_premier.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
@@ -25,7 +26,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "estado_habitacion")
+@Table(name = "estado")
 public class EstadoHabitacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +39,5 @@ public class EstadoHabitacion {
     @JsonIgnore
     private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    @ManyToOne
-    @JoinColumn(name = "habitacion_id")
-    private Habitacion habitacion;
+    private Long habitacion;
 }

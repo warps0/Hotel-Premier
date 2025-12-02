@@ -1,10 +1,8 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,7 +11,6 @@ import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
@@ -25,7 +22,6 @@ public class HuespedServiceImpl implements HuespedService {
 
     private final HuespedDAO repository;
 
-    @Autowired
     public HuespedServiceImpl(HuespedDAO repository) {
         this.repository = repository;
     }

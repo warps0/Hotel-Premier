@@ -10,7 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,5 +37,24 @@ public class Habitacion {
     private Piso piso;
     //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("fechaInicio ASC")
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "habitaciones")
+    private List<Reserva> reservas = new ArrayList<>();
+    /*
+    @ManyToMany(mappedBy = "habitaciones")
+    @JsonBackReference
+    private List<Reserva> reservas;
+    */
+
+    public void addEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+        System.out.println(estadoHabitacion);
+        this.historialEstado.add(estadoHabitacion);
+    }
+
+    public void removeEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+        // TODO: ¿estadoHabitacion == historialEstado.at(X)? ;B
+        this.historialEstado.remove(estadoHabitacion);
+    }
 }
