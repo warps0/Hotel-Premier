@@ -45,7 +45,7 @@ public class Habitacion {
     private int numeroHabitacion;
     //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@OrderBy("fechaInicio ASC")
+    @OrderBy("fechaInicio ASC")
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
 
     @ManyToMany(mappedBy = "habitaciones")
