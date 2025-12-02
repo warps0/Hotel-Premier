@@ -29,7 +29,7 @@ public class HabitacionServiceImpl implements HabitacionService{
     public Habitacion create(Habitacion habitacion) throws Exception {
         habitacion.setHistorialEstado(new ArrayList<EstadoHabitacion>());
         habitacion.setReservas(new ArrayList<Reserva>());
-        System.out.println(habitacion.getHistorialEstado());
+
         return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
                 () -> new Exception() //HabitacionNotFoundException()
         );
@@ -66,17 +66,21 @@ public class HabitacionServiceImpl implements HabitacionService{
 
     }
 
-    public Habitacion agregarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
+    @Override
+    public Habitacion agregarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
         Habitacion habitacion = this.getById(idHabitacion).get();
 
-        //habitacion.addEstadoHabitacion(estadoHabitacion);
+        habitacion.addEstadoHabitacion(estadoHabitacion);
+        estadoHabitacion.setHabitacion(idHabitacion);
+
         return repository.save(habitacion);
     }
 
-    public Habitacion borrarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
+    @Override
+    public Habitacion borrarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
         Habitacion habitacion = this.getById(idHabitacion).get();
 
-        //habitacion.removeEstadoHabitacion(estadoHabitacion);
+        habitacion.removeEstadoHabitacion(estadoHabitacion);
         return repository.save(habitacion);
     }
 
@@ -95,37 +99,24 @@ public class HabitacionServiceImpl implements HabitacionService{
         return repository.findByCapacidad(capacidad);
     }
 
-    public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
-        List<Habitacion> habitaciones = this.getAll();
-        List<HabitacionDTO> listaDTO = new ArrayList<>();
+    public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime inputInicio, LocalDateTime inputFin) {
+        return this.getAll()
+        .stream()
+        .map(h -> {
+            List<EstadoHabitacion> filtrados = h.getHistorialEstado()
+                .stream()
+                .filter(e ->
+                        !e.getFechaFin().isBefore(inputInicio) &&
+                        !e.getFechaInicio().isAfter(inputFin)
+                )
+                .toList();
 
-        for (Habitacion habitacion : habitaciones) {
-            HabitacionDTO habitacionDTO = new HabitacionDTO(habitacion.getId(), habitacion.getTipoHabitacion(), habitacion.getHistorialEstado());
-            listaDTO.add(habitacionDTO);
-        }
-
-        for(HabitacionDTO habitacion : listaDTO) {
-            //TODO: Filtrar historialEstado en base a fechaInicio y fechaFin
-            // Busco aproximación por izq mas cercana fechaInicio
-            // Busco aproximación por der mas cercana fechaFin
-            int fromIdex = -1;
-            int toIndex = -1;
-            
-            for(EstadoHabitacion e: habitacion.getHistorialEstado()){
-                if(e.getFechaInicio().isBefore(fechaInicio)){
-                    fromIdex = habitacion.getHistorialEstado().indexOf(e);
-                }
-                else if(e.getFechaFin().isAfter(fechaFin)){
-                    toIndex = habitacion.getHistorialEstado().indexOf(e);
-                }
-            }
-            // JWT SECRET KEY
-            if(fromIdex != -1 && toIndex != -1){
-                List<EstadoHabitacion> subList = habitacion.getHistorialEstado().subList(fromIdex, toIndex);
-                habitacion.setHistorialEstado(subList);
-            }
-        }
-
-        return listaDTO;
+            return new HabitacionDTO(
+                    h.getId(),
+                    h.getTipoHabitacion(),
+                    filtrados
+            );
+        })
+        .toList();
     }
 }

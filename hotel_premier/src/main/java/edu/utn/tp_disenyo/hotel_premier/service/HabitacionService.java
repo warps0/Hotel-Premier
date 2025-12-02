@@ -17,8 +17,8 @@ public interface HabitacionService {
     public Optional<Habitacion> getById(Long id) throws Exception;
     public void deleteById(Long id) throws Exception;
     public void updateById(Long id, Habitacion habitacion) throws Exception;
-    public Habitacion agregarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception;
-    public Habitacion borrarEstado(long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception;
+    public Habitacion agregarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception;
+    public Habitacion borrarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception;
     public List<Habitacion> findByTipoHabitacion(TipoHabitacion tipoHabitacion);
     public List<Habitacion> findByPiso(Piso piso);
     public List<Habitacion> findByCapacidad(Integer capacidad);

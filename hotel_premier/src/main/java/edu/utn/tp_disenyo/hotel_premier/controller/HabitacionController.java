@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,8 @@ class HabitacionController {
     }
 
     @PostMapping
-    public ResponseEntity<Habitacion> create(@RequestBody Habitacion habitacion) throws Exception {
+    public ResponseEntity<Habitacion> create(@RequestBody Habitacion habitacion) 
+    throws Exception {
         return new ResponseEntity<Habitacion>(service.create(habitacion), HttpStatus.CREATED);
     }
 
@@ -40,7 +43,7 @@ class HabitacionController {
 
     @PutMapping("/agregarEstado/{id}")
     public ResponseEntity<Habitacion> agregarEstado(@PathVariable long id, @RequestBody EstadoHabitacion estadoHabitacion)
-            throws Exception {
+    throws Exception {
         return new ResponseEntity<Habitacion>(service.agregarEstado(id, estadoHabitacion), HttpStatus.OK);
     }
 
