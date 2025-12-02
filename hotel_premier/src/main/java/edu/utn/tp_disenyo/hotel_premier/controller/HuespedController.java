@@ -25,13 +25,11 @@ public class HuespedController {
 
     @GetMapping
     public ResponseEntity<List<HuespedDTO>> getAll(
-        @RequestParam(required = false) String nombre,
-        @RequestParam(required = false) String apellido,
-        @RequestParam(required = false) String documento,
-        @RequestParam(required = false) TipoDoc tipoDoc 
-    ) {
-        //TODO: ¿Objecto Filter?
-        return new ResponseEntity<>(service.getAll(nombre, apellido, documento, tipoDoc), HttpStatus.OK);
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) String documento,
+            @RequestParam(required = false) TipoDoc tipoDoc) {
+        return ResponseEntity.ok(service.getAll(nombre, apellido, documento, tipoDoc));
     }
 
     @GetMapping("/{id}")
@@ -45,7 +43,8 @@ public class HuespedController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Huesped> update(@PathVariable Long id, @RequestBody Huesped huesped) throws HuespedNotFoundException {
+    public ResponseEntity<Huesped> update(@PathVariable Long id, @RequestBody Huesped huesped)
+            throws HuespedNotFoundException {
         return new ResponseEntity<>(service.update(id, huesped), HttpStatus.OK);
     }
 
@@ -57,7 +56,7 @@ public class HuespedController {
 
     @GetMapping("/existsByDocumento")
     public ResponseEntity<Boolean> existsByDocumento(@RequestParam String documento, @RequestParam TipoDoc tipoDoc) {
-        return new ResponseEntity<>(service.existsByDocumento(documento, tipoDoc),  HttpStatus.OK);
+        return new ResponseEntity<>(service.existsByDocumento(documento, tipoDoc), HttpStatus.OK);
     }
 
 }

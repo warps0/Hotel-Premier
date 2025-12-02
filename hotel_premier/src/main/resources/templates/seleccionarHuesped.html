@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Premier - Resultados</title>
+    <link rel="stylesheet" th:href="@{/css/buscarHuesped.css}">
+</head>
+
+<body>
+    <h1>Resultados de Búsqueda</h1>
+
+    <!-- Resultados encontrados -->
+    <div class="results-container" th:if="${resultados != null && !resultados.isEmpty()}">
+        <span class="results-title">Listado Huéspedes</span>
+
+        <form th:action="@{/huesped/seleccionar}" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Tipo Documento</th>
+                        <th>Documento</th>
+                        <th>Selección</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="huesped : ${resultados}">
+                        <td th:text="${huesped.nombre}"></td>
+                        <td th:text="${huesped.apellido}"></td>
+                        <td th:text="${huesped.tipoDoc}"></td>
+                        <td th:text="${huesped.docIdentidad}"></td>
+                        <td style="text-align: center;">
+                            <input type="radio" name="huespedId" th:value="${huesped.id}" required>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="bottom-buttons">
+                <a th:href="@{/huesped/buscar}">
+                    <button type="button" class="btn-cancelar">Nueva Búsqueda</button>
+                </a>
+                <button type="submit" class="btn-search">Seleccionar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Sin resultados -->
+    <div class="results-container" th:if="${resultados != null && resultados.isEmpty()}">
+        <span class="results-title">Sin Resultados</span>
+        <p style="text-align: center; padding: 20px;">No se encontraron huéspedes con los criterios especificados.</p>
+        
+        <div class="bottom-buttons">
+            <a th:href="@{/huesped/buscar}">
+                <button type="button" class="btn-search">Nueva Búsqueda</button>
+            </a>
+        </div>
+    </div>
+
+    <script th:src="@{/js/botonCancelar.js}"></script>
+</body>
+
+</html>
