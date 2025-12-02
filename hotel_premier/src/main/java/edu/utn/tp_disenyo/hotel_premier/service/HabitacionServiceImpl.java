@@ -27,6 +27,8 @@ public class HabitacionServiceImpl implements HabitacionService{
 
     @Override
     public Habitacion create(Habitacion habitacion) throws Exception {
+        habitacion.setHistorialEstado(new ArrayList<EstadoHabitacion>());
+        System.out.println(habitacion.getHistorialEstado());
         return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
                 () -> new Exception() //HabitacionNotFoundException()
         );
@@ -52,6 +54,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 
     @Override
     public void updateById(Long id, Habitacion habitacion) throws Exception {
+        // TODO: PATCH acá forzamos que si llega null se pone null
         Habitacion habitacionActualizada = repository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
 
         habitacionActualizada.setCapacidad(habitacion.getCapacidad());

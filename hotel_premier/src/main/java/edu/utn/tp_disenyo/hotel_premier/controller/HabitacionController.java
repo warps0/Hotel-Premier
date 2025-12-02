@@ -30,7 +30,6 @@ class HabitacionController {
 
     @PostMapping
     public ResponseEntity<Habitacion> create(@RequestBody Habitacion habitacion) throws Exception {
-        System.out.println(habitacion);
         return new ResponseEntity<Habitacion>(service.create(habitacion), HttpStatus.CREATED);
     }
 
