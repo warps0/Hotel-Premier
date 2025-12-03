@@ -13,8 +13,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(HuespedNotSavedException.class)
-    public ResponseEntity<String> handleHuespedNotSaved(HuespedNotSavedException exception){
+    @ExceptionHandler(EntityNotSavedException.class)
+    public ResponseEntity<String> handleHuespedNotSaved(EntityNotSavedException exception){
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

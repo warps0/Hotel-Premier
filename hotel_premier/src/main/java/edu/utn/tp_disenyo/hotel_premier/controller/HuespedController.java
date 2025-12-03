@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class HuespedController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Huesped> getById(@PathVariable Long id) throws HuespedNotFoundException {
+    public ResponseEntity<Huesped> getById(@PathVariable Long id) throws HuespedNotFoundException, EntityNotSavedException {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }
 
@@ -49,7 +50,7 @@ public class HuespedController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) throws HuespedNotFoundException {
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws HuespedNotFoundException, EntityNotSavedException {
         service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
