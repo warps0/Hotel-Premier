@@ -23,11 +23,13 @@ class HabitacionController {
         this.habitacionService = habitacionService;
     }
 
+    // Crear TODAS las habitaciones
     @PostMapping("/init")
     public ResponseEntity<String> initHabitaciones() throws Exception {
         return new ResponseEntity<>(habitacionService.initHabitaciones(), HttpStatus.CREATED);
     }
 
+    // Obtener TODAS las habitaciones
     @GetMapping
     public List<Habitacion> getAll(@RequestParam(required = false) TipoHabitacion tipo) {
         if(tipo == null) {
@@ -36,6 +38,13 @@ class HabitacionController {
         else return habitacionService.findByTipoHabitacion(tipo);
     }
 
+    // Buscar habitaciones por rango de fechas (fechaInicio ~ fechaFin)
+    @GetMapping("/buscar")
+    public List<HabitacionDTO> getByFecha(@RequestParam LocalDateTime fechaInicio, @RequestParam LocalDateTime fechaFin) {
+        return service.getHabitacionesByRangoFecha(fechaInicio, fechaFin);
+    }
+
+    // Crear un huésped
     @PostMapping
     public ResponseEntity<Habitacion> create(@RequestParam TipoHabitacion tipo)
     throws Exception {
@@ -46,20 +55,18 @@ class HabitacionController {
         return new ResponseEntity<Habitacion>(habitacionService.create(tipo), HttpStatus.CREATED);
     }
 
-    @GetMapping("/buscar")
-    public List<HabitacionDTO> getByFecha(@RequestParam LocalDateTime fechaInicio, @RequestParam LocalDateTime fechaFin) {
-        return habitacionService.getHabitacionesByRangoFecha(fechaInicio, fechaFin);
-    }
-
+    // Agregar una instancia de EstadoHabitacion a una Habitación
     @PutMapping("/agregarEstado/{id}")
     public ResponseEntity<Habitacion> agregarEstado(@PathVariable long id, @RequestBody EstadoHabitacion estadoHabitacion)
     throws Exception {
         return new ResponseEntity<Habitacion>(habitacionService.agregarEstado(id, estadoHabitacion), HttpStatus.OK);
     }
 
+    // Borrar una instancia de EstadoHabitacion a una Habitación
     @PutMapping("/borrarEstado/{id}")
     public ResponseEntity<Habitacion> borrarEstado(@PathVariable long id, @RequestBody EstadoHabitacion estadoHabitacion)
             throws Exception {
         return new ResponseEntity<Habitacion>(habitacionService.borrarEstado(id, estadoHabitacion), HttpStatus.OK);
     }
+
 }
