@@ -7,10 +7,14 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
+import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
+import edu.utn.tp_disenyo.hotel_premier.util.Estado;
+import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import io.micrometer.common.lang.NonNull;
 
 @Service
@@ -26,24 +30,28 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public Reserva create(@NonNull ReservaCreateDTO reservaDTO) throws Exception {
-        Huesped responsable = huespedService.getById(reservaDTO.getResponsableId());
+    public ReservaDTO create(@NonNull ReservaCreateDTO reservaDTO) throws Exception {
+        // Se buscan las instancias de habitaciones que pertenecen a la reserva para asociarlas
         List<Habitacion> habitaciones = new ArrayList<>();
         for(Long habitacionId: reservaDTO.getHabitacionesIds()){
-            habitaciones.add(habitacionService.getById(habitacionId).get());
-        }
-        //List<Habitacion> habitaciones = habitacionService.findAllById(reservaDTO.getHabitacionesIds());
+            Habitacion h = habitacionService.getById(habitacionId).get();
+            habitaciones.add(h);
+
+            // Se deben crear los estados 'RESERVADO' en las habitaciones correspondientes
+            EstadoHabitacion e = new EstadoHabitacion(reservaDTO.getFechaInicio(), reservaDTO.getFechaFin(), Estado.RESERVADO);
+            habitacionService.agregarEstado(habitacionId, e);
+        }        
 
         Reserva reserva = new Reserva(
-            reservaDTO.getEstado(),
+            EstadoReserva.ACTIVA,
             reservaDTO.getFechaInicio(),
             reservaDTO.getFechaFin(),
-            responsable
+            null // Responsable de la reserva se modifica manualmente y aparte
         );
 
-        //habitaciones.forEach(reserva::addHabitacion);
+        reservaRepository.save(reserva);
 
-        return reservaRepository.save(reserva);
+        return new ReservaDTO(reserva);
     }
 
     @Override

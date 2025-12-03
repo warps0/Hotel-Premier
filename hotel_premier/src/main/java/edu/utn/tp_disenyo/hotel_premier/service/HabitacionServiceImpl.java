@@ -3,12 +3,9 @@ package edu.utn.tp_disenyo.hotel_premier.service;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
-import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
-import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -91,6 +88,8 @@ public class HabitacionServiceImpl implements HabitacionService {
                 habitacion.setCapacidad(2);
                 habitacion.setNumeroHabitacion(Habitacion.cont_suite + cantHabitacionesDeTipo);
                 break;
+            default:
+                throw new Exception();
         }
 
         return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
