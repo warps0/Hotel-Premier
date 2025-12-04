@@ -43,10 +43,14 @@ public class ReservaController {
     }
 
     @GetMapping("/responsable")
-    public ResponseEntity<List<ReservaDTO>> getByResponsable(@RequestParam(required = false) String nombre,
-        @RequestParam(required = false) String apellido, @RequestParam(required = false) String contacto) throws Exception{
-            return new ResponseEntity<>(reservaService.getByResponsable(nombre, apellido, contacto), HttpStatus.OK);
-        }
+    public ResponseEntity<List<ReservaDTO>> getByResponsable(
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String apellido, 
+        @RequestParam(required = false) String contacto
+    ) 
+    throws Exception{
+        return new ResponseEntity<>(reservaService.getByResponsable(nombre, apellido, contacto), HttpStatus.OK);
+    }
     
     @PostMapping
     public ReservaDTO create(@RequestBody ReservaCreateDTO reserva)
@@ -59,7 +63,7 @@ public class ReservaController {
         return new ResponseEntity<>(reservaService.agregarHuesped(id, huespedes), HttpStatus.OK);
     }
 
-    // TODO: AGREGAR ENDPOINT DE GETBYRESPONSABLE. LUEGO, OCUPAR HABITACIÓN
+    // TODO: LUEGO, OCUPAR HABITACIÓN
     // BOMBOCLAT
     
 }
