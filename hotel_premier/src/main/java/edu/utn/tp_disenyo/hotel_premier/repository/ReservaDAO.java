@@ -3,10 +3,11 @@ package edu.utn.tp_disenyo.hotel_premier.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 
-public interface ReservaDAO extends JpaRepository<Reserva, Long> {
+public interface ReservaDAO extends JpaRepository<Reserva, Long>, JpaSpecificationExecutor<Reserva> {
 
     public List<Reserva> findByNombreOrApellidoOrContacto(String nombre, String apellido, String contacto);
     

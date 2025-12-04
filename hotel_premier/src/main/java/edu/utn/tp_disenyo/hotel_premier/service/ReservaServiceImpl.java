@@ -17,6 +17,7 @@ import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
+import edu.utn.tp_disenyo.hotel_premier.util.ReservaSpecification;
 import io.micrometer.common.lang.NonNull;
 
 @Service
@@ -197,9 +198,10 @@ public class ReservaServiceImpl implements ReservaService {
         return new ReservaDTO(actualizada, ids, huespedes);
     }
 
+    // TODO: VER SI ANDA ESTE METODO. SI ANDA, SEGUIR CON EL CONTROLADOR PARA ESTE METODO.
     @Override
     public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception {
-        List<Reserva> reservas = reservaRepository.findByNombreOrApellidoOrContacto(nombre, apellido, contacto);
+        List<Reserva> reservas = reservaRepository.findAll(ReservaSpecification.filterBy(nombre, apellido, contacto));
         List<ReservaDTO> reservasDTO = new ArrayList<>();
 
 
