@@ -1,37 +1,5 @@
-// Agregar esta función en tu archivo reservarHabitacion.js o reservas.js
-
-function siguiente() {
-    // Verificar que haya una habitación seleccionada
-    if (!seleccionReserva.habitacionNumero) {
-        alert('Por favor, seleccione una habitación antes de continuar');
-        return;
-    }
-
-    // Verificar que haya fechas seleccionadas
-    const fechaInicio = document.getElementById('startDate').value;
-    const fechaFin = document.getElementById('endDate').value;
-    
-    if (!fechaInicio || !fechaFin) {
-        alert('Por favor, seleccione las fechas de la reserva');
-        return;
-    }
-
-    // Formatear las fechas para la URL
-    const fechaIng = formatearFecha(fechaInicio);
-    const fechaEgr = formatearFecha(fechaFin);
-    
-    // Construir URL con parámetros
-    const params = new URLSearchParams({
-        habitacion: seleccionReserva.habitacionNumero,
-        tipo: seleccionReserva.tipoHabitacion,
-        fechaIngreso: fechaIng,
-        fechaEgreso: fechaEgr,
-    });
-    
-    // Redirigir a la página de confirmación
-    window.location.href = `/confirmar/reserva?${params.toString()}`;
-}
-
+// Este archivo contiene funciones para la página de confirmación.
+// Evitar declarar `siguiente()` aquí para no sobrescribir la función del buscador.
 
 // Obtener datos de la URL
 function obtenerDatosURL() {
@@ -76,31 +44,89 @@ function rechazar() {
 }
 
 function aceptar() {
+    // Obtener datos de la URL (posible reserva única)
     const datos = obtenerDatosURL();
-    
-    // Aquí envías los datos al backend
-    fetch('/api/reservas', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            habitacionId: datos.habitacion,
-            fechaIngreso: datos.fechaIngreso,
-            horaIngreso: datos.horaIngreso,
-            fechaEgreso: datos.fechaEgreso,
-            horaEgreso: datos.horaEgreso
+
+    // Obtener reservas (posible multiple) cargadas desde la URL
+    const reservasFromURL = reservasPendientes || [];
+
+    // Obtener datos del responsable desde inputs
+    const nombre = document.getElementById('nombre') ? document.getElementById('nombre').value.trim() : '';
+    const apellido = document.getElementById('apellido') ? document.getElementById('apellido').value.trim() : '';
+    const contacto = document.getElementById('contacto') ? document.getElementById('contacto').value.trim() : '';
+
+    if (!nombre || !apellido || !contacto) {
+        if (!confirm('No completó los datos del responsable (nombre/apellido/contacto). Desea continuar de todos modos?')) {
+            return;
+        }
+    }
+
+    // Si hay reservas múltiples (vienen en el array), enviar una petición por cada una
+    if (reservasFromURL.length > 0) {
+        const promises = reservasFromURL.map(reserva => {
+            const payload = {
+                habitacionesIds: [reserva.habitacionId || reserva.habitacionNumero],
+                nombre: nombre || 'N/D',
+                apellido: apellido || 'N/D',
+                contacto: contacto || 'N/D',
+                fechaInicio: reserva.fechaInicio + 'T00:00:00',
+                fechaFin: reserva.fechaFin + 'T00:00:00'
+            };
+
+            return fetch('/api/reserva', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(resp => {
+                if (!resp.ok) throw new Error('Error en creación: ' + resp.status);
+                return resp.json();
+            });
+        });
+
+        Promise.all(promises)
+            .then(results => {
+                alert(`${results.length} reserva(s) confirmada(s) exitosamente`);
+                window.location.href = '/home';
+            })
+            .catch(err => {
+                console.error('Error al confirmar reservas múltiples:', err);
+                alert('Ocurrió un error al confirmar las reservas');
+            });
+
+        return;
+    }
+
+    // Si no hay array de reservas, intentar enviar una sola reserva usando parámetros simples
+    if (datos.habitacion) {
+        const payload = {
+            habitacionesIds: [Number(datos.habitacion)],
+            nombre: nombre || 'N/D',
+            apellido: apellido || 'N/D',
+            contacto: contacto || 'N/D',
+            fechaInicio: (datos.fechaIngreso ? datos.fechaIngreso : '') + 'T00:00:00',
+            fechaFin: (datos.fechaEgreso ? datos.fechaEgreso : '') + 'T00:00:00'
+        };
+
+        fetch('/api/reserva', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Reserva confirmada exitosamente');
-        window.location.href = '/home'; // Volver a la pantalla principal
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al confirmar la reserva');
-    });
+        .then(resp => {
+            if (!resp.ok) throw new Error('Error en creación: ' + resp.status);
+            return resp.json();
+        })
+        .then(data => {
+            alert('Reserva confirmada exitosamente');
+            window.location.href = '/home';
+        })
+        .catch(err => {
+            console.error('Error al confirmar reserva:', err);
+            alert('Error al confirmar la reserva');
+        });
+    } else {
+        alert('No hay datos de reserva para enviar');
+    }
 }
 
 
@@ -185,43 +211,10 @@ let reservasPendientes = [];
             }
         }
 
-        // Cargar datos al iniciar la página
+        // Cargar datos al iniciar la página (reservas múltiples)
         window.addEventListener('DOMContentLoaded', () => {
             reservasPendientes = obtenerReservasURL();
             console.log('Reservas cargadas:', reservasPendientes);
             renderizarReservas();
         });
-
-        function rechazar() {
-            if (confirm('¿Desea cancelar todas las reservas y volver?')) {
-                window.history.back();
-            }
-        }
-
-        function aceptar() {
-            if (reservasPendientes.length === 0) {
-                alert('No hay reservas para confirmar');
-                return;
-            }
-
-            // Enviar todas las reservas al backend
-            fetch('/api/reservas/multiple', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    reservas: reservasPendientes
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(`${reservasPendientes.length} reserva(s) confirmada(s) exitosamente`);
-                window.location.href = '/home'; // Volver a la pantalla principal
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al confirmar las reservas');
-            });
-        }
     
