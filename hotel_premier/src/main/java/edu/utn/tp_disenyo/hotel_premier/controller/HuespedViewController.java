@@ -85,19 +85,12 @@ public String seleccionarHuesped(
     return "redirect:/habitaciones/reservar";
 }
 
-    // habitaciones/reservar --> reservarHabitacion
-    // habitaciones/estado --> verEstadoHabitaciones
-    @GetMapping("/habitaciones/estado")
-    public String mostrarEstadoHabitaciones(Model model) {
-        return "verEstadoHabitaciones"; 
-}
-    // habitaciones/ocupar --> ocuparHabitacion
-
     @GetMapping("/huesped/duplicado")
     public String confirmarHuesped(@ModelAttribute("huesped") Huesped formHuesped, Model model) {
         return "advertenciaDNI";
     }
 
+    // TODO: cambiar de controlador
     @GetMapping({ "/", "/home" })
     public String home() {
         return "index";

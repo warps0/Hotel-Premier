@@ -206,31 +206,180 @@ function crearCeldaFecha(habitaciones, fecha, estadoHabitaciones) {
     
     habitaciones.forEach(habitacion => {
         const numeroHabitacion = habitacion.numeroHabitacion;
+        const id = habitacion.id;
         const estado = estadoHabitaciones[numeroHabitacion]?.[fechaStr] || 'disponible';
-        const divHabitacion = crearDivHabitacion(numeroHabitacion, estado);
+        const divHabitacion = crearDivHabitacion(numeroHabitacion, estado, id);
         celda.appendChild(divHabitacion);
     });
     
     return celda;
 }
 
-function crearDivHabitacion(numero, estado) {
+function crearDivHabitacion(numero, estado, id) {
     const div = document.createElement('div');
     div.className = `room-number room-${estado}`;
     div.textContent = numero;
     div.style.margin = '3px 0';
-    div.title = `Habitación ${numero} - ${obtenerTextoEstado(estado)}`;
-    
+
+    if (estado === 'disponible') {
+        div.style.cursor = 'pointer';
+        div.onclick = function () {
+            reservar(div, numero, id);
+        };
+    }
+
     return div;
 }
 
-function obtenerTextoEstado(estado) {
-    const textos = {
-        'disponible': 'Disponible',
-        'ocupada': 'Ocupada',
-        'fuera-servicio': 'Fuera de servicio'
+let seleccionReserva = {
+    habitacionNumero: null,
+    habitacionId: null,
+    primerFecha: null,
+    segundaFecha: null,
+    primeraSeleccion: null,
+    segundaSeleccion: null
+};
+
+function reservar(boton, numero, id) {
+    const fechaCelda = obtenerFechaDeCelda(boton);
+    
+    // Primer click: seleccionar habitación y fecha inicial
+    if (!seleccionReserva.habitacionNumero) {
+        seleccionReserva.habitacionNumero = numero;
+        seleccionReserva.habitacionId = id;
+        seleccionReserva.primerFecha = fechaCelda;
+        seleccionReserva.primeraSeleccion = boton;
+        
+        boton.classList.add("room-seleccionada");
+        console.log("Primera selección - Habitación:", numero, "Fecha:", fechaCelda);
+        return;
+    }
+    
+    // Si ya hay una selección pero es otra habitación
+    if (seleccionReserva.habitacionNumero !== numero) {
+        alert("Debe seleccionar la misma habitación (número " + seleccionReserva.habitacionNumero + ") para completar el rango de fechas.");
+        return;
+    }
+    
+    
+    // Segundo click: completar el rango
+    if (seleccionReserva.habitacionNumero === numero && !seleccionReserva.segundaFecha) {
+        seleccionReserva.segundaFecha = fechaCelda;
+        seleccionReserva.segundaSeleccion = boton;
+        
+        boton.classList.add("room-seleccionada");
+        console.log("Segunda selección - Habitación:", numero, "Fecha:", fechaCelda);
+        
+        // Verificar disponibilidad en el rango completo
+        verificarYConfirmarReserva();
+    }
+}
+
+function obtenerFechaDeCelda(boton) {
+    const celda = boton.parentElement;
+    const columna = Array.from(celda.parentElement.children).indexOf(celda);
+    
+    // La primera columna es el tipo de habitación, las fechas empiezan en columna 1
+    const columnaFecha = columna - 1;
+    
+    const fechas = generarRangoFechas(estadoApp.fechaInicio, calcularDiasEntre(estadoApp.fechaInicio, estadoApp.fechaFin));
+    const fecha = fechas[columnaFecha];
+    
+    return fecha.toISOString().split('T')[0];
+}
+
+function verificarYConfirmarReserva() {
+    const { habitacionNumero, primerFecha, segundaFecha } = seleccionReserva;
+    
+    // Determinar cuál es inicio y cuál es fin
+    const fecha1 = new Date(primerFecha);
+    const fecha2 = new Date(segundaFecha);
+    const fechaInicio = fecha1 < fecha2 ? primerFecha : segundaFecha;
+    const fechaFin = fecha1 < fecha2 ? segundaFecha : primerFecha;
+    
+    console.log("Verificando disponibilidad:", { habitacionNumero, fechaInicio, fechaFin });
+    
+    // Verificar que todas las fechas en el rango estén disponibles
+    const disponible = verificarDisponibilidadRango(habitacionNumero, fechaInicio, fechaFin);
+    
+    if (disponible) {
+        console.log("✓ Habitación disponible en todo el rango");
+        confirmarReserva(fechaInicio, fechaFin);
+    } else {
+        console.log("✗ Habitación NO disponible en el rango");
+        alert("La habitación " + habitacionNumero + " no está disponible en todas las fechas del rango seleccionado.");
+        cancelarSeleccion();
+    }
+}
+
+function verificarDisponibilidadRango(numeroHabitacion, fechaInicio, fechaFin) {
+    const fechas = generarTodasLasFechasDelRango(fechaInicio, fechaFin);
+    
+    for (const fecha of fechas) {
+        const estado = estadoApp.datosHabitaciones[numeroHabitacion]?.[fecha];
+        if (estado !== 'disponible') {
+            console.log("Fecha ocupada o no disponible:", fecha, "Estado:", estado);
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function confirmarReserva(fechaInicio, fechaFin) {
+    // Pintar todas las celdas del rango en naranja
+    pintarRangoReserva(seleccionReserva.habitacionNumero, fechaInicio, fechaFin);
+    
+    console.log("Reserva confirmada:", {
+        habitacion: seleccionReserva.habitacionNumero,
+        id: seleccionReserva.habitacionId,
+        fechaInicio,
+        fechaFin
+    });
+    
+    // Aquí puedes hacer el llamado al backend para guardar la reserva
+    // await guardarReservaEnBackend(seleccionReserva.habitacionId, fechaInicio, fechaFin);
+    
+    // Resetear la selección
+    resetearSeleccion();
+}
+
+function pintarRangoReserva(numeroHabitacion, fechaInicio, fechaFin) {
+    const fechas = generarTodasLasFechasDelRango(fechaInicio, fechaFin);
+    
+    // Buscar todas las celdas de esta habitación en el rango de fechas
+    const divs = document.querySelectorAll('.room-number');
+    
+    divs.forEach(div => {
+        if (parseInt(div.textContent) === numeroHabitacion) {
+            const fechaDiv = obtenerFechaDeCelda(div);
+            if (fechas.includes(fechaDiv)) {
+                div.classList.remove('room-seleccionada');
+                div.classList.add('room-reservada');
+            }
+        }
+    });
+}
+
+function cancelarSeleccion() {
+    if (seleccionReserva.primeraSeleccion) {
+        seleccionReserva.primeraSeleccion.classList.remove('room-seleccionada');
+    }
+    if (seleccionReserva.segundaSeleccion) {
+        seleccionReserva.segundaSeleccion.classList.remove('room-seleccionada');
+    }
+    resetearSeleccion();
+}
+
+function resetearSeleccion() {
+    seleccionReserva = {
+        habitacionNumero: null,
+        habitacionId: null,
+        primerFecha: null,
+        segundaFecha: null,
+        primeraSeleccion: null,
+        segundaSeleccion: null
     };
-    return textos[estado] || 'Desconocido';
 }
 
 function validarFechas(fechaInicio, fechaFin) {

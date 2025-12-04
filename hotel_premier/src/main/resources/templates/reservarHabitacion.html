@@ -1,22 +1,75 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Premier</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+   <link rel="stylesheet" th:href="@{/css/verEstadoHabitaciones.css}">
 </head>
-
 <body>
-    <h1>Reservar Habitación</h1>
+    <div class="container">
+        <h1>Estado de Habitaciones</h1>
 
+        <!-- Sección de búsqueda -->
+        <div class="search-section" id="searchSection">
+            <h2>Complete las fechas y presione Buscar para ver el estado de las habitaciones:</h2>
+            
+            <div style="border: 2px solid #333; padding: 20px; margin-top: 20px;">
+                <h3 style="margin-bottom: 20px;">Rango de Fechas</h3>
+                
+                <div class="date-inputs">
+                    <div class="date-field">
+                        <label for="startDate">Desde (fecha de inicio):</label>
+                        <input type="date" id="startDate" required>
+                    </div>
+                    
+                    <div class="date-field">
+                        <label for="endDate">Hasta (fecha de fin):</label>
+                        <input type="date" id="endDate" required>
+                    </div>
+                </div>
 
-    
+                <button class="btn btn-search" onclick="buscarHabitaciones()">
+                    🔍 Buscar
+                </button>
+            </div>
 
-    <!-- <script th:src="@{/js/nacionalidades.js}"></script> -->
+            <button class="btn btn-cancel" onclick="cancelSearch()">Cancelar</button>
+        </div>
 
+        <div class="results-section" id="resultsSection">
+            <a href="#" class="help-link">⭕ Ayuda</a>
+            
+            <div class="table-container">
+                <table id="roomTable">
+                    <thead>
+                        <tr>
+                            <th class="room-type-cell">Tipo de Habitación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
 
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color room-disponible"></div>
+                    <span>Disponible</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color room-ocupada"></div>
+                    <span>Ocupada</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color room-fuera-servicio"></div>
+                    <span>Fuera de servicio</span>
+                </div>
+            </div>
+
+            <button class="btn btn-cancel" onclick="backToSearch()">Cancelar</button>
+        </div>
+    </div>
+    <script th:src="@{/js/verEstadoHabitaciones.js}"></script>
 </body>
-
 </html>
