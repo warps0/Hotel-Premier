@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Premier</title>
     <link rel="stylesheet" th:href="@{/css/verEstadoHabitaciones.css}">
 </head>
+
 <body>
     <div class="container">
         <h1>Estado de Habitaciones</h1>
-
-        <!-- Sección de búsqueda -->
         <div class="search-section" id="searchSection">
-            <h2>Complete las fechas y presione Buscar para ver el estado de las habitaciones:</h2>
-            
-            <div style="border: 2px solid #333; padding: 20px; margin-top: 20px;">
+            <p class="instrucciones">Complete las fechas y presione Buscar para ver el estado de las habitaciones:</p>
+
+            <div style="border: 2px solid #333; padding: 20px; margin:auto; max-width: 900px;">
                 <h3 style="margin-bottom: 20px;">Rango de Fechas</h3>
-                
+
                 <div class="date-inputs">
                     <div class="date-field">
                         <label for="startDate">Desde (fecha de inicio):</label>
                         <input type="date" id="startDate" required>
                     </div>
-                    
+
                     <div class="date-field">
                         <label for="endDate">Hasta (fecha de fin):</label>
                         <input type="date" id="endDate" required>
                     </div>
                 </div>
-
-                <button class="btn btn-search" onclick="buscarHabitaciones()">
-                    🔍 Buscar
-                </button>
+                <div class="botones-centrados">
+                    <button class="btn-buscar" onclick="buscarHabitaciones()">Buscar</button>
+                </div>
+                
             </div>
 
-            <button class="btn btn-cancel" onclick="cancelSearch()">Cancelar</button>
+            <div class="botones-izquierda">
+                <button onclick="botonCancelar('¿Desea cancelar ver estado de habitación?')" type="button"
+                    class="btn-cancelar">Cancelar</button>
+            </div>
         </div>
 
-        <!-- Sección de resultados -->
         <div class="results-section" id="resultsSection">
-            <a href="#" class="help-link">⭕ Ayuda</a>
-            
+
             <div class="table-container">
                 <table id="roomTable">
                     <thead>
@@ -68,9 +69,14 @@
                 </div>
             </div>
 
-            <button class="btn btn-cancel" onclick="backToSearch()">Cancelar</button>
+            <div class="botones-izquierda">
+                <button onclick="botonCancelar('¿Desea cancelar ver estado de habitación?')" type="button"
+                    class="btn-cancelar">Cancelar</button>
+            </div>
         </div>
     </div>
     <script th:src="@{/js/verEstadoHabitaciones.js}"></script>
+    <script th:src="@{/js/botonCancelar.js}"></script>
 </body>
+
 </html>

@@ -10,8 +10,6 @@
 
 <body>
     <h1>Resultados de Búsqueda</h1>
-
-    <!-- Resultados encontrados -->
     <div class="results-container" th:if="${resultados != null && !resultados.isEmpty()}">
         <span class="results-title">Listado Huéspedes</span>
 
@@ -48,14 +46,13 @@
         </form>
     </div>
 
-    <!-- Sin resultados -->
     <div class="results-container" th:if="${resultados != null && resultados.isEmpty()}">
         <span class="results-title">Sin Resultados</span>
         <p style="text-align: center; padding: 20px;">No se encontraron huéspedes con los criterios especificados.</p>
         
-        <div class="bottom-buttons">
+        <div class="botones-centrados">
             <a th:href="@{/huesped/buscar}">
-                <button type="button" class="btn-search">Nueva Búsqueda</button>
+                <button type="button" class="btn-buscar">Nueva Búsqueda</button>
             </a>
         </div>
     </div>

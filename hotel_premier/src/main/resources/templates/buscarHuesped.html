@@ -15,15 +15,15 @@
         completa de huéspedes:</p>
 
     <form th:action="@{/huesped/buscar}" method="get">
-    <input type="hidden" name="buscar" value="true">
-    
-    <div class="search-container">
-        <span class="fieldset-title">Datos Huésped</span>
+        <input type="hidden" name="buscar" value="true">
 
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="escriba un nombre aquí">
-        </div>
+        <div class="search-container">
+            <span class="fieldset-title">Datos Huésped</span>
+
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="escriba un nombre aquí">
+            </div>
 
             <div class="form-group">
                 <label for="apellido">Apellido:</label>
@@ -45,15 +45,15 @@
                 </div>
             </div>
 
-            <div class="button-container">
-                <button type="submit" class="btn-search">Buscar</button>
+            <div class="botones-centrados">
+                <button type="submit" class="btn-buscar">Buscar</button>
             </div>
         </div>
 
-    
+        <div class="botones-izquierda">
             <button onclick="botonCancelar('¿Desea cancelar buscar un huésped?')" type="button"
-                class="btn-form btn-cancelar">Cancelar</button>
-    
+                class="btn-cancelar">Cancelar</button>
+        </div>
     </form>
 
     <script th:src="@{/js/botonCancelar.js}"></script>
