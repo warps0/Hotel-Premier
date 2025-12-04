@@ -251,3 +251,15 @@ th {
     display: block;
     margin: 0 auto;
 }
+
+.room-reservada-pendiente {
+    background-color: #ff9800 !important;
+    color: white;
+    font-weight: bold;
+    cursor: default !important;
+}
+
+.room-seleccionada {
+    background-color: #ffd700 !important;
+    border: 2px solid #ff9800;
+}
