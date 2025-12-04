@@ -2,6 +2,8 @@ package edu.utn.tp_disenyo.hotel_premier.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,6 +13,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -31,6 +36,8 @@ public class EstadoHabitacion {
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private Estado estado;
+
+
 
     @Transient
     @JsonIgnore
