@@ -76,10 +76,7 @@ select {
     cursor: pointer;
 }
 
-.button-container {
-    text-align: center;
-    margin-top: 30px;
-}
+
 
 .btn-siguiente {
     font-size: 16px;
@@ -182,4 +179,8 @@ input[type="radio"] {
     transition: transform 0.1s ease-in-out, background-color 0.2s;
     background-color: #cceeff;
     color: #333;
+}
+.button-container {
+    text-align: center;
+    margin-top: 30px;
 }

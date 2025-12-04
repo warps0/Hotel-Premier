@@ -340,6 +340,7 @@ function confirmarReserva(fechaInicio, fechaFin) {
     // Aquí puedes hacer el llamado al backend para guardar la reserva
     // await guardarReservaEnBackend(seleccionReserva.habitacionId, fechaInicio, fechaFin);
     
+    
     // Resetear la selección
     resetearSeleccion();
 }
@@ -409,7 +410,7 @@ async function buscarHabitaciones() {
         
         validarFechas(fechaInicio, fechaFin);
         
-        mostrarCargando(true);
+        // mostrarCargando(true);
         
         // Obtener todas las habitaciones del backend
         const habitacionesPorTipo = await obtenerTodasLasHabitaciones();
@@ -439,15 +440,15 @@ async function buscarHabitaciones() {
     }
 }
 
-function mostrarCargando(cargando) {
-    estadoApp.cargando = cargando;
+// function mostrarCargando(cargando) {
+//     estadoApp.cargando = cargando;
     
-    const botonBuscar = document.querySelector('.btn-search');
-    if (botonBuscar) {
-        botonBuscar.disabled = cargando;
-        botonBuscar.textContent = cargando ? '⏳ Cargando...' : '🔍 Buscar';
-    }
-}
+//     const botonBuscar = document.querySelector('.btn-search');
+//     if (botonBuscar) {
+//         botonBuscar.disabled = cargando;
+//         botonBuscar.textContent = cargando ? '⏳ Cargando...' : '🔍 Buscar';
+//     }
+// }
 
 function mostrarResultados() {
     document.getElementById('searchSection').style.display = 'none';

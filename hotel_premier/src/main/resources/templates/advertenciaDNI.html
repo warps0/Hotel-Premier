@@ -17,7 +17,6 @@
                 <button class="btn-popup no" onclick="window.history.back()">Corregir</button>
 
                 <form action="http://localhost:8080/huesped/forzarCreacion" th:object="${huesped}" method="POST">
-                    <!-- Atributos escondidos para preservar el huesped cargado anteriormente -->
                     <!-- Huesped -->
                         <input type="hidden" th:field="*{nombre}" />
                         <input type="hidden" th:field="*{apellido}" />
@@ -42,14 +41,7 @@
         </div>
     </div>
 
-    <script th:src="@{/js/script.js}"></script>
-
 </body>
 
 </html>
 
-
-<!--<div class="botones">-->
-<!--    <button class="no" id="noBtn">Corregir</button>-->
-<!--    <button class="si" id="siBtn">Aceptar igualmente</button>-->
-<!--</div>-->
