@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
@@ -61,6 +62,15 @@ public class ReservaController {
     @PutMapping("/{id}")
     public ResponseEntity<ReservaDTO> agregarHuesped(@PathVariable Long id, @RequestBody List<HuespedDTO> huespedes) throws Exception {
         return new ResponseEntity<>(reservaService.agregarHuesped(id, huespedes), HttpStatus.OK);
+    }
+
+    @PostMapping("/ocupar")
+    public ResponseEntity<EstadiaDTO> ocuparHabitacion(
+        @RequestParam Long reservaId,
+        @RequestParam Long habitacionId,
+        @RequestBody List<Long> huespedesId)
+        throws Exception {
+            return new ResponseEntity<>(reservaService.ocuparHabitacion(reservaId, habitacionId, huespedesId), HttpStatus.CREATED);
     }
 
     // TODO: LUEGO, OCUPAR HABITACIÓN

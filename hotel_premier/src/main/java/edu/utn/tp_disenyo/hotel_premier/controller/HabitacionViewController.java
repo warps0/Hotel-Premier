@@ -32,10 +32,4 @@ public class HabitacionViewController {
         return "reservarHabitacion";
     }
 
-    @GetMapping("/habitaciones/ocupar")
-    public String reservarHabitacion(Model model) {
-        return "ocuparHabitacion";
-    }
-
-
 }
