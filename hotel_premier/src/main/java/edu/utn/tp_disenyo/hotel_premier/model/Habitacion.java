@@ -3,7 +3,6 @@ package edu.utn.tp_disenyo.hotel_premier.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -50,11 +49,6 @@ public class Habitacion {
 
     @ManyToMany(mappedBy = "habitaciones")
     private List<Reserva> reservas = new ArrayList<>();
-    /*
-    @ManyToMany(mappedBy = "habitaciones")
-    @JsonBackReference
-    private List<Reserva> reservas;
-    */
 
     public void addEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
         System.out.println(estadoHabitacion);

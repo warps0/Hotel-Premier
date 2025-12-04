@@ -7,9 +7,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
-import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotSavedException;
+import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,10 @@ public class HuespedServiceImpl implements HuespedService {
 
     // TODO: Manejar excepciones para el método create
     @Override
-    public Huesped create(@NonNull Huesped huesped) throws HuespedNotSavedException {
+    public Huesped create(@NonNull Huesped huesped) throws EntityNotSavedException {
 
         return Optional.ofNullable(repository.save(huesped)).orElseThrow(
-            () -> new HuespedNotSavedException()
+            () -> new EntityNotSavedException()
         );
     }
 
@@ -124,8 +125,8 @@ public class HuespedServiceImpl implements HuespedService {
     }
 
     @Override
-    public void deleteById(Long id) throws HuespedNotFoundException {
-        Huesped huesped = repository.findById(id).orElseThrow(() -> new HuespedNotFoundException());
+    public void deleteById(Long id) throws EntityNotSavedException {
+        Huesped huesped = repository.findById(id).orElseThrow(() -> new EntityNotSavedException());
         repository.delete(huesped);
     }
 
@@ -144,4 +145,10 @@ public class HuespedServiceImpl implements HuespedService {
         return repository.save(huesped);
     }
 
+    @Override
+    public List<Huesped> findAllByIds(List<Long> ids) {
+        List<Huesped> huespedes = repository.findAllById(ids);
+
+        return huespedes;
+    }
 }

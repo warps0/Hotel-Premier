@@ -1,6 +1,5 @@
 package edu.utn.tp_disenyo.hotel_premier.repository;
 
-import edu.utn.tp_disenyo.hotel_premier.util.Piso;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,4 +16,5 @@ public interface HabitacionDAO extends JpaRepository<Habitacion, Long> {
     int countByTipoHabitacion(TipoHabitacion tipoHabitacion);
     //¿List<EstadoHabitacion>?
     //List<Habitacion> findByStartDateBetween(LocalDateTime fechaInicio, LocalDateTime fechaFin);
+    // List<Habitacion> findAllById(List<Long> ids);
 }

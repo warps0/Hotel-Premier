@@ -23,4 +23,5 @@ public interface HuespedDAO extends JpaRepository<Huesped, Long> {
     boolean existsByDocIdentidadAndTipoDoc(String docIdentidad, TipoDoc tipoDoc);
 
     //public List<Huesped> findByContacto(Contacto contacto);
+    // List<Huesped> findAllById(List<Long> ids);
 }
