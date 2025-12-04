@@ -1,10 +1,10 @@
 const CONFIGURACION_HOTEL = {
     tiposHabitacion: {
-        'INDIVIDUAL_ESTANDAR': { nombre: 'Individual Estándar', cantidad: 10, pisoInicial: 100 },
-        'DOBLE_ESTANDAR': { nombre: 'Doble Estándar', cantidad: 18, pisoInicial: 200 },
-        'DOBLE_SUPERIOR': { nombre: 'Doble Superior', cantidad: 8, pisoInicial: 300 },
-        'SUPERIOR_FAMILY_PLAN': { nombre: 'Superior Family Plan', cantidad: 10, pisoInicial: 400 },
-        'SUITE_PLAN': { nombre: 'Suite Plan', cantidad: 2, pisoInicial: 500 }
+        'INDIVIDUAL_ESTANDAR': { nombre: 'Individual Estándar' },
+        'DOBLE_ESTANDAR': { nombre: 'Doble Estándar' },
+        'DOBLE_SUPERIOR': { nombre: 'Doble Superior' },
+        'SUPERIOR_FAMILY_PLAN': { nombre: 'Superior Family Plan' },
+        'SUITE_DOBLE': { nombre: 'Suite Doble' }
     },
     
     mapeoEstados: {
@@ -43,58 +43,6 @@ function generarRangoFechas(fechaInicio, cantidadDias) {
     return fechas;
 }
 
-function estaEnRango(fecha, fechaInicio, fechaFin) {
-    const f = new Date(fecha + 'T00:00:00');
-    const inicio = new Date(fechaInicio + 'T00:00:00');
-    const fin = new Date(fechaFin + 'T00:00:00');
-    
-    return f >= inicio && f <= fin;
-}
-
-async function obtenerEstadoHabitaciones(fechaInicio, fechaFin) {
-    try {
-        const fechaInicioISO = `${fechaInicio}T00:00:00`;
-        const fechaFinISO = `${fechaFin}T00:00:00`;
-        
-        const url = `/api/habitacion/buscar?fechaInicio=${fechaInicioISO}&fechaFin=${fechaFinISO}`;
-        
-        console.log('URL de solicitud:', url);
-        
-        const respuesta = await fetch(url);
-        
-        if (!respuesta.ok) {
-            const errorText = await respuesta.text();
-            console.error('Error del servidor:', errorText);
-            throw new Error(`Error HTTP: ${respuesta.status} - ${errorText}`);
-        }
-        
-        const habitaciones = await respuesta.json();
-        return procesarRespuestaBackend(habitaciones, fechaInicio, fechaFin);
-        
-    } catch (error) {
-        console.error('Error al obtener habitaciones:', error);
-        throw error;
-    }
-}
-
-function procesarRespuestaBackend(habitaciones, fechaInicioRango, fechaFinRango) {
-    const estadoPorHabitacionYFecha = {};
-    
-    habitaciones.forEach(habitacion => {
-        const numeroHabitacion = habitacion.id;
-        estadoPorHabitacionYFecha[numeroHabitacion] = {};
-        
-        const fechas = generarTodasLasFechasDelRango(fechaInicioRango, fechaFinRango);
-        
-        fechas.forEach(fecha => {
-            const estado = obtenerEstadoEnFecha(habitacion.historialEstado, fecha);
-            estadoPorHabitacionYFecha[numeroHabitacion][fecha] = estado;
-        });
-    });
-    
-    return estadoPorHabitacionYFecha;
-}
-
 function generarTodasLasFechasDelRango(fechaInicio, fechaFin) {
     const fechas = [];
     const fechaActual = new Date(fechaInicio + 'T00:00:00');
@@ -123,13 +71,81 @@ function obtenerEstadoEnFecha(historialEstado, fechaBuscada) {
     return 'disponible';
 }
 
-function generarTabla(fechaInicio, cantidadDias, estadoHabitaciones) {
+// Nueva función: Obtener habitaciones por tipo desde el backend
+async function obtenerHabitacionesPorTipo(tipo) {
+    try {
+        const url = `/api/habitacion?tipo=${tipo}`;
+        console.log('Obteniendo habitaciones del tipo:', tipo);
+        
+        const respuesta = await fetch(url);
+        
+        if (!respuesta.ok) {
+            const errorText = await respuesta.text();
+            console.error('Error del servidor:', errorText);
+            throw new Error(`Error HTTP: ${respuesta.status} - ${errorText}`);
+        }
+        
+        const habitaciones = await respuesta.json();
+        return habitaciones;
+        
+    } catch (error) {
+        console.error(`Error al obtener habitaciones del tipo ${tipo}:`, error);
+        throw error;
+    }
+}
+
+// Nueva función: Obtener todas las habitaciones de todos los tipos
+async function obtenerTodasLasHabitaciones() {
+    try {
+        const tipos = Object.keys(CONFIGURACION_HOTEL.tiposHabitacion);
+        
+        // Hacer todas las peticiones en paralelo
+        const promesas = tipos.map(tipo => obtenerHabitacionesPorTipo(tipo));
+        const resultados = await Promise.all(promesas);
+        
+        // Organizar las habitaciones por tipo
+        const habitacionesPorTipo = {};
+        tipos.forEach((tipo, index) => {
+            habitacionesPorTipo[tipo] = resultados[index];
+        });
+        
+        return habitacionesPorTipo;
+        
+    } catch (error) {
+        console.error('Error al obtener todas las habitaciones:', error);
+        throw error;
+    }
+}
+
+// Procesar habitaciones para crear el mapa de estados por fecha
+function procesarHabitaciones(habitacionesPorTipo, fechaInicio, fechaFin) {
+    const estadoPorHabitacionYFecha = {};
+    const fechas = generarTodasLasFechasDelRango(fechaInicio, fechaFin);
+    
+    // Procesar cada tipo de habitación
+    Object.values(habitacionesPorTipo).forEach(habitaciones => {
+        habitaciones.forEach(habitacion => {
+            const numeroHabitacion = habitacion.numeroHabitacion;
+            estadoPorHabitacionYFecha[numeroHabitacion] = {};
+            
+            // Para cada fecha del rango, determinar el estado
+            fechas.forEach(fecha => {
+                const estado = obtenerEstadoEnFecha(habitacion.historialEstado, fecha);
+                estadoPorHabitacionYFecha[numeroHabitacion][fecha] = estado;
+            });
+        });
+    });
+    
+    return estadoPorHabitacionYFecha;
+}
+
+function generarTabla(fechaInicio, cantidadDias, habitacionesPorTipo, estadoHabitaciones) {
     limpiarTabla();
     
     const fechas = generarRangoFechas(fechaInicio, cantidadDias);
     
     generarEncabezados(fechas);
-    generarFilasHabitaciones(fechas, estadoHabitaciones);
+    generarFilasHabitaciones(fechas, habitacionesPorTipo, estadoHabitaciones);
 }
 
 function limpiarTabla() {
@@ -150,16 +166,20 @@ function generarEncabezados(fechas) {
     });
 }
 
-function generarFilasHabitaciones(fechas, estadoHabitaciones) {
+function generarFilasHabitaciones(fechas, habitacionesPorTipo, estadoHabitaciones) {
     const tbody = document.getElementById('tableBody');
     
     Object.entries(CONFIGURACION_HOTEL.tiposHabitacion).forEach(([tipo, config]) => {
-        const fila = crearFilaTipoHabitacion(tipo, config, fechas, estadoHabitaciones);
-        tbody.appendChild(fila);
+        const habitaciones = habitacionesPorTipo[tipo] || [];
+        
+        if (habitaciones.length > 0) {
+            const fila = crearFilaTipoHabitacion(tipo, config, fechas, habitaciones, estadoHabitaciones);
+            tbody.appendChild(fila);
+        }
     });
 }
 
-function crearFilaTipoHabitacion(tipoHabitacion, configuracion, fechas, estadoHabitaciones) {
+function crearFilaTipoHabitacion(tipoHabitacion, configuracion, fechas, habitaciones, estadoHabitaciones) {
     const fila = document.createElement('tr');
     
     // Celda con el nombre del tipo de habitación
@@ -168,59 +188,199 @@ function crearFilaTipoHabitacion(tipoHabitacion, configuracion, fechas, estadoHa
     celdaTipo.textContent = configuracion.nombre;
     fila.appendChild(celdaTipo);
     
-    // Generar los números de habitación para este tipo
-    const numerosHabitacion = generarNumerosHabitacion(
-        configuracion.pisoInicial, 
-        configuracion.cantidad
-    );
+    // Ordenar habitaciones por número
+    const habitacionesOrdenadas = habitaciones.sort((a, b) => a.numeroHabitacion - b.numeroHabitacion);
     
     // Una celda por cada fecha
     fechas.forEach(fecha => {
-        const celda = crearCeldaFecha(numerosHabitacion, fecha, estadoHabitaciones);
+        const celda = crearCeldaFecha(habitacionesOrdenadas, fecha, estadoHabitaciones);
         fila.appendChild(celda);
     });
     
     return fila;
 }
 
-function generarNumerosHabitacion(pisoInicial, cantidad) {
-    const numeros = [];
-    for (let i = 1; i <= cantidad; i++) {
-        numeros.push(pisoInicial + i);
-    }
-    return numeros;
-}
-
-function crearCeldaFecha(numerosHabitacion, fecha, estadoHabitaciones) {
+function crearCeldaFecha(habitaciones, fecha, estadoHabitaciones) {
     const celda = document.createElement('td');
     const fechaStr = fecha.toISOString().split('T')[0];
     
-    numerosHabitacion.forEach(numeroHabitacion => {
+    habitaciones.forEach(habitacion => {
+        const numeroHabitacion = habitacion.numeroHabitacion;
+        const id = habitacion.id;
         const estado = estadoHabitaciones[numeroHabitacion]?.[fechaStr] || 'disponible';
-        const divHabitacion = crearDivHabitacion(numeroHabitacion, estado);
+        const divHabitacion = crearDivHabitacion(numeroHabitacion, estado, id);
         celda.appendChild(divHabitacion);
     });
     
     return celda;
 }
 
-function crearDivHabitacion(numero, estado) {
+function crearDivHabitacion(numero, estado, id) {
     const div = document.createElement('div');
     div.className = `room-number room-${estado}`;
     div.textContent = numero;
     div.style.margin = '3px 0';
-    div.title = `Habitación ${numero} - ${obtenerTextoEstado(estado)}`;
-    
+
+    if (estado === 'disponible') {
+        div.style.cursor = 'pointer';
+        div.onclick = function () {
+            reservar(div, numero, id);
+        };
+    }
+
     return div;
 }
 
-function obtenerTextoEstado(estado) {
-    const textos = {
-        'disponible': 'Disponible',
-        'ocupada': 'Ocupada',
-        'fuera-servicio': 'Fuera de servicio'
+let seleccionReserva = {
+    habitacionNumero: null,
+    habitacionId: null,
+    primerFecha: null,
+    segundaFecha: null,
+    primeraSeleccion: null,
+    segundaSeleccion: null
+};
+
+function reservar(boton, numero, id) {
+    const fechaCelda = obtenerFechaDeCelda(boton);
+    
+    // Primer click: seleccionar habitación y fecha inicial
+    if (!seleccionReserva.habitacionNumero) {
+        seleccionReserva.habitacionNumero = numero;
+        seleccionReserva.habitacionId = id;
+        seleccionReserva.primerFecha = fechaCelda;
+        seleccionReserva.primeraSeleccion = boton;
+        
+        boton.classList.add("room-seleccionada");
+        console.log("Primera selección - Habitación:", numero, "Fecha:", fechaCelda);
+        return;
+    }
+    
+    // Si ya hay una selección pero es otra habitación
+    if (seleccionReserva.habitacionNumero !== numero) {
+        alert("Debe seleccionar la misma habitación (número " + seleccionReserva.habitacionNumero + ") para completar el rango de fechas.");
+        return;
+    }
+    
+    
+    // Segundo click: completar el rango
+    if (seleccionReserva.habitacionNumero === numero && !seleccionReserva.segundaFecha) {
+        seleccionReserva.segundaFecha = fechaCelda;
+        seleccionReserva.segundaSeleccion = boton;
+        
+        boton.classList.add("room-seleccionada");
+        console.log("Segunda selección - Habitación:", numero, "Fecha:", fechaCelda);
+        
+        // Verificar disponibilidad en el rango completo
+        verificarYConfirmarReserva();
+    }
+}
+
+function obtenerFechaDeCelda(boton) {
+    const celda = boton.parentElement;
+    const columna = Array.from(celda.parentElement.children).indexOf(celda);
+    
+    // La primera columna es el tipo de habitación, las fechas empiezan en columna 1
+    const columnaFecha = columna - 1;
+    
+    const fechas = generarRangoFechas(estadoApp.fechaInicio, calcularDiasEntre(estadoApp.fechaInicio, estadoApp.fechaFin));
+    const fecha = fechas[columnaFecha];
+    
+    return fecha.toISOString().split('T')[0];
+}
+
+function verificarYConfirmarReserva() {
+    const { habitacionNumero, primerFecha, segundaFecha } = seleccionReserva;
+    
+    // Determinar cuál es inicio y cuál es fin
+    const fecha1 = new Date(primerFecha);
+    const fecha2 = new Date(segundaFecha);
+    const fechaInicio = fecha1 < fecha2 ? primerFecha : segundaFecha;
+    const fechaFin = fecha1 < fecha2 ? segundaFecha : primerFecha;
+    
+    console.log("Verificando disponibilidad:", { habitacionNumero, fechaInicio, fechaFin });
+    
+    // Verificar que todas las fechas en el rango estén disponibles
+    const disponible = verificarDisponibilidadRango(habitacionNumero, fechaInicio, fechaFin);
+    
+    if (disponible) {
+        console.log("✓ Habitación disponible en todo el rango");
+        confirmarReserva(fechaInicio, fechaFin);
+    } else {
+        console.log("✗ Habitación NO disponible en el rango");
+        alert("La habitación " + habitacionNumero + " no está disponible en todas las fechas del rango seleccionado.");
+        cancelarSeleccion();
+    }
+}
+
+function verificarDisponibilidadRango(numeroHabitacion, fechaInicio, fechaFin) {
+    const fechas = generarTodasLasFechasDelRango(fechaInicio, fechaFin);
+    
+    for (const fecha of fechas) {
+        const estado = estadoApp.datosHabitaciones[numeroHabitacion]?.[fecha];
+        if (estado !== 'disponible') {
+            console.log("Fecha ocupada o no disponible:", fecha, "Estado:", estado);
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function confirmarReserva(fechaInicio, fechaFin) {
+    // Pintar todas las celdas del rango en naranja
+    pintarRangoReserva(seleccionReserva.habitacionNumero, fechaInicio, fechaFin);
+    
+    console.log("Reserva confirmada:", {
+        habitacion: seleccionReserva.habitacionNumero,
+        id: seleccionReserva.habitacionId,
+        fechaInicio,
+        fechaFin
+    });
+    
+    // Aquí puedes hacer el llamado al backend para guardar la reserva
+    // await guardarReservaEnBackend(seleccionReserva.habitacionId, fechaInicio, fechaFin);
+    
+    
+    // Resetear la selección
+    resetearSeleccion();
+}
+
+function pintarRangoReserva(numeroHabitacion, fechaInicio, fechaFin) {
+    const fechas = generarTodasLasFechasDelRango(fechaInicio, fechaFin);
+    
+    // Buscar todas las celdas de esta habitación en el rango de fechas
+    const divs = document.querySelectorAll('.room-number');
+    
+    divs.forEach(div => {
+        if (parseInt(div.textContent) === numeroHabitacion) {
+            const fechaDiv = obtenerFechaDeCelda(div);
+            if (fechas.includes(fechaDiv)) {
+                div.classList.remove('room-seleccionada');
+                div.classList.add('room-reservada');
+            }
+        }
+    });
+}
+
+function cancelarSeleccion() {
+    if (seleccionReserva.primeraSeleccion) {
+        seleccionReserva.primeraSeleccion.classList.remove('room-seleccionada');
+    }
+    if (seleccionReserva.segundaSeleccion) {
+        seleccionReserva.segundaSeleccion.classList.remove('room-seleccionada');
+    }
+    resetearSeleccion();
+}
+
+function resetearSeleccion() {
+    seleccionReserva = {
+        habitacionNumero: null,
+        habitacionId: null,
+        primerFecha: null,
+        segundaFecha: null,
+        primeraSeleccion: null,
+        segundaSeleccion: null
     };
-    return textos[estado] || 'Desconocido';
 }
 
 function validarFechas(fechaInicio, fechaFin) {
@@ -239,6 +399,7 @@ const estadoApp = {
     cargando: false,
     fechaInicio: null,
     fechaFin: null,
+    habitacionesPorTipo: null,
     datosHabitaciones: null
 };
 
@@ -249,20 +410,26 @@ async function buscarHabitaciones() {
         
         validarFechas(fechaInicio, fechaFin);
         
-        mostrarCargando(true);
+        // mostrarCargando(true);
         
-        const estadoHabitaciones = await obtenerEstadoHabitaciones(
+        // Obtener todas las habitaciones del backend
+        const habitacionesPorTipo = await obtenerTodasLasHabitaciones();
+        
+        // Procesar los estados por fecha
+        const estadoHabitaciones = procesarHabitaciones(
+            habitacionesPorTipo,
             fechaInicio, 
             fechaFin
         );
         
         estadoApp.fechaInicio = fechaInicio;
         estadoApp.fechaFin = fechaFin;
+        estadoApp.habitacionesPorTipo = habitacionesPorTipo;
         estadoApp.datosHabitaciones = estadoHabitaciones;
         
         const cantidadDias = calcularDiasEntre(fechaInicio, fechaFin);
  
-        generarTabla(fechaInicio, cantidadDias, estadoHabitaciones);
+        generarTabla(fechaInicio, cantidadDias, habitacionesPorTipo, estadoHabitaciones);
         
         mostrarResultados();
         
@@ -273,15 +440,15 @@ async function buscarHabitaciones() {
     }
 }
 
-function mostrarCargando(cargando) {
-    estadoApp.cargando = cargando;
+// function mostrarCargando(cargando) {
+//     estadoApp.cargando = cargando;
     
-    const botonBuscar = document.querySelector('.btn-search');
-    if (botonBuscar) {
-        botonBuscar.disabled = cargando;
-        botonBuscar.textContent = cargando ? '⏳ Cargando...' : '🔍 Buscar';
-    }
-}
+//     const botonBuscar = document.querySelector('.btn-search');
+//     if (botonBuscar) {
+//         botonBuscar.disabled = cargando;
+//         botonBuscar.textContent = cargando ? '⏳ Cargando...' : '🔍 Buscar';
+//     }
+// }
 
 function mostrarResultados() {
     document.getElementById('searchSection').style.display = 'none';
@@ -291,4 +458,14 @@ function mostrarResultados() {
 function manejarError(error) {
     console.error('Error en la búsqueda:', error);
     alert(error.message || 'Ocurrió un error al buscar las habitaciones');
+}
+
+function backToSearch() {
+    document.getElementById('resultsSection').classList.remove('active');
+    document.getElementById('searchSection').style.display = 'block';
+}
+
+function cancelSearch() {
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
 }

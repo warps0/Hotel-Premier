@@ -5,18 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Premier</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/ocuparHabitacion.css}">
 </head>
 
 <body>
-    <h1>Ocupar Habitación</h1>
+    <h1>Ocupar habitación</h1>
 
+    <p class="instrucciones">Complete los datos del huésped:</p>
 
-    
+    <form th:action="@{/habitaciones/ocupar}" method="get">
+        <input type="hidden" name="buscar" value="true">
 
-    <!-- <script th:src="@{/js/nacionalidades.js}"></script> -->
+        <div class="search-container">
+            <span class="fieldset-title">Datos Huésped</span>
 
+            <div class="form-group">
+                <label for="nombre">Nombres:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="escriba un nombre aquí">
+                <p class="indicacion"> Ingrese los nombres a buscar separados por coma</p>
+            </div>
 
+            <div class="form-group">
+                <label for="apellido">Apellidos:</label>
+                <input type="text" id="apellido" name="apellido" placeholder="escriba un apellido aquí">
+                <p class="indicacion"> Ingrese los apellidos a buscar separados por coma</p>
+            </div>
+
+            <div class="form-group">
+                <label for="documento">Documentos:</label>
+                <input type="text" id="documento" name="documento" placeholder="escriba un documento aquí">
+                <p class="indicacion"> Ingrese los documentos a buscar separados por coma</p>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-search">Buscar</button>
+            </div>
+        </div>
+
+        <div class="botones">
+            <button onclick="botonCancelar('¿Desea cancelar ocupar habitación?')" type="button"
+                class="btn-form btn-cancelar">Cancelar</button>
+        </div>
+    </form>
+
+    <script th:src="@{/js/botonCancelar.js}"></script>
 </body>
 
 </html>
