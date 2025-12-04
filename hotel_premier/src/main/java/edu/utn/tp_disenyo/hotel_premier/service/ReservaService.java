@@ -17,4 +17,5 @@ public interface ReservaService {
     public Reserva update(Long id, Reserva reserva) throws Exception;
     public void deleteById(Long id) throws Exception;
     public ReservaDTO agregarHuesped(Long id, List<HuespedDTO> huespedes) throws Exception;
+    public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception;
 }

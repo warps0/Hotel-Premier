@@ -197,4 +197,25 @@ public class ReservaServiceImpl implements ReservaService {
         return new ReservaDTO(actualizada, ids, huespedes);
     }
 
+    @Override
+    public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception {
+        List<Reserva> reservas = reservaRepository.findByNombreOrApellidoOrContacto(nombre, apellido, contacto);
+        List<ReservaDTO> reservasDTO = new ArrayList<>();
+
+
+        List<Long> idsHabitaciones = reservas.stream()
+            .map(Reserva::getId)
+            .toList();
+
+        for(Reserva r: reservas){
+            List<HuespedDTO> huespedes = r.getHuespedes().stream()
+                .map(h -> new HuespedDTO(h))
+                .toList();
+            ReservaDTO dto = new ReservaDTO(r, idsHabitaciones, huespedes);
+            reservasDTO.add(dto);
+        }
+
+        return reservasDTO;
+    }
+
 }

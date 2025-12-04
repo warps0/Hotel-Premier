@@ -52,5 +52,8 @@ public class ReservaController {
     public ResponseEntity<ReservaDTO> agregarHuesped(@PathVariable Long id, @RequestBody List<HuespedDTO> huespedes) throws Exception {
         return new ResponseEntity<>(reservaService.agregarHuesped(id, huespedes), HttpStatus.OK);
     }
+
+    // TODO: AGREGAR ENDPOINT DE GETBYRESPONSABLE. LUEGO, OCUPAR HABITACIÓN
+    // BOMBOCLAT
     
 }
