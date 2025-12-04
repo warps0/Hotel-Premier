@@ -28,7 +28,7 @@ public class ReservaController {
     }
 
     @GetMapping
-    public List<Reserva> getAll(@RequestParam(required = false) EstadoReserva estadoReserva)
+    public List<ReservaDTO> getAll(@RequestParam(required = false) EstadoReserva estadoReserva)
     throws Exception {
         if(estadoReserva == null) {
            return reservaService.getAll();

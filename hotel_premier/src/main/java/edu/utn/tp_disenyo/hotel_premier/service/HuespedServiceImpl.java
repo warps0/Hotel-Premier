@@ -145,4 +145,10 @@ public class HuespedServiceImpl implements HuespedService {
         return repository.save(huesped);
     }
 
+    @Override
+    public List<Huesped> findAllByIds(List<Long> ids) {
+        List<Huesped> huespedes = repository.findAllById(ids);
+
+        return huespedes;
+    }
 }

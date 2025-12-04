@@ -4,7 +4,6 @@ import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
-import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 
 public interface HuespedService {
-
     // TODO: Manejar excepciones para el método create
     public Huesped create(Huesped huesped) throws EntityNotSavedException;
     public List<HuespedDTO> getAll(String nombre, String apellido, String documento, TipoDoc tipoDoc);
@@ -21,5 +19,5 @@ public interface HuespedService {
     public void deleteById(Long id) throws EntityNotSavedException;
     public boolean existsByDocumento(String docIdentidad, TipoDoc tipoDoc);
     public Huesped tryToCreate(Huesped huesped) throws HuespedDuplicatedException;
-
+    public List<Huesped> findAllByIds(List<Long> ids) throws Exception;
 }

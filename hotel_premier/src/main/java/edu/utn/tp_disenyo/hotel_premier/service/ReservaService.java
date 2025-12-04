@@ -11,7 +11,7 @@ import io.micrometer.common.lang.NonNull;
 public interface ReservaService {
     // TODO: ¿DTO?, Exception
     public ReservaDTO create(@NonNull ReservaCreateDTO reservaDTO) throws Exception;
-    public List<Reserva> getAll() throws Exception;
+    public List<ReservaDTO> getAll() throws Exception;
     public Optional<Reserva> getById(Long id) throws Exception;
     public Reserva update(Long id, Reserva reserva) throws Exception;
     public void deleteById(Long id) throws Exception;

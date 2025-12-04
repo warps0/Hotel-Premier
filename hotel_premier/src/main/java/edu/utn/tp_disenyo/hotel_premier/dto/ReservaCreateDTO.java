@@ -11,7 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class ReservaCreateDTO {
+    private List<Long> huespedesIds;
     private List<Long> habitacionesIds;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
+
+    private String nombre;
+    private String apellido;
+    private String contacto;
 }
