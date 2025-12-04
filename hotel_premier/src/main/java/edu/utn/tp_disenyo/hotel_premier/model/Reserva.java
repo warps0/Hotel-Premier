@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,11 +43,6 @@ public class Reserva {
     private String apellido;
     private String contacto;
     
-    /* 
-    @ManyToOne
-    @JoinColumn(name = "responsable_id")
-    private Huesped responsable; 
-    */
     @ManyToMany
     @JoinTable(
         name = "reserva_huesped",
@@ -57,7 +53,6 @@ public class Reserva {
 
     
     @ManyToMany
-    //@JsonIgnore
     @JoinTable(
         name = "reserva_habitacion",
         joinColumns = @JoinColumn(name = "reserva_id"),
@@ -65,12 +60,20 @@ public class Reserva {
     ) 
     private List<Habitacion> habitaciones = new ArrayList<>();
 
+    // Al momento de crear una reserva, la lista de estadías será vacía
+    // Para asociar estas, se usaran métodos internos a la clase
+    @OneToMany(
+        mappedBy = "reserva",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<Estadia> estadias = new ArrayList<>();
+
 
     public Reserva(EstadoReserva estado, ReservaCreateDTO dto, List<Habitacion> habitaciones, List<Huesped> huespedes) {
         this.fechaCreacion = LocalDateTime.now();
         
         this.estado = estado;
-        //this.responsable = responsable;
 
         this.nombre = dto.getNombre();
         this.apellido = dto.getApellido();
@@ -81,16 +84,4 @@ public class Reserva {
         this.habitaciones = habitaciones;
         this.huespedes = huespedes;
     }
-
-    /*
-    public void addHabitacion(Habitacion habitacion) {
-        habitaciones.add(habitacion);
-        habitacion.getReservas().add(this);
-    }
-
-    public void removeHabitacion(Habitacion habitacion) {
-        habitaciones.remove(habitacion);
-        habitacion.getReservas().remove(this);
-    }
-    */
 }

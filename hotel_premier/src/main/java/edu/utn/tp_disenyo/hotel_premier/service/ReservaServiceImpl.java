@@ -1,19 +1,23 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
+import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
@@ -23,11 +27,13 @@ import io.micrometer.common.lang.NonNull;
 @Service
 public class ReservaServiceImpl implements ReservaService {
     private final ReservaDAO reservaRepository;
+    private final EstadiaDAO estadiaRepository;
     private final HuespedService huespedService;
     private final HabitacionService habitacionService;
 
-    public ReservaServiceImpl(ReservaDAO rRep, HuespedService hServ, HabitacionService habServ) {
+    public ReservaServiceImpl(ReservaDAO rRep, EstadiaDAO eRep, HuespedService hServ, HabitacionService habServ) {
         this.reservaRepository = rRep;
+        this.estadiaRepository = eRep;
         this.huespedService = hServ;
         this.habitacionService = habServ;
     }
@@ -220,4 +226,44 @@ public class ReservaServiceImpl implements ReservaService {
         return reservasDTO;
     }
 
+    @Override
+    public EstadiaDTO ocuparHabitacion(Long reservaId, Long habitacionId, List<Long> huespedesId) throws Exception {
+        Reserva reserva = reservaRepository.findById(reservaId).get();
+        Habitacion habitacion = habitacionService.getById(habitacionId).get();
+        Estadia estadia = new Estadia();
+
+        if(reserva.getHabitaciones().contains(habitacion)) {
+            List<Huesped> huespedes = new ArrayList<>();
+
+            for(Long hId : huespedesId) {
+                Huesped temp = huespedService.getById(hId);
+                huespedes.add(temp);
+            }
+
+            reserva.setHuespedes(huespedes);
+
+            List<HuespedDTO> huespedesDTOS = new ArrayList<>();
+
+            EstadoHabitacion estadoHabitacion = habitacion.getEstadoHabitacion(reserva.getFechaInicio(), reserva.getFechaFin());
+            System.out.println(estadoHabitacion);
+
+            if(estadoHabitacion.getEstado() == Estado.RESERVADO){
+                estadoHabitacion.setEstado(Estado.OCUPADO);
+
+                estadia.setFechaIngreso(LocalDateTime.now());
+                estadia.setFechaEgreso(reserva.getFechaFin());
+                estadia.setReserva(reserva);
+                estadia.setHuespedes(huespedes);
+                estadia.setHabitacionId(habitacionId);
+            }
+            else throw new Exception("Habitacion no reservada para ahora owo");
+        }
+        else throw new Exception("Habitacion no válida para ocupar");
+
+        reservaRepository.save(reserva);
+        habitacionService.updateById(habitacionId, habitacion);
+        estadiaRepository.save(estadia);
+
+        return new EstadiaDTO(estadia);
+    }
 }

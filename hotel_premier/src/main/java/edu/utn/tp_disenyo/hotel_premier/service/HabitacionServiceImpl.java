@@ -1,10 +1,16 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
+import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
+import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +24,14 @@ import static edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion.*;
 @Service
 public class HabitacionServiceImpl implements HabitacionService {
 
-    private final HabitacionDAO repository;
+    private final HabitacionDAO habitacionRepository;
+    private final EstadiaDAO estadiaRepository;
+    private final HuespedService huespedService;
 
-    public HabitacionServiceImpl(HabitacionDAO repository) {
-        this.repository = repository;
+    public HabitacionServiceImpl(HabitacionDAO repository, EstadiaDAO estadiaRepository, HuespedService huespedService) {
+        this.habitacionRepository = repository;
+        this.estadiaRepository = estadiaRepository;
+        this.huespedService = huespedService;
     }
 
     @Override
@@ -53,7 +63,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         Habitacion habitacion = new Habitacion();
         habitacion.setTipoHabitacion(tipo);
 
-        int cantHabitacionesDeTipo = repository.countByTipoHabitacion(tipo);
+        int cantHabitacionesDeTipo = habitacionRepository.countByTipoHabitacion(tipo);
         cantHabitacionesDeTipo++; // Incremento en uno, creo la primera habitación
 
         // Forzar listas de estados y reservas vacías
@@ -92,33 +102,33 @@ public class HabitacionServiceImpl implements HabitacionService {
                 throw new Exception();
         }
 
-        return Optional.ofNullable(repository.save(habitacion)).orElseThrow(
+        return Optional.ofNullable(habitacionRepository.save(habitacion)).orElseThrow(
                 () -> new Exception() // EntityNotSavedException()
         );
     }
 
     @Override
     public List<Habitacion> getAll() {
-        return repository.findAll();
+        return habitacionRepository.findAll();
     }
 
     @Override
     public Optional<Habitacion> getById(Long id) throws Exception {
-        return Optional.ofNullable(repository.findById(id)).orElseThrow(
+        return Optional.ofNullable(habitacionRepository.findById(id)).orElseThrow(
                 () -> new Exception() //HabitacionNotFoundException()
         );
     }
 
     @Override
     public void deleteById(Long id) throws Exception {
-        Habitacion habitacionBorrada = repository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
-        repository.delete(habitacionBorrada);
+        Habitacion habitacionBorrada = habitacionRepository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
+        habitacionRepository.delete(habitacionBorrada);
     }
 
     @Override
     public void updateById(Long id, Habitacion habitacion) throws Exception {
         // TODO: PATCH acá forzamos que si llega null se pone null
-        Habitacion habitacionActualizada = repository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
+        Habitacion habitacionActualizada = habitacionRepository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
 
         habitacionActualizada.setCapacidad(habitacion.getCapacidad());
         habitacionActualizada.setPrecio(habitacion.getPrecio());
@@ -135,7 +145,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         habitacion.addEstadoHabitacion(estadoHabitacion);
         estadoHabitacion.setHabitacion(idHabitacion);
 
-        return repository.save(habitacion);
+        return habitacionRepository.save(habitacion);
     }
 
     @Override
@@ -143,12 +153,12 @@ public class HabitacionServiceImpl implements HabitacionService {
         Habitacion habitacion = this.getById(idHabitacion).get();
 
         habitacion.removeEstadoHabitacion(estadoHabitacion);
-        return repository.save(habitacion);
+        return habitacionRepository.save(habitacion);
     }
 
     @Override
     public List<Habitacion> findByTipoHabitacion(TipoHabitacion tipoHabitacion) {
-        return repository.findByTipoHabitacion(tipoHabitacion);
+        return habitacionRepository.findByTipoHabitacion(tipoHabitacion);
     }
 
 //    @Override
@@ -158,7 +168,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public List<Habitacion> findByCapacidad(Integer capacidad) {
-        return repository.findByCapacidad(capacidad);
+        return habitacionRepository.findByCapacidad(capacidad);
     }
 
     @Override
@@ -202,5 +212,4 @@ public class HabitacionServiceImpl implements HabitacionService {
             filtrados
         );
     }
-        
 }
