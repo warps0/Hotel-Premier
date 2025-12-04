@@ -18,13 +18,22 @@ public class ReservaDTO {
     private EstadoReserva estado;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
+    private List<HuespedDTO> huespedes;
+    private String nombre;
+    private String apellido;
+    private String contacto;
     private List<Long> habitacionesIds = new ArrayList<>();
 
-    public ReservaDTO(Reserva reserva, List<Long> idsHabitaciones) {
+    public ReservaDTO(Reserva reserva, List<Long> idsHabitaciones, List<HuespedDTO> huespedes) {
         this.id = reserva.getId();
         this.estado = reserva.getEstado();
         this.fechaInicio = reserva.getFechaInicio();
+        this.huespedes = huespedes;
         this.fechaFin = reserva.getFechaFin();
+        this.nombre = reserva.getNombre();
+        this.apellido = reserva.getApellido();
+        this.contacto = reserva.getContacto();
         this.habitacionesIds = idsHabitaciones;
+
     }
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
@@ -109,6 +110,13 @@ public class ReservaServiceImpl implements ReservaService {
             new ArrayList<>()
             : huespedService.findAllByIds(reservaDTO.getHuespedesIds());
 
+        List<HuespedDTO> huespedesDTO = new ArrayList<>();
+
+        for(Huesped h : huespedes) {
+            HuespedDTO dto = new HuespedDTO(h);
+            huespedesDTO.add(dto);
+        }
+
         // ============================
         // 3. Create and save reservation
         // ============================
@@ -121,12 +129,15 @@ public class ReservaServiceImpl implements ReservaService {
 
         reservaRepository.save(reserva);
 
-        return new ReservaDTO(reserva, reservaDTO.getHabitacionesIds());
+        return new ReservaDTO(reserva, reservaDTO.getHabitacionesIds(), huespedesDTO);
     }
+
     @Override
     public List<ReservaDTO> getAll() throws Exception {
         List<Reserva> reservas = Optional.ofNullable(reservaRepository.findAll()).orElseThrow(() -> new Exception());
         List<ReservaDTO> result = new ArrayList<>();
+
+        List<HuespedDTO> huespedes = new ArrayList<>();
 
         for(Reserva reserva : reservas){
             List<Long> habitacionesIds = new ArrayList<>();
@@ -135,7 +146,11 @@ public class ReservaServiceImpl implements ReservaService {
                 habitacionesIds.add(habitacionReservada.getId());
             }
 
-            result.add(new ReservaDTO(reserva, habitacionesIds));
+            for(Huesped h : reserva.getHuespedes()) {
+                HuespedDTO dto = new HuespedDTO(h);
+                huespedes.add(dto);
+            }
+            result.add(new ReservaDTO(reserva, habitacionesIds, huespedes));
         }
 
         return result;
@@ -165,6 +180,21 @@ public class ReservaServiceImpl implements ReservaService {
     public void deleteById(Long id) throws Exception {
         Reserva reservaBorrada = reservaRepository.findById(id).orElseThrow( () -> new Exception()); //HabitacionNotFoundException()
         reservaRepository.delete(reservaBorrada);
+    }
+
+    @Override
+    public ReservaDTO agregarHuesped(Long id, List<HuespedDTO> huespedes) throws Exception {
+        List<Long> ids = huespedes.stream()
+            .map(HuespedDTO::getId)
+            .toList();
+
+        List<Huesped> lista = huespedService.findAllByIds(ids);
+        Reserva actualizada = reservaRepository.findById(id).get();
+        actualizada.setHuespedes(lista);
+
+        reservaRepository.save(actualizada);
+
+        return new ReservaDTO(actualizada, ids, huespedes);
     }
 
 }

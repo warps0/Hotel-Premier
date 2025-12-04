@@ -3,6 +3,7 @@ package edu.utn.tp_disenyo.hotel_premier.service;
 import java.util.List;
 import java.util.Optional;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
@@ -15,4 +16,5 @@ public interface ReservaService {
     public Optional<Reserva> getById(Long id) throws Exception;
     public Reserva update(Long id, Reserva reserva) throws Exception;
     public void deleteById(Long id) throws Exception;
+    public ReservaDTO agregarHuesped(Long id, List<HuespedDTO> huespedes) throws Exception;
 }
