@@ -34,6 +34,5 @@ public class ReservaDTO {
         this.apellido = reserva.getApellido();
         this.contacto = reserva.getContacto();
         this.habitacionesIds = idsHabitaciones;
-
     }
 }

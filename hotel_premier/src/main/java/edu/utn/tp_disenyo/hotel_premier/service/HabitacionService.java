@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.HabitacionNotFoundException;
+import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
@@ -29,4 +31,6 @@ public interface HabitacionService {
 
     public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin);
     public HabitacionDTO getHabitacionByRangoFecha(Long idHabitacion, LocalDateTime fechaInicio, LocalDateTime fechaFin) throws Exception;
+
+    
 }

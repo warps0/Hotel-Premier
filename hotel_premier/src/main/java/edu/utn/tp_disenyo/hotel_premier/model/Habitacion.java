@@ -1,5 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,19 @@ public class Habitacion {
     public void addEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
         System.out.println(estadoHabitacion);
         this.historialEstado.add(estadoHabitacion);
+    }
+
+    public EstadoHabitacion getEstadoHabitacion(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+        EstadoHabitacion temp = null;
+
+        for(EstadoHabitacion e : historialEstado){
+            if(e.getFechaInicio() == fechaInicio && e.getFechaFin() == fechaFin){
+                temp = e;
+                break;
+            }
+        }
+
+        return temp;
     }
 
     public void removeEstadoHabitacion(EstadoHabitacion estadoHabitacion) {

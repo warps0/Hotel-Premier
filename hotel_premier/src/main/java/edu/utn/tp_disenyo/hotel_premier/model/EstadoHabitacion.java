@@ -37,8 +37,6 @@ public class EstadoHabitacion {
     private LocalDateTime fechaFin;
     private Estado estado;
 
-
-
     @Transient
     @JsonIgnore
     private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
