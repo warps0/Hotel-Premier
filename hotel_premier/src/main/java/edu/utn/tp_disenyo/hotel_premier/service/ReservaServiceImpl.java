@@ -197,6 +197,7 @@ public class ReservaServiceImpl implements ReservaService {
         return new ReservaDTO(actualizada, ids, huespedes);
     }
 
+    // TODO: VER SI ANDA ESTE METODO. SI ANDA, SEGUIR CON EL CONTROLADOR PARA ESTE METODO.
     @Override
     public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception {
         List<Reserva> reservas = reservaRepository.findByNombreOrApellidoOrContacto(nombre, apellido, contacto);

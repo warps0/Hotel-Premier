@@ -41,6 +41,12 @@ public class ReservaController {
         // TODO: GetByEstadoReserva
         return reservaService.getAll();
     }
+
+    @GetMapping("/responsable")
+    public ResponseEntity<List<ReservaDTO>> getByResponsable(@RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String apellido, @RequestParam(required = false) String contacto) throws Exception{
+            return new ResponseEntity<>(reservaService.getByResponsable(nombre, apellido, contacto), HttpStatus.OK);
+        }
     
     @PostMapping
     public ReservaDTO create(@RequestBody ReservaCreateDTO reserva)
