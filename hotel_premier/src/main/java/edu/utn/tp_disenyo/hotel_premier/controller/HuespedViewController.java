@@ -4,6 +4,7 @@ import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
+import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.service.HuespedService;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
@@ -101,7 +102,7 @@ public class HuespedViewController {
 
     @PostMapping("/huesped")
     public String submitForm(@ModelAttribute Huesped formHuesped, RedirectAttributes redirectAttributes)
-    throws EntityNotSavedException {
+            throws EntityNotSavedException {
         try {
             huespedService.tryToCreate(formHuesped);
 
@@ -118,7 +119,7 @@ public class HuespedViewController {
 
     @PostMapping("/huesped/forzarCreacion")
     public String forzarCreacion(@ModelAttribute("huesped") Huesped formHuesped, RedirectAttributes redirectAttributes)
-    throws EntityNotSavedException {
+            throws EntityNotSavedException {
         huespedService.create(formHuesped);
 
         redirectAttributes.addFlashAttribute("nombreCompleto",

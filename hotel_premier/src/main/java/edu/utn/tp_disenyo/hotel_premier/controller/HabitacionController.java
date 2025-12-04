@@ -17,25 +17,25 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 class HabitacionController {
 
-    private HabitacionService habitacionService;
+    private HabitacionService service;
 
-    public HabitacionController(HabitacionService habitacionService) {
-        this.habitacionService = habitacionService;
+    public HabitacionController(HabitacionService service) {
+        this.service = service;
     }
 
     // Crear TODAS las habitaciones
     @PostMapping("/init")
     public ResponseEntity<String> initHabitaciones() throws Exception {
-        return new ResponseEntity<>(habitacionService.initHabitaciones(), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.initHabitaciones(), HttpStatus.CREATED);
     }
 
     // Obtener TODAS las habitaciones
     @GetMapping
     public List<Habitacion> getAll(@RequestParam(required = false) TipoHabitacion tipo) {
         if(tipo == null) {
-            return habitacionService.getAll();
+            return service.getAll();
         }
-        else return habitacionService.findByTipoHabitacion(tipo);
+        else return service.findByTipoHabitacion(tipo);
     }
 
     // Buscar habitaciones por rango de fechas (fechaInicio ~ fechaFin)
@@ -52,21 +52,21 @@ class HabitacionController {
             //TODO: Mas exceptions
             throw new Exception();
         }
-        return new ResponseEntity<Habitacion>(habitacionService.create(tipo), HttpStatus.CREATED);
+        return new ResponseEntity<Habitacion>(service.create(tipo), HttpStatus.CREATED);
     }
 
     // Agregar una instancia de EstadoHabitacion a una Habitación
     @PutMapping("/agregarEstado/{id}")
     public ResponseEntity<Habitacion> agregarEstado(@PathVariable long id, @RequestBody EstadoHabitacion estadoHabitacion)
     throws Exception {
-        return new ResponseEntity<Habitacion>(habitacionService.agregarEstado(id, estadoHabitacion), HttpStatus.OK);
+        return new ResponseEntity<Habitacion>(service.agregarEstado(id, estadoHabitacion), HttpStatus.OK);
     }
 
     // Borrar una instancia de EstadoHabitacion a una Habitación
     @PutMapping("/borrarEstado/{id}")
     public ResponseEntity<Habitacion> borrarEstado(@PathVariable long id, @RequestBody EstadoHabitacion estadoHabitacion)
             throws Exception {
-        return new ResponseEntity<Habitacion>(habitacionService.borrarEstado(id, estadoHabitacion), HttpStatus.OK);
+        return new ResponseEntity<Habitacion>(service.borrarEstado(id, estadoHabitacion), HttpStatus.OK);
     }
 
 }

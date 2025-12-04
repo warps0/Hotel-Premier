@@ -182,4 +182,25 @@ public class HabitacionServiceImpl implements HabitacionService {
         })
         .toList();
     }
+
+    @Override
+    public HabitacionDTO getHabitacionByRangoFecha(Long idHabitacion, LocalDateTime inputInicio, LocalDateTime inputFin) throws Exception {
+
+        List<EstadoHabitacion> filtrados = this.getById(idHabitacion).get().getHistorialEstado()
+            .stream()
+            .filter(e ->
+                !e.getFechaFin().isBefore(inputInicio) &&
+                !e.getFechaInicio().isAfter(inputFin)
+            )
+            .toList();
+        
+        return new HabitacionDTO(
+            idHabitacion,
+            this.getById(idHabitacion)
+                .get()
+                .getTipoHabitacion(), // ?
+            filtrados
+        );
+    }
+        
 }

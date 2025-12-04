@@ -20,14 +20,15 @@ public class ReservaDTO {
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private Long responsableId;
-    private List<Long> habitacionesIds = new ArrayList<Long>();
+    private List<Long> habitacionesIds = new ArrayList<>();
 
-    public ReservaDTO(Reserva reserva) {
+    public ReservaDTO(Reserva reserva, List<Long> idsHabitaciones) {
         this.id = reserva.getId();
         this.estado = reserva.getEstado();
         this.fechaInicio = reserva.getFechaInicio();
         this.fechaFin = reserva.getFechaFin();
         this.responsableId = reserva.getResponsable().getId();
+        this.habitacionesIds = idsHabitaciones;
 
         for(Habitacion h : reserva.getHabitaciones()){
             habitacionesIds.add(h.getId());

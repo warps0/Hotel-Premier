@@ -47,7 +47,7 @@ public class Reserva {
     private List<Habitacion> habitaciones = new ArrayList<>();
 
 
-    public Reserva(EstadoReserva estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, Huesped responsable) {
+    public Reserva(EstadoReserva estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, Huesped responsable, List<Habitacion> habitaciones) {
         this.fechaCreacion = LocalDateTime.now();
         
         this.estado = estado;
@@ -55,6 +55,7 @@ public class Reserva {
 
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.habitaciones = habitaciones;
     }
 
     /*
