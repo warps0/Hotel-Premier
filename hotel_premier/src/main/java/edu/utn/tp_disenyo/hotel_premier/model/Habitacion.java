@@ -52,7 +52,6 @@ public class Habitacion {
     private List<Reserva> reservas = new ArrayList<>();
 
     public void addEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
-        System.out.println(estadoHabitacion);
         this.historialEstado.add(estadoHabitacion);
     }
 
@@ -60,7 +59,7 @@ public class Habitacion {
         EstadoHabitacion temp = null;
 
         for(EstadoHabitacion e : historialEstado){
-            if(e.getFechaInicio() == fechaInicio && e.getFechaFin() == fechaFin){
+            if(e.getFechaInicio().isEqual(fechaInicio) && e.getFechaFin().isEqual(fechaFin)){
                 temp = e;
                 break;
             }

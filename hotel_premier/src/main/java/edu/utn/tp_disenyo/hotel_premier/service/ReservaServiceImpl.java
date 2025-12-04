@@ -245,6 +245,7 @@ public class ReservaServiceImpl implements ReservaService {
             List<HuespedDTO> huespedesDTOS = new ArrayList<>();
 
             EstadoHabitacion estadoHabitacion = habitacion.getEstadoHabitacion(reserva.getFechaInicio(), reserva.getFechaFin());
+            System.out.println(estadoHabitacion);
 
             if(estadoHabitacion.getEstado() == Estado.RESERVADO){
                 estadoHabitacion.setEstado(Estado.OCUPADO);
