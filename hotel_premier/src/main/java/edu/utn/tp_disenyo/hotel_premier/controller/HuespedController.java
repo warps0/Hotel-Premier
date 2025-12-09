@@ -68,9 +68,4 @@ public class HuespedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Checkear que el huesped nunca se alojo en el hotel
-    @GetMapping("/{existeReserva}")
-    public ResponseEntity<Boolean> huespedReservado( @PathVariable Long id) throws Exception {
-        return new ResponseEntity<>(service.huespedReservado( id), HttpStatus.OK);
-    }
 }

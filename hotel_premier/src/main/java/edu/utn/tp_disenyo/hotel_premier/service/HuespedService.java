@@ -21,5 +21,4 @@ public interface HuespedService {
     public boolean existsByDocumento(String docIdentidad, TipoDoc tipoDoc);
     public Huesped tryToCreate(Huesped huesped) throws HuespedDuplicatedException;
     public List<Huesped> findAllByIds(List<Long> ids) throws Exception;
-    public boolean huespedReservado(long huespedId) throws Exception;
 }
