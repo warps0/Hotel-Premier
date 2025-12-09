@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -279,5 +281,21 @@ public class ReservaServiceImpl implements ReservaService {
         }
 
         return reservasDTOS;
+    }
+
+    @Override
+    public boolean huespedReservado(long huespedId) throws Exception {
+        List<ReservaDTO> reservasExistentes = this.getByEstado(EstadoReserva.EXISTENTE);
+        List<ReservaDTO> reservasActivas = this.getByEstado(EstadoReserva.ACTIVA);
+        List<ReservaDTO> reservas = Stream.concat(reservasExistentes.stream(), reservasActivas.stream()).collect(Collectors.toList());
+
+        HuespedDTO huesped = new HuespedDTO(huespedService.getById(huespedId));
+
+        for (ReservaDTO reserva : reservas) {
+            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva EXISTENTE o ACTIVA
+                return true;
+            }
+        }
+        return false;
     }
 }
