@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.stereotype.Service;
 
@@ -204,7 +205,6 @@ public class ReservaServiceImpl implements ReservaService {
         return new ReservaDTO(actualizada, ids, huespedes);
     }
 
-    // TODO: VER SI ANDA ESTE METODO. SI ANDA, SEGUIR CON EL CONTROLADOR PARA ESTE METODO.
     @Override
     public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception {
         List<Reserva> reservas = reservaRepository.findAll(ReservaSpecification.filterBy(nombre, apellido, contacto));
@@ -266,4 +266,19 @@ public class ReservaServiceImpl implements ReservaService {
 
         return new EstadiaDTO(estadia);
     }
+
+    @Override
+    public void cancelarReserva(List<Long> reservaIds) throws Exception {
+        for (Long id : reservaIds) {
+            Reserva r = reservaRepository.findById(id).get();
+
+            r.setEstado(EstadoReserva.CANCELADA);
+
+            for (Habitacion h: r.getHabitaciones()) {
+                
+            }
+        }
+    }
+
+    
 }

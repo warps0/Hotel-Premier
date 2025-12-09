@@ -75,5 +75,15 @@ public class ReservaController {
 
     // TODO: LUEGO, OCUPAR HABITACIÓN
     // BOMBOCLAT
+    @PutMapping("/cancelar")
+    public void cancelarReserva(
+        @RequestBody List<Long> reservaIds
+    ) throws Exception {
+        if(reservaIds.isEmpty()){
+            throw new Exception("Ingrese los ID de las reservas a cancelar.");
+        }
+        
+
+    }
     
 }

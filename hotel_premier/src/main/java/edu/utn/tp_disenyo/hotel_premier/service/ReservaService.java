@@ -21,4 +21,6 @@ public interface ReservaService {
     public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception;
 
     public EstadiaDTO ocuparHabitacion(Long reservaId, Long habitacionId, List<Long> huespedesId) throws Exception;
+
+    public void cancelarReserva(List<Long> reservaIds) throws Exception;
 }
