@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;

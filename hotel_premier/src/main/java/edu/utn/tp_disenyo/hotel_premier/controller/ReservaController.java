@@ -73,6 +73,11 @@ public class ReservaController {
             return new ResponseEntity<>(reservaService.ocuparHabitacion(reservaId, habitacionId, huespedesId), HttpStatus.CREATED);
     }
 
+    // Checkear que el huesped nunca se alojo en el hotel
+    @GetMapping("/{existeReserva}")
+    public ResponseEntity<Boolean> huespedReservado( @PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(reservaService.huespedReservado( id), HttpStatus.OK);
+    }
     // TODO: LUEGO, OCUPAR HABITACIÓN
     // BOMBOCLAT
     @PutMapping("/cancelar")

@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -129,7 +130,7 @@ public class ReservaServiceImpl implements ReservaService {
         // 3. Create and save reservation
         // ============================
         Reserva reserva = new Reserva(
-                EstadoReserva.ACTIVA,
+                EstadoReserva.EXISTENTE,
                 reservaDTO,
                 habitaciones,
                 huespedes
@@ -249,6 +250,7 @@ public class ReservaServiceImpl implements ReservaService {
 
             if(estadoHabitacion.getEstado() == Estado.RESERVADO){
                 estadoHabitacion.setEstado(Estado.OCUPADO);
+                reserva.setEstado(EstadoReserva.ACTIVA);
 
                 estadia.setFechaIngreso(LocalDateTime.now());
                 estadia.setFechaEgreso(reserva.getFechaFin());
@@ -268,17 +270,31 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public void cancelarReserva(List<Long> reservaIds) throws Exception {
-        for (Long id : reservaIds) {
-            Reserva r = reservaRepository.findById(id).get();
+    public List<ReservaDTO> getByEstado(EstadoReserva estado) throws Exception {
+        List<Reserva> reservas = reservaRepository.findByEstado(estado);
+        List<ReservaDTO> reservasDTOS = new ArrayList<>();
 
-            r.setEstado(EstadoReserva.CANCELADA);
+        for(Reserva r: reservas){
 
-            for (Habitacion h: r.getHabitaciones()) {
-                
-            }
+            reservasDTOS.add(new ReservaDTO(r));
         }
+
+        return reservasDTOS;
     }
 
-    
+    @Override
+    public boolean huespedReservado(long huespedId) throws Exception {
+        List<ReservaDTO> reservasExistentes = this.getByEstado(EstadoReserva.EXISTENTE);
+        List<ReservaDTO> reservasActivas = this.getByEstado(EstadoReserva.ACTIVA);
+        List<ReservaDTO> reservas = Stream.concat(reservasExistentes.stream(), reservasActivas.stream()).collect(Collectors.toList());
+
+        HuespedDTO huesped = new HuespedDTO(huespedService.getById(huespedId));
+
+        for (ReservaDTO reserva : reservas) {
+            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva EXISTENTE o ACTIVA
+                return true;
+            }
+        }
+        return false;
+    }
 }
