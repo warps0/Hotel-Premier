@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
@@ -44,6 +45,7 @@ public class Reserva {
     private String contacto;
     
     @ManyToMany
+    @JsonBackReference
     @JoinTable(
         name = "reserva_huesped",
         joinColumns = @JoinColumn(name = "reserva_id"),
@@ -53,6 +55,7 @@ public class Reserva {
 
     
     @ManyToMany
+    @JsonBackReference
     @JoinTable(
         name = "reserva_habitacion",
         joinColumns = @JoinColumn(name = "reserva_id"),
@@ -62,6 +65,7 @@ public class Reserva {
 
     // Al momento de crear una reserva, la lista de estadías será vacía
     // Para asociar estas, se usaran métodos internos a la clase
+    @JsonBackReference
     @OneToMany(
         mappedBy = "reserva",
         cascade = CascadeType.ALL,
