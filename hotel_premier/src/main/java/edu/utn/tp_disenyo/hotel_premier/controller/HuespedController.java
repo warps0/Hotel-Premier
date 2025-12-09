@@ -1,9 +1,11 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,4 +68,9 @@ public class HuespedController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // Checkear que el huesped nunca se alojo en el hotel
+    @GetMapping("/{existeReserva}")
+    public ResponseEntity<Boolean> huespedReservado( @PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(service.huespedReservado( id), HttpStatus.OK);
+    }
 }

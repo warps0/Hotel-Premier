@@ -7,10 +7,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
-import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
+import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,12 @@ public class HuespedServiceImpl implements HuespedService {
 
     private final HuespedDAO repository;
 
-    public HuespedServiceImpl(HuespedDAO repository) {
+    private final ReservaService reservaService;
+
+    public HuespedServiceImpl(HuespedDAO repository, ReservaService reservaService) {
+
         this.repository = repository;
+        this.reservaService = reservaService;
     }
 
     // TODO: Manejar excepciones para el método create
@@ -151,4 +156,21 @@ public class HuespedServiceImpl implements HuespedService {
 
         return huespedes;
     }
+
+    @Override
+    public boolean huespedReservado(long huespedId) throws Exception {
+        List<ReservaDTO> reservasExistentes = reservaService.getByEstado(EstadoReserva.EXISTENTE);
+        List<ReservaDTO> reservasActivas = reservaService.getByEstado(EstadoReserva.ACTIVA);
+        List<ReservaDTO> reservas = Stream.concat(reservasExistentes.stream(), reservasActivas.stream()).collect(Collectors.toList());
+
+        HuespedDTO huesped = new HuespedDTO(repository.findById(huespedId).orElse(null));
+
+        for (ReservaDTO reserva : reservas) {
+            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva EXISTENTE o ACTIVA
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

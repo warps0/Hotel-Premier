@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
+import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
@@ -20,4 +21,5 @@ public interface HuespedService {
     public boolean existsByDocumento(String docIdentidad, TipoDoc tipoDoc);
     public Huesped tryToCreate(Huesped huesped) throws HuespedDuplicatedException;
     public List<Huesped> findAllByIds(List<Long> ids) throws Exception;
+    public boolean huespedReservado(long huespedId) throws Exception;
 }
