@@ -128,7 +128,7 @@ public class ReservaServiceImpl implements ReservaService {
         // 3. Create and save reservation
         // ============================
         Reserva reserva = new Reserva(
-                EstadoReserva.ACTIVA,
+                EstadoReserva.EXISTENTE,
                 reservaDTO,
                 habitaciones,
                 huespedes
@@ -249,6 +249,7 @@ public class ReservaServiceImpl implements ReservaService {
 
             if(estadoHabitacion.getEstado() == Estado.RESERVADO){
                 estadoHabitacion.setEstado(Estado.OCUPADO);
+                reserva.setEstado(EstadoReserva.ACTIVA);
 
                 estadia.setFechaIngreso(LocalDateTime.now());
                 estadia.setFechaEgreso(reserva.getFechaFin());
@@ -265,5 +266,18 @@ public class ReservaServiceImpl implements ReservaService {
         estadiaRepository.save(estadia);
 
         return new EstadiaDTO(estadia);
+    }
+
+    @Override
+    public List<ReservaDTO> getByEstado(EstadoReserva estado) throws Exception {
+        List<Reserva> reservas = reservaRepository.findByEstado(estado);
+        List<ReservaDTO> reservasDTOS = new ArrayList<>();
+
+        for(Reserva r: reservas){
+
+            reservasDTOS.add(new ReservaDTO(r));
+        }
+
+        return reservasDTOS;
     }
 }

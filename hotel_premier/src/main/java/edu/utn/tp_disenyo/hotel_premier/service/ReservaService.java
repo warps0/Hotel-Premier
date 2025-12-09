@@ -8,6 +8,7 @@ import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import io.micrometer.common.lang.NonNull;
 
 public interface ReservaService {
@@ -21,4 +22,5 @@ public interface ReservaService {
     public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception;
 
     public EstadiaDTO ocuparHabitacion(Long reservaId, Long habitacionId, List<Long> huespedesId) throws Exception;
+    public List<ReservaDTO> getByEstado(EstadoReserva estado) throws Exception;
 }
