@@ -297,4 +297,24 @@ public class ReservaServiceImpl implements ReservaService {
         }
         return false;
     }
+
+    @Override
+    public void cancelarReserva(List<Long> reservaIds) throws Exception {
+        for(Long id : reservaIds) {
+            Reserva r = reservaRepository.findById(id).get();
+
+            if(r.getEstado() == EstadoReserva.EXISTENTE){
+                for(Habitacion h : r.getHabitaciones()) {
+                    EstadoHabitacion e = h.getEstadoHabitacion(r.getFechaInicio(), r.getFechaFin());
+                    h.removeEstadoHabitacion(e);
+
+                    habitacionService.updateById(h.getId(), h);
+                }
+
+                r.setEstado(EstadoReserva.CANCELADA);
+
+                reservaRepository.save(r);
+            }
+        }
+    }
 }

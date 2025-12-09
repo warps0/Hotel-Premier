@@ -80,6 +80,7 @@ public class ReservaController {
     }
     // TODO: LUEGO, OCUPAR HABITACIÓN
     // BOMBOCLAT
+
     @PutMapping("/cancelar")
     public void cancelarReserva(
         @RequestBody List<Long> reservaIds
@@ -88,7 +89,7 @@ public class ReservaController {
             throw new Exception("Ingrese los ID de las reservas a cancelar.");
         }
         
-
+        reservaService.cancelarReserva(reservaIds);
     }
     
 }
