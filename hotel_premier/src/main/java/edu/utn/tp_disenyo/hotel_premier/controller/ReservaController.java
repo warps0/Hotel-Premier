@@ -74,7 +74,7 @@ public class ReservaController {
     }
 
     // Checkear que el huesped nunca se alojo en el hotel
-    @GetMapping("/{existeReserva}")
+    @GetMapping("/huesped/{id}")
     public ResponseEntity<Boolean> huespedReservado( @PathVariable Long id) throws Exception {
         return new ResponseEntity<>(reservaService.huespedReservado( id), HttpStatus.OK);
     }
