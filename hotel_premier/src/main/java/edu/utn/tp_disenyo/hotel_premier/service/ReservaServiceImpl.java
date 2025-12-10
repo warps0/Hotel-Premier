@@ -246,7 +246,6 @@ public class ReservaServiceImpl implements ReservaService {
             List<HuespedDTO> huespedesDTOS = new ArrayList<>();
 
             EstadoHabitacion estadoHabitacion = habitacion.getEstadoHabitacion(reserva.getFechaInicio(), reserva.getFechaFin());
-            System.out.println(estadoHabitacion);
 
             if(estadoHabitacion.getEstado() == Estado.RESERVADO){
                 estadoHabitacion.setEstado(Estado.OCUPADO);
@@ -284,14 +283,24 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public boolean huespedReservado(long huespedId) throws Exception {
-        List<ReservaDTO> reservasExistentes = this.getByEstado(EstadoReserva.EXISTENTE);
-        List<ReservaDTO> reservasActivas = this.getByEstado(EstadoReserva.ACTIVA);
-        List<ReservaDTO> reservas = Stream.concat(reservasExistentes.stream(), reservasActivas.stream()).collect(Collectors.toList());
+        List<ReservaDTO> reservas = this.getAll();
+        List<ReservaDTO> reservasActivasFinalizadas = reservas.stream()
+                                                              .filter(reserva -> reserva.getEstado() == EstadoReserva.FINALIZADA || reserva.getEstado() == EstadoReserva.ACTIVA)
+                                                              .collect(Collectors.toList());
+
+        if(reservasActivasFinalizadas.isEmpty()){
+            System.out.println("No hay reservas activas ni finalizadas");
+        }
+        else{
+            System.out.println(reservasActivasFinalizadas.get(0));
+            System.out.println(reservasActivasFinalizadas.get(0).getHuespedes());
+        }
 
         HuespedDTO huesped = new HuespedDTO(huespedService.getById(huespedId));
 
-        for (ReservaDTO reserva : reservas) {
-            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva EXISTENTE o ACTIVA
+
+        for (ReservaDTO reserva : reservasActivasFinalizadas) {
+            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva ACTIVA o FINALIZADA
                 return true;
             }
         }
