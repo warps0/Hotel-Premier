@@ -24,4 +24,6 @@ public interface ReservaService {
     public EstadiaDTO ocuparHabitacion(Long reservaId, Long habitacionId, List<Long> huespedesId) throws Exception;
     public List<ReservaDTO> getByEstado(EstadoReserva estado) throws Exception;
     public boolean huespedReservado(long huespedId) throws Exception;
+
+    public void cancelarReserva(List<Long> reservaIds) throws Exception;
 }

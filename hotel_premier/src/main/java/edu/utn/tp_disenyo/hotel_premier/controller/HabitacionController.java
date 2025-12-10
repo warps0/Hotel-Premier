@@ -44,14 +44,10 @@ class HabitacionController {
         return service.getHabitacionesByRangoFecha(fechaInicio, fechaFin);
     }
 
-    // Crear un huésped
+    // Crear un habitación
     @PostMapping
-    public ResponseEntity<Habitacion> create(@RequestParam TipoHabitacion tipo)
-    throws Exception {
-        if (tipo == null) {
-            //TODO: Mas exceptions
-            throw new Exception();
-        }
+    public ResponseEntity<Habitacion> create(@RequestParam(required = false) TipoHabitacion tipo) throws Exception {
+        if(tipo == null) throw new Exception("Debe determinar un tipo de habitación para su creación");
         return new ResponseEntity<Habitacion>(service.create(tipo), HttpStatus.CREATED);
     }
 

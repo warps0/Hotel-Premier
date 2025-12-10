@@ -43,6 +43,7 @@ public class HuespedController {
     }
 
     // Existe un huésped con el documento especificado?
+    // Borrar
     @GetMapping("/existsByDocumento")
     public ResponseEntity<Boolean> existsByDocumento(@RequestParam String documento, @RequestParam TipoDoc tipoDoc) {
         return new ResponseEntity<>(service.existsByDocumento(documento, tipoDoc), HttpStatus.OK);
