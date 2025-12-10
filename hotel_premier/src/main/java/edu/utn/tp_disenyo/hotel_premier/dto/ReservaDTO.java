@@ -20,7 +20,7 @@ public class ReservaDTO {
     private EstadoReserva estado;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
-    private List<HuespedDTO> huespedes;
+    private List<HuespedDTO> huespedes = new ArrayList<>();
     private String nombre;
     private String apellido;
     private String contacto;
