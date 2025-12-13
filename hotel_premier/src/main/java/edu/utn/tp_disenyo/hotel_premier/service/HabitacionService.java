@@ -31,6 +31,6 @@ public interface HabitacionService {
 
     public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin);
     public HabitacionDTO getHabitacionByRangoFecha(Long idHabitacion, LocalDateTime fechaInicio, LocalDateTime fechaFin) throws Exception;
+    public Habitacion getByNumeroHabitacion(Integer numeroHabitacion);
 
-    
 }
