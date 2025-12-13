@@ -11,10 +11,11 @@ import java.util.List;
 public interface HabitacionDAO extends JpaRepository<Habitacion, Long> {
 
     List<Habitacion> findByTipoHabitacion(TipoHabitacion tipoHabitacion);
-    //List<Habitacion> findByPiso(Piso piso);
-    List<Habitacion> findByCapacidad(Integer capacidad);
     int countByTipoHabitacion(TipoHabitacion tipoHabitacion);
-    //¿List<EstadoHabitacion>?
+    List<Habitacion> findByCapacidad(Integer capacidad);
+    Habitacion findByNumeroHabitacion(Integer numeroHabitacion);
+    //List<Habitacion> findAllById(List<Long> ids);
     //List<Habitacion> findByStartDateBetween(LocalDateTime fechaInicio, LocalDateTime fechaFin);
-    // List<Habitacion> findAllById(List<Long> ids);
+    //¿List<EstadoHabitacion>?
+    //List<Habitacion> findByPiso(Piso piso);
 }
