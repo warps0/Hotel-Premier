@@ -326,4 +326,21 @@ public class ReservaServiceImpl implements ReservaService {
             }
         }
     }
+
+    @Override
+    public List<Reserva> getByFechaFin(LocalDateTime fechaFin) throws Exception{
+        return reservaRepository.findByFechaFin(fechaFin);
+    }
+
+    public List<Huesped> getOcupantes(int numeroHabitacion, LocalDateTime fechaFin) throws Exception {
+        Habitacion h = habitacionService.getByNumeroHabitacion(numeroHabitacion);
+        List<Reserva> r = this.getByFechaFin(fechaFin);
+        List<Huesped> huespedesReserva = new ArrayList<>();
+
+        for(Reserva reserva: r){
+            huespedesReserva.addAll(reserva.getHuespedes());
+        }
+
+        return huespedesReserva;
+    }
 }
