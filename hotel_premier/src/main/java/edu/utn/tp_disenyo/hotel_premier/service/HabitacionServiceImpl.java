@@ -212,4 +212,10 @@ public class HabitacionServiceImpl implements HabitacionService {
             filtrados
         );
     }
+
+    @Override
+    public Habitacion getByNumeroHabitacion(Integer numeroHabitacion){
+        return habitacionRepository.findByNumeroHabitacion(numeroHabitacion);
+    }
+
 }
