@@ -1,5 +1,6 @@
 package edu.utn.tp_disenyo.hotel_premier.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
@@ -12,5 +13,5 @@ public interface ReservaDAO extends JpaRepository<Reserva, Long>, JpaSpecificati
 
     public List<Reserva> findByNombreOrApellidoOrContacto(String nombre, String apellido, String contacto);
     public List<Reserva> findByEstado(EstadoReserva estado) throws Exception;
-    
+    public List<Reserva> findByFechaFin(LocalDateTime fechaFin) throws Exception;
 }
