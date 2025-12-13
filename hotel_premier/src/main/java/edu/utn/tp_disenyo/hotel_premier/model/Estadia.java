@@ -49,5 +49,11 @@ public class Estadia {
 
     private Long habitacionId;
 
-    //List<Servicios>
+    @ManyToMany
+    @JoinTable(
+            name = "estadia_reserva",
+            joinColumns = @JoinColumn(name = "estadia_id"),
+            inverseJoinColumns = @JoinColumn(name = "reserva_id")
+    )
+    private List<Servicio> servicios = new ArrayList<>();
 }
