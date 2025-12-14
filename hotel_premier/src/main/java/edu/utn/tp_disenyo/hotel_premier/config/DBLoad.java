@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Contacto;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
+import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
+import edu.utn.tp_disenyo.hotel_premier.service.HabitacionService;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 
 @Configuration
@@ -76,5 +78,10 @@ public class DBLoad {
         };
     }
 
-    
+    @Bean
+    CommandLineRunner initHabitaciones(HabitacionService habitacionService) {
+        return args -> {
+            habitacionService.initHabitaciones();
+        };
+    }
 }
