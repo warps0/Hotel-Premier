@@ -23,7 +23,7 @@ public abstract class Persona {
     private String nacionalidad;
     private String ocupacion;
     private LocalDate fechaNacimiento;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contactoId")
     private Contacto mediosDeContacto;
     
