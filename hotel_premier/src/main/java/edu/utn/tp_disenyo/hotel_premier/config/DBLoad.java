@@ -93,6 +93,7 @@ public class DBLoad {
     @Bean
     CommandLineRunner initReservas(ReservaService reservaService) {
         return args -> {
+            // Reserva 1
             List<Long> huespedesIds = new ArrayList<>();
             List<Long> habitacionesIds = new ArrayList<>();
             LocalDateTime fechaInicio = LocalDateTime.of(2025, 12, 16, 0, 0);
@@ -111,7 +112,7 @@ public class DBLoad {
             );
 
             reservaService.create(reservaCreateDTO);
-
+            // Reserva 2
             List<Long> huespedesIds2 = new ArrayList<>();
             List<Long> habitacionesIds2 = new ArrayList<>();
             LocalDateTime fechaInicio2 = LocalDateTime.of(2025, 12, 15, 0, 0);
@@ -130,7 +131,7 @@ public class DBLoad {
             );
 
             reservaService.create(reservaCreateDTO2);
-
+            // Reserva 3
             List<Long> huespedesIds3 = new ArrayList<>();
             List<Long> habitacionesIds3 = new ArrayList<>();
             LocalDateTime fechaInicio3 = LocalDateTime.of(2025, 12, 13, 0, 0);
