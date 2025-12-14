@@ -25,6 +25,10 @@ public class Factura {
     private float costo_servicios;
     private char tipo_factura;
 
+    @ManyToOne
+    @JoinColumn(name = "reserva")
+    private Reserva reserva;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<DetalleFactura> detalleFactura;
 
