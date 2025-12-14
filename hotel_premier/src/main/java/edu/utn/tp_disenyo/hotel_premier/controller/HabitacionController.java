@@ -23,11 +23,13 @@ class HabitacionController {
         this.service = service;
     }
 
+    /* 
     // Crear TODAS las habitaciones
     @PostMapping("/init")
     public ResponseEntity<String> initHabitaciones() throws Exception {
         return new ResponseEntity<>(service.initHabitaciones(), HttpStatus.CREATED);
-    }
+    } 
+    */
 
     // Obtener TODAS las habitaciones
     @GetMapping
