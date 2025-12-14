@@ -12,6 +12,8 @@ import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ import java.util.Optional;
 import static edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion.*;
 
 @Service
+@Transactional
 public class HabitacionServiceImpl implements HabitacionService {
 
     private final HabitacionDAO habitacionRepository;
@@ -113,10 +116,8 @@ public class HabitacionServiceImpl implements HabitacionService {
     }
 
     @Override
-    public Optional<Habitacion> getById(Long id) throws Exception {
-        return Optional.ofNullable(habitacionRepository.findById(id)).orElseThrow(
-                () -> new Exception() //HabitacionNotFoundException()
-        );
+    public Optional<Habitacion> getById(Long id) {
+        return habitacionRepository.findById(id);
     }
 
     @Override
@@ -140,7 +141,9 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public Habitacion agregarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception {
-        Habitacion habitacion = this.getById(idHabitacion).get();
+        Habitacion habitacion = habitacionRepository.findById(idHabitacion).orElseThrow(
+            () -> new IllegalStateException("Habitación no encontrada")
+        );            
 
         habitacion.addEstadoHabitacion(estadoHabitacion);
         estadoHabitacion.setHabitacion(idHabitacion);
@@ -194,21 +197,28 @@ public class HabitacionServiceImpl implements HabitacionService {
     }
 
     @Override
-    public HabitacionDTO getHabitacionByRangoFecha(Long idHabitacion, LocalDateTime inputInicio, LocalDateTime inputFin) throws Exception {
+    public HabitacionDTO getHabitacionByRangoFecha(
+            Long idHabitacion,
+            LocalDateTime inputInicio,
+            LocalDateTime inputFin
+    ) {
 
-        List<EstadoHabitacion> filtrados = this.getById(idHabitacion).get().getHistorialEstado()
+        Habitacion habitacion = habitacionRepository.findById(idHabitacion)
+            .orElseThrow(() ->
+                new IllegalStateException("Habitación no encontrada: " + idHabitacion)
+            );
+
+        List<EstadoHabitacion> filtrados = habitacion.getHistorialEstado()
             .stream()
             .filter(e ->
                 !e.getFechaFin().isBefore(inputInicio) &&
                 !e.getFechaInicio().isAfter(inputFin)
             )
             .toList();
-        
+
         return new HabitacionDTO(
-            idHabitacion,
-            this.getById(idHabitacion)
-                .get()
-                .getTipoHabitacion(), // ?
+            habitacion.getId(),
+            habitacion.getTipoHabitacion(),
             filtrados
         );
     }
