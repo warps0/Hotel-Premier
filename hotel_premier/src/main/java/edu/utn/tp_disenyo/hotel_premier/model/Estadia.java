@@ -56,4 +56,6 @@ public class Estadia {
             inverseJoinColumns = @JoinColumn(name = "reserva_id")
     )
     private List<Servicio> servicios = new ArrayList<>();
+
+    //TODO: EstadiaDTO
 }

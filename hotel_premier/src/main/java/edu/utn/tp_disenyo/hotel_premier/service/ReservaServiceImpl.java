@@ -78,7 +78,7 @@ public class ReservaServiceImpl implements ReservaService {
         // 2. Fetch guests (optional)
         // ============================
         List<Huesped> huespedes = reservaDTO.getHuespedesIds() == null || reservaDTO.getHuespedesIds().isEmpty() ? 
-            new ArrayList<>()
+            new ArrayList<>() 
             : huespedService.findAllByIds(reservaDTO.getHuespedesIds());
 
         List<HuespedDTO> huespedesDTO = new ArrayList<>();
@@ -158,6 +158,8 @@ public class ReservaServiceImpl implements ReservaService {
         List<Long> ids = huespedes.stream()
             .map(HuespedDTO::getId)
             .toList();
+        
+        System.out.println(ids);
 
         List<Huesped> lista = huespedService.findAllByIds(ids);
         Reserva actualizada = reservaRepository.findById(id).get();

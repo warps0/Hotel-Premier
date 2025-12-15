@@ -26,6 +26,8 @@ public class ReservaDTO {
     private String contacto;
     private List<Long> habitacionesIds = new ArrayList<>();
 
+    //TODO: Agregar lista estadiaDTO
+
     public ReservaDTO(Reserva reserva, List<Long> idsHabitaciones, List<HuespedDTO> huespedes) {
         this.id = reserva.getId();
         this.estado = reserva.getEstado();

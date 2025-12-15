@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Contacto;
@@ -17,11 +19,14 @@ import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
 import edu.utn.tp_disenyo.hotel_premier.service.HabitacionService;
 import edu.utn.tp_disenyo.hotel_premier.service.ReservaService;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
+import jakarta.transaction.Transactional;
 
+@Profile("dev")
 @Configuration
 public class DBLoad {
 
     @Bean
+    @Order(1)
     CommandLineRunner initHuesped(HuespedDAO huespedRepository) {
         return args -> {
             Huesped temp = new Huesped("MATIAS", "TROSSERO", "39504880", TipoDoc.DNI);
@@ -84,6 +89,7 @@ public class DBLoad {
     }
 
     @Bean
+    @Order(2)
     CommandLineRunner initHabitaciones(HabitacionService habitacionService) {
         return args -> {
             habitacionService.initHabitaciones();
@@ -91,6 +97,8 @@ public class DBLoad {
     }
 
     @Bean
+    @Order(3)
+    @Transactional
     CommandLineRunner initReservas(ReservaService reservaService) {
         return args -> {
             // Reserva 1
