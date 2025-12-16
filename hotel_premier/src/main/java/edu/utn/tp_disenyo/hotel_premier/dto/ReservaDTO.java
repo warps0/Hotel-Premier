@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class ReservaDTO {
     private String apellido;
     private String contacto;
     private List<Long> habitacionesIds = new ArrayList<>();
+    private List<EstadiaDTO>  estadias = new ArrayList<>();
 
     //TODO: Agregar lista estadiaDTO
 
@@ -49,5 +51,9 @@ public class ReservaDTO {
         this.nombre = reserva.getNombre();
         this.apellido = reserva.getApellido();
         this.contacto = reserva.getContacto();
+
+        for(Estadia estadia : reserva.getEstadias()){
+            this.estadias.add(new EstadiaDTO(estadia));
+        }
     }
 }
