@@ -2,6 +2,7 @@ package edu.utn.tp_disenyo.hotel_premier.service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.FacturaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Factura;
+import edu.utn.tp_disenyo.hotel_premier.model.PersonaJuridica;
 
 import java.util.List;
 
@@ -12,4 +13,7 @@ public interface FacturaService {
     public List<Factura> getAll();
     public Factura getdById(Long id);
     public Factura asignarResponsablePago(long idResponsable, long idFactura);
+    public PersonaJuridica getPersonaJuridicaByRazonSocial(String razonSocial);
+    public PersonaJuridica createPersonaJuridica(PersonaJuridica personaJuridica);
+
 }
