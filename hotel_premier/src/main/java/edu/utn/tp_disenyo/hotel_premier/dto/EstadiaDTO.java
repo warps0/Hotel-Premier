@@ -41,5 +41,7 @@ public class EstadiaDTO {
              .stream()
              .map(HuespedDTO::new)
              .toList();
+        
+        this.servicios = e.getServicios();
     }
 }

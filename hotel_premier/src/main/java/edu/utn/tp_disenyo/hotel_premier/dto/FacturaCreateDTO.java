@@ -20,6 +20,6 @@ public class FacturaCreateDTO {
     private Long idEstadia;
     private List<EstadiaServicio> servicios;
 
-    // Factura debería manejarlo
-    private List<DetalleFactura> detalleFactura = new ArrayList<>();
+    //TODO: Factura debería manejarlo
+    // private List<DetalleFactura> detalleFactura = new ArrayList<>();
 }

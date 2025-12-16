@@ -23,10 +23,12 @@ import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
+import edu.utn.tp_disenyo.hotel_premier.repository.ServicioDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import edu.utn.tp_disenyo.hotel_premier.util.ReservaSpecification;
 import io.micrometer.common.lang.NonNull;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReservaServiceImpl implements ReservaService {
@@ -34,12 +36,14 @@ public class ReservaServiceImpl implements ReservaService {
     private final EstadiaDAO estadiaRepository;
     private final HuespedService huespedService;
     private final HabitacionService habitacionService;
+    private final ServicioDAO servicioRepository;
 
-    public ReservaServiceImpl(ReservaDAO rRep, EstadiaDAO eRep, HuespedService hServ, HabitacionService habServ) {
+    public ReservaServiceImpl(ReservaDAO rRep, EstadiaDAO eRep, HuespedService hServ, HabitacionService habServ, ServicioDAO servicioRepository) {
         this.reservaRepository = rRep;
         this.estadiaRepository = eRep;
         this.huespedService = hServ;
         this.habitacionService = habServ;
+        this.servicioRepository = servicioRepository;
     }
 
     @Override
@@ -194,6 +198,7 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
+    @Transactional
     public EstadiaDTO ocuparHabitacion(Long reservaId, Long habitacionId, List<Long> huespedesId) throws Exception {
         Reserva reserva = reservaRepository.findById(reservaId).get();
         Habitacion habitacion = habitacionService.getById(habitacionId).get();
@@ -202,7 +207,11 @@ public class ReservaServiceImpl implements ReservaService {
         // CALCULOS DE LA ESTADIA
         long days = ChronoUnit.DAYS.between(reserva.getFechaInicio(), reserva.getFechaFin());
         float price = habitacion.getPrecio() * days;
-        estadia.addServicio(new Servicio("NOCHES", price), false);
+
+        Servicio servicio = new Servicio("NOCHES", price);
+        servicioRepository.save(servicio);
+        
+        estadia.addServicio(servicio, false);
 
         if(reserva.getHabitaciones().contains(habitacion)) {
             List<Huesped> huespedes = new ArrayList<>();

@@ -50,7 +50,7 @@ public class Factura {
             this.tipo_factura = 'b';
         }
         this.responsableDePago = responsable;
-        this.detalleFactura = facturaCreateDTO.getDetalleFactura();
+        //this.detalleFactura = facturaCreateDTO.getDetalleFactura();
     }
 }
 

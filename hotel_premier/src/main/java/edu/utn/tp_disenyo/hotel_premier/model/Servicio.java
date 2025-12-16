@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "servicio")
@@ -21,19 +24,20 @@ public class Servicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tipo_servicio;
-    private Float costo_total;
+    private String tipoServicio;
+    private Float costoTotal;
 
     //private String nombre_producto;
     //private int cantidad_producto;
     //private float precio_unitario_producto;
     //private float costo_total;
 
+    
     @OneToMany(mappedBy = "servicio")
-    private List<EstadiaServicio> estadias;
+    private List<EstadiaServicio> estadias = new ArrayList<>();
 
     public Servicio(String tipoServicio, Float costoTotal) {
-        this.tipo_servicio = tipoServicio;
-        this.costo_total = costoTotal;
+        this.tipoServicio = tipoServicio;
+        this.costoTotal = costoTotal;
     }
 }

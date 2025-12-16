@@ -5,25 +5,43 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 
+import edu.utn.tp_disenyo.hotel_premier.dto.FacturaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Contacto;
+import edu.utn.tp_disenyo.hotel_premier.model.DetalleFactura;
+import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
+import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
+import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
+import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
+import edu.utn.tp_disenyo.hotel_premier.repository.ServicioDAO;
+import edu.utn.tp_disenyo.hotel_premier.service.FacturaService;
 import edu.utn.tp_disenyo.hotel_premier.service.HabitacionService;
 import edu.utn.tp_disenyo.hotel_premier.service.ReservaService;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
 @Profile("dev")
 @Configuration
 public class DBLoad {
+    
+    private final FacturaService facturaService;
+    private final EstadiaDAO estadiaRepository;
+
+    public DBLoad(FacturaService facturaService, EstadiaDAO estadiaRepository) {
+        this.facturaService = facturaService;
+        this.estadiaRepository = estadiaRepository;
+    }
 
     @Bean
     @Order(1)
@@ -98,6 +116,14 @@ public class DBLoad {
 
     @Bean
     @Order(3)
+    CommandLineRunner initServicios(ServicioDAO servicioRepository) {
+        return args -> {
+            //servicioRepository.save(new Servicio("NOCHES", 0f));
+        };
+    }
+
+    @Bean
+    @Order(4)
     @Transactional
     CommandLineRunner initReservas(ReservaService reservaService) {
         return args -> {
@@ -158,6 +184,41 @@ public class DBLoad {
             );
 
             reservaService.create(reservaCreateDTO3);
+        };
+    }
+
+    @Bean
+    @Order(5)
+    CommandLineRunner ocuparHabitaciones(ReservaService reservaService) {
+        return args -> {
+            // #! OCUPAR HABITACIONES
+            reservaService.ocuparHabitacion(1L, 1L, List.of(1L, 3L));
+
+            reservaService.ocuparHabitacion(2L, 2L, List.of(2L));
+
+            reservaService.ocuparHabitacion(3L, 3L, List.of(3L));
+        };
+    }
+
+
+    // ¿Qué pasa si envío un idEstadia que no pertenece a la reserva?
+    // ¿Se puede?
+    // Potencial vulnerabilidad: Crear una estadia con costo 0 y tener la mejor partuza del vernao
+    // Jacuzzi, Champagne ... ENANOS
+
+    @Bean
+    @Order(6)
+    @Transactional
+    CommandLineRunner initFacturas(EstadiaDAO estadiaDAO,ServicioDAO servicioDAO) {
+        return args -> {
+            Estadia estadia = estadiaDAO.findById(1L).orElseThrow();
+            Servicio noches = servicioDAO.findByTipoServicio("NOCHES");
+
+            estadia.getServicios().stream()
+                .filter(es -> es.getServicio().equals(noches))
+                .findFirst()
+                .orElseThrow()
+                .setIncluido(true);
         };
     }
 }

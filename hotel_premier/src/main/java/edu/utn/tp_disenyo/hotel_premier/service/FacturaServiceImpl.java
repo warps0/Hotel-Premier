@@ -59,11 +59,11 @@ public class FacturaServiceImpl implements FacturaService {
         Factura factura = this.getdById(idFactura);
         Huesped h = hRepository.getReferenceById(idResponsable);
         PersonaJuridica pj = pjRepository.getPersonaJuridicaById(idResponsable);
-        if(h==null){
-            factura.setResponsableDePago(pj);;
+        if(h == null){
+            factura.setResponsableDePago(pj);
         }
         else{
-            factura.setResponsableDePago(pj);
+            factura.setResponsableDePago(h);
         }
         return factura;
     }

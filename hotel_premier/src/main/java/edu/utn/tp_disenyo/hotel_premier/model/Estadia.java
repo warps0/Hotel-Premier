@@ -36,7 +36,7 @@ public class Estadia {
     private LocalDateTime fechaIngreso;
     private LocalDateTime fechaEgreso;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "reserva_id")
     private Reserva reserva;
@@ -55,6 +55,7 @@ public class Estadia {
     @OneToMany(mappedBy = "estadia")
     private List<Factura> facturas = new ArrayList<>();
 
+    //@JsonBackReference
     @OneToMany(
         mappedBy = "estadia",
         cascade = CascadeType.ALL,
@@ -63,12 +64,18 @@ public class Estadia {
     private List<EstadiaServicio> servicios = new ArrayList<>();
 
     public void addServicio(Servicio servicio, boolean incluido) {
+        boolean exists = servicios.stream()
+            .anyMatch(es -> es.getServicio().equals(servicio));
+
+        if (exists) return;
+
         EstadiaServicio es = new EstadiaServicio();
-        servicio.getEstadias().add(es);
         es.setEstadia(this);
         es.setServicio(servicio);
         es.setIncluido(incluido);
-        this.servicios.add(es);
+
+        servicios.add(es);
+        servicio.getEstadias().add(es);
     }
 
     public void removeServicio(Servicio servicio) {
