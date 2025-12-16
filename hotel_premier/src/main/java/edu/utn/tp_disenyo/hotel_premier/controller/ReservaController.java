@@ -59,7 +59,7 @@ public class ReservaController {
         return reservaService.create(reserva);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/agregarHuesped/{id}")
     public ResponseEntity<ReservaDTO> agregarHuesped(@PathVariable Long id, @RequestBody List<HuespedDTO> huespedes) throws Exception {
         return new ResponseEntity<>(reservaService.agregarHuesped(id, huespedes), HttpStatus.OK);
     }
@@ -91,5 +91,9 @@ public class ReservaController {
         
         reservaService.cancelarReserva(reservaIds);
     }
-    
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservaDTO> getReservaById(Long id) throws Exception {
+        return new ResponseEntity<>(new ReservaDTO(reservaService.getById(id).get()), HttpStatus.OK);
+    }
 }
