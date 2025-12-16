@@ -2,11 +2,10 @@ package edu.utn.tp_disenyo.hotel_premier.repository;
 
 import edu.utn.tp_disenyo.hotel_premier.model.PersonaJuridica;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface PersonaJuridicaDAO extends CrudRepository<PersonaJuridica, Long> {
-    public List<PersonaJuridica> findByRazonSocial(String razon);
-
+    PersonaJuridica findByRazonSocial(String razon);
     PersonaJuridica getPersonaJuridicaById(Long id);
 }
