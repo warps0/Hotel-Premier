@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ReservaDAO extends JpaRepository<Reserva, Long>, JpaSpecificationExecutor<Reserva> {
 
     public List<Reserva> findByNombreOrApellidoOrContacto(String nombre, String apellido, String contacto);
