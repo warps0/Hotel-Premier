@@ -4,24 +4,23 @@ import edu.utn.tp_disenyo.hotel_premier.dto.FacturaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Factura;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.PersonaJuridica;
-import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.FacturaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.PersonaJuridicaDAO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class FacturaServiceImpl {
+@Service
+public class FacturaServiceImpl implements FacturaService {
 
-    private final FacturaDAO respository;
+    private final FacturaDAO repository;
     private final PersonaJuridicaDAO pjRepository;
     private final HuespedDAO hRepository;
-    private final FacturaService facturaService;
-    private final Reserva reservaService;
+    private final ReservaService reservaService;
 
-    public FacturaServiceImpl(FacturaDAO repository, FacturaService facturaService, Reserva reservaService, PersonaJuridicaDAO pjRepository, HuespedDAO hRepository) {
-        this.respository = repository;
-        this.facturaService = facturaService;
+    public FacturaServiceImpl(FacturaDAO repository, ReservaService reservaService, PersonaJuridicaDAO pjRepository, HuespedDAO hRepository) {
+        this.repository = repository;
         this.reservaService = reservaService;
         this.pjRepository = pjRepository;
         this.hRepository = hRepository;
@@ -29,15 +28,15 @@ public class FacturaServiceImpl {
 
     public Factura createFactura(FacturaCreateDTO factura){
         Factura facturaCreada = new Factura(factura);
-        return respository.save(facturaCreada);
+        return repository.save(facturaCreada);
     }
 
     public List<Factura> getAll(){
-        return facturaService.getAll();
+        return repository.findAll();
     }
 
     public Factura getdById(Long id){
-        return facturaService.getdById(id);
+        return repository.findById(id).get();
     }
 
     public Factura asignarResponsablePago(long idResponsable, long idFactura){
@@ -51,5 +50,13 @@ public class FacturaServiceImpl {
             factura.setResponsable_pago(h);
         }
         return factura;
+    }
+
+    public PersonaJuridica getPersonaJuridicaByRazonSocial(String razonSocial){
+        return pjRepository.findByRazonSocial(razonSocial);
+    }
+
+    public PersonaJuridica createPersonaJuridica(PersonaJuridica personaJuridica){
+        return pjRepository.save(personaJuridica);
     }
 }
