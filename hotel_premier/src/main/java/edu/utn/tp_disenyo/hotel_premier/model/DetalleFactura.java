@@ -18,7 +18,8 @@ public class DetalleFactura {
     private Long id;
 
     private String nombre_producto;
-    private int cantidad_producto;
-    private float precio_unitario_producto;
     private float costo_total;
+    //private int cantidad_producto;
+    //private float precio_unitario_producto;
+    
 }

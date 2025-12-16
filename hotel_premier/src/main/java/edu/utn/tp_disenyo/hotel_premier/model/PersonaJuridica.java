@@ -15,6 +15,7 @@ import java.util.Objects;
 @Entity
 public class PersonaJuridica extends Persona {
     private String razonSocial; //Nombre
+    private String cuit;
 
     // Dos personas jurídicas son iguales si tienen la misma razón social
     @Override

@@ -26,11 +26,11 @@ public class Factura {
     private char tipo_factura = 'a';
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Persona responsable_pago;
+    private Persona responsableDePago;
 
     @ManyToOne
-    @JoinColumn(name = "reserva")
-    private Reserva reserva;
+    @JoinColumn(name = "estadia")
+    private Estadia estadia;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<DetalleFactura> detalleFactura = new ArrayList<>();
@@ -44,13 +44,12 @@ public class Factura {
         this.detalleFactura.remove(detalleFactura);
     }
 
-    public Factura (FacturaCreateDTO facturaCreateDTO){
+    public Factura (FacturaCreateDTO facturaCreateDTO, Persona responsable){
         this.fecha_emision = LocalDateTime.now();
-        if(facturaCreateDTO.getResponsable_pago() instanceof PersonaJuridica){
+        if(responsable instanceof PersonaJuridica){
             this.tipo_factura = 'b';
         }
-        this.responsable_pago = null;
-        this.responsable_pago = facturaCreateDTO.getResponsable_pago();
+        this.responsableDePago = responsable;
         this.detalleFactura = facturaCreateDTO.getDetalleFactura();
     }
 }

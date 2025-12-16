@@ -21,7 +21,7 @@ public class FacturaDTO {
         this.fecha_emision = factura.getFecha_emision();
         this.tipo_factura = factura.getTipo_factura();
 
-        this.reserva = new ReservaDTO(factura.getReserva());
+        //this.reserva = new ReservaDTO(factura.getReserva());
         this.detalleFactura = factura.getDetalleFactura();
     }
 }

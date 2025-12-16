@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
@@ -196,6 +198,11 @@ public class ReservaServiceImpl implements ReservaService {
         Reserva reserva = reservaRepository.findById(reservaId).get();
         Habitacion habitacion = habitacionService.getById(habitacionId).get();
         Estadia estadia = new Estadia();
+        
+        // CALCULOS DE LA ESTADIA
+        long days = ChronoUnit.DAYS.between(reserva.getFechaInicio(), reserva.getFechaFin());
+        float price = habitacion.getPrecio() * days;
+        estadia.addServicio(new Servicio("NOCHES", price), false);
 
         if(reserva.getHabitaciones().contains(habitacion)) {
             List<Huesped> huespedes = new ArrayList<>();

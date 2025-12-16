@@ -24,6 +24,16 @@ public class Servicio {
     private String tipo_servicio;
     private Float costo_total;
 
-    @ManyToMany(mappedBy = "servicios")
-    private List<Estadia> estadias;
+    //private String nombre_producto;
+    //private int cantidad_producto;
+    //private float precio_unitario_producto;
+    //private float costo_total;
+
+    @OneToMany(mappedBy = "servicio")
+    private List<EstadiaServicio> estadias;
+
+    public Servicio(String tipoServicio, Float costoTotal) {
+        this.tipo_servicio = tipoServicio;
+        this.costo_total = costoTotal;
+    }
 }
