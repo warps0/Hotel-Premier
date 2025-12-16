@@ -206,19 +206,19 @@ public class DBLoad {
     // Potencial vulnerabilidad: Crear una estadia con costo 0 y tener la mejor partuza del vernao
     // Jacuzzi, Champagne ... ENANOS
 
-    @Bean
-    @Order(6)
-    @Transactional
-    CommandLineRunner initFacturas(EstadiaDAO estadiaDAO,ServicioDAO servicioDAO) {
-        return args -> {
-            Estadia estadia = estadiaDAO.findById(1L).orElseThrow();
-            Servicio noches = servicioDAO.findByTipoServicio("NOCHES");
-
-            estadia.getServicios().stream()
-                .filter(es -> es.getServicio().equals(noches))
-                .findFirst()
-                .orElseThrow()
-                .setIncluido(true);
-        };
-    }
+//    @Bean
+//    @Order(6)
+//    @Transactional
+//    CommandLineRunner initFacturas(EstadiaDAO estadiaDAO,ServicioDAO servicioDAO) {
+//        return args -> {
+//            Estadia estadia = estadiaDAO.findById(1L).orElseThrow();
+//            Servicio noches = servicioDAO.findByTipoServicio("NOCHES");
+//
+//            estadia.getServicios().stream()
+//                .filter(es -> es.getServicio().equals(noches))
+//                .findFirst()
+//                .orElseThrow()
+//                .setIncluido(true);
+//        };
+//    }
 }
