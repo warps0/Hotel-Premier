@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaServicioDTO;
-
+import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
 import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 
@@ -23,6 +23,11 @@ public class EstadiaServiceImpl implements EstadiaService {
         this.estadiaRepository = estadiaRepository;
         this.servicioDAO = servicioDAO;
         this.estadiaServicioDAO = estadiaServicioDAO;
+    }
+
+    @Override
+    public Estadia findEstadiaById(Long idEstadia) {
+        return estadiaRepository.findById(idEstadia).orElseThrow();
     }
 
     @Override
