@@ -1,27 +1,19 @@
 package edu.utn.tp_disenyo.hotel_premier.dto;
 
-import edu.utn.tp_disenyo.hotel_premier.model.DetalleFactura;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
-import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
+@Data
+@NoArgsConstructor  // 👈 ESTO ES OBLIGATORIO PARA EVITAR EL ERROR 415
 @AllArgsConstructor
-@Getter
-@Setter
 public class FacturaCreateDTO {
-    //private char tipo_factura;
-    //private Persona responsable_pago = null;
+    
     private Long idResponsableDePago;
     private Long idEstadia;
-    private List<EstadiaServicio> servicios;
-
-    //TODO: Factura debería manejarlo
-    // private List<DetalleFactura> detalleFactura = new ArrayList<>();
+    
+    // Spring intentará convertir el JSON de servicios a esta lista de objetos
+    private List<EstadiaServicio> servicios; 
 }

@@ -13,15 +13,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/factura")
 @CrossOrigin(origins = "http://localhost:3000")
 public class FacturaController {
+
     private final FacturaService facturaService;
 
+    // Inyección por constructor (Correcto)
     public FacturaController(FacturaService facturaService) {
         this.facturaService = facturaService;
     }
 
     @GetMapping("/personaJuridica/{razonSocial}")
-    public ResponseEntity<PersonaJuridica>  getPersonaJuridicaByRazonSocial(@PathVariable("razonSocial") String razonSocial){
-        return new ResponseEntity<>(facturaService.getPersonaJuridicaByRazonSocial(razonSocial), HttpStatus.OK);
+    public ResponseEntity<PersonaJuridica> getPersonaJuridicaByRazonSocial(@PathVariable("razonSocial") String razonSocial){
+        PersonaJuridica pj = facturaService.getPersonaJuridicaByRazonSocial(razonSocial);
+        if (pj == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(pj, HttpStatus.OK);
     }
 
     @PostMapping("/personaJuridica")

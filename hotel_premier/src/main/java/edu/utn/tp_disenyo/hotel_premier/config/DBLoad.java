@@ -5,30 +5,24 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 
-import edu.utn.tp_disenyo.hotel_premier.dto.FacturaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.model.Contacto;
-import edu.utn.tp_disenyo.hotel_premier.model.DetalleFactura;
 import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
-import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
-import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HuespedDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.ServicioDAO;
 import edu.utn.tp_disenyo.hotel_premier.service.FacturaService;
 import edu.utn.tp_disenyo.hotel_premier.service.HabitacionService;
 import edu.utn.tp_disenyo.hotel_premier.service.ReservaService;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
 @Profile("dev")
@@ -118,7 +112,13 @@ public class DBLoad {
     @Order(3)
     CommandLineRunner initServicios(ServicioDAO servicioRepository) {
         return args -> {
-            //servicioRepository.save(new Servicio("NOCHES", 0f));
+            // Se agregan servicios basicos con precios para pruebas
+            if(servicioRepository.count() == 0) {
+                servicioRepository.save(new Servicio("NOCHES", 100000f));
+                servicioRepository.save(new Servicio("Coca Cola", 2500f));
+                servicioRepository.save(new Servicio("Lavanderia", 15000f));
+                servicioRepository.save(new Servicio("Spa", 45000f));
+            }
         };
     }
 
@@ -146,6 +146,7 @@ public class DBLoad {
             );
 
             reservaService.create(reservaCreateDTO);
+            
             // Reserva 2
             List<Long> huespedesIds2 = new ArrayList<>();
             List<Long> habitacionesIds2 = new ArrayList<>();
@@ -165,6 +166,7 @@ public class DBLoad {
             );
 
             reservaService.create(reservaCreateDTO2);
+            
             // Reserva 3
             List<Long> huespedesIds3 = new ArrayList<>();
             List<Long> habitacionesIds3 = new ArrayList<>();
@@ -191,34 +193,33 @@ public class DBLoad {
     @Order(5)
     CommandLineRunner ocuparHabitaciones(ReservaService reservaService) {
         return args -> {
-            // #! OCUPAR HABITACIONES
+            // Ocupar habitaciones (Genera las estadias)
             reservaService.ocuparHabitacion(1L, 1L, List.of(1L, 3L));
-
             reservaService.ocuparHabitacion(2L, 2L, List.of(2L));
-
             reservaService.ocuparHabitacion(3L, 3L, List.of(3L));
         };
     }
 
+    @Bean
+    @Order(6)
+    @Transactional
+    CommandLineRunner initConsumos(EstadiaDAO estadiaDAO, ServicioDAO servicioDAO) {
+        return args -> {
+            // Carga de consumos adicionales a la Estadia 1 para pruebas de facturacion
+            Estadia estadia = estadiaDAO.findById(1L).orElse(null);
+            Servicio cocaCola = servicioDAO.findByTipoServicio("Coca Cola");
+            Servicio lavanderia = servicioDAO.findByTipoServicio("Lavanderia");
 
-    // ¿Qué pasa si envío un idEstadia que no pertenece a la reserva?
-    // ¿Se puede?
-    // Potencial vulnerabilidad: Crear una estadia con costo 0 y tener la mejor partuza del vernao
-    // Jacuzzi, Champagne ... ENANOS
-
-//    @Bean
-//    @Order(6)
-//    @Transactional
-//    CommandLineRunner initFacturas(EstadiaDAO estadiaDAO,ServicioDAO servicioDAO) {
-//        return args -> {
-//            Estadia estadia = estadiaDAO.findById(1L).orElseThrow();
-//            Servicio noches = servicioDAO.findByTipoServicio("NOCHES");
-//
-//            estadia.getServicios().stream()
-//                .filter(es -> es.getServicio().equals(noches))
-//                .findFirst()
-//                .orElseThrow()
-//                .setIncluido(true);
-//        };
-//    }
+            if (estadia != null) {
+                if (cocaCola != null) {
+                    // Se usa addServicio que maneja la relacion bidireccional correctamente
+                    estadia.addServicio(cocaCola, false);
+                }
+                if (lavanderia != null) {
+                    estadia.addServicio(lavanderia, false);
+                }
+                estadiaDAO.save(estadia);
+            }
+        };
+    }
 }

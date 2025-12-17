@@ -16,11 +16,15 @@ public class EstadiaServicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "estadia_id")
-    private Long estadiaId;
+    
+    @ManyToOne
+    @JoinColumn(name = "estadia_id") 
+    private Estadia estadia;
 
-    @Column(name = "servicio_id")
-    private Long servicioId;
+    
+    @ManyToOne
+    @JoinColumn(name = "servicio_id") 
+    private Servicio servicio; 
 
     @Column(nullable = false)
     private boolean incluido;

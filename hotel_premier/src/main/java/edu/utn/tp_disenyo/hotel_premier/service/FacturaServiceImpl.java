@@ -41,7 +41,8 @@ public class FacturaServiceImpl implements FacturaService {
 
         if (facturaDTO.getServicios() != null) {
             for (EstadiaServicio item : facturaDTO.getServicios()) {
-                item.setEstadiaId(facturaDTO.getIdEstadia());
+                // 👇 CORRECCIÓN AQUÍ: Usamos el objeto estadia que buscamos arriba
+                item.setEstadia(estadia); // ✅ Antes: item.setEstadiaId(facturaDTO.getIdEstadia());
                 estadiaServicioRepository.save(item);
             }
         }

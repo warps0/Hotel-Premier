@@ -93,7 +93,7 @@ public class ReservaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservaDTO> getReservaById(Long id) throws Exception {
+    public ResponseEntity<ReservaDTO> getReservaById(@PathVariable Long id) throws Exception {
         return new ResponseEntity<>(new ReservaDTO(reservaService.getById(id).get()), HttpStatus.OK);
     }
 }

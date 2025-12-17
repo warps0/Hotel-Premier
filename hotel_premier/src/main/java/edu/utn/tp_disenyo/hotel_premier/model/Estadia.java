@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -55,27 +54,38 @@ public class Estadia {
     @OneToMany(mappedBy = "estadia")
     private List<Factura> facturas = new ArrayList<>();
 
-    //@JsonBackReference
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+
+
+   //@JsonBackReference
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "estadia_id")
     private List<EstadiaServicio> servicios = new ArrayList<>();
 
+
+
+
+
+
+
+    // 👇 MÉTODO CORREGIDO: Usa objetos en vez de IDs
     public void addServicio(Servicio servicio, boolean incluido) {
         boolean exists = servicios.stream()
-                .anyMatch(es -> es.getServicioId() != null && es.getServicioId().equals(servicio.getId()));
+                .anyMatch(es -> es.getServicio() != null && es.getServicio().getId().equals(servicio.getId()));
 
         if (exists) return;
 
         EstadiaServicio es = new EstadiaServicio();
 
-        es.setEstadiaId(this.id);
-        es.setServicioId(servicio.getId());
+        es.setEstadia(this); // ✅ Antes: setEstadiaId(this.id)
+        es.setServicio(servicio); // ✅ Antes: setServicioId(servicio.getId())
         es.setIncluido(incluido);
 
         servicios.add(es);
     }
 
+    // 👇 MÉTODO CORREGIDO: Usa objetos en vez de IDs
     public void removeServicio(Servicio servicio) {
-        servicios.removeIf(es -> es.getServicioId() != null && es.getServicioId().equals(servicio.getId()));
+        servicios.removeIf(es -> es.getServicio() != null && es.getServicio().getId().equals(servicio.getId()));
     }
 }
