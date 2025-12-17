@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.controller;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.FacturaCreateDTO;
+import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
 import edu.utn.tp_disenyo.hotel_premier.model.Factura;
 import edu.utn.tp_disenyo.hotel_premier.model.PersonaJuridica;
 import edu.utn.tp_disenyo.hotel_premier.service.FacturaService;
@@ -32,5 +33,10 @@ public class FacturaController {
     @PostMapping
     public ResponseEntity<Factura> createFactura(@RequestBody FacturaCreateDTO factura){
         return new ResponseEntity<>(facturaService.createFactura(factura), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/servicios/pagar/{idEstadiaServicio}")
+    public ResponseEntity<EstadiaServicio> pagarServicio(@PathVariable long idEstadiaServicio) {
+        return new ResponseEntity<>(facturaService.pagarServicio(idEstadiaServicio), HttpStatus.OK);
     }
 }
