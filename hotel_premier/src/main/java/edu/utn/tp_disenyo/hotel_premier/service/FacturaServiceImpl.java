@@ -6,49 +6,72 @@ import edu.utn.tp_disenyo.hotel_premier.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 
 @Service
 public class FacturaServiceImpl implements FacturaService {
 
     private final FacturaDAO repository;
+
     private final PersonaJuridicaDAO pjRepository;
     private final HuespedDAO hRepository;
+    private final PersonaDAO pRepository;
+
+
     private final EstadiaDAO estadiaRepository;
     private final EstadiaServicioDAO estadiaServicioRepository;
 
-    public FacturaServiceImpl(FacturaDAO repository,
-                              PersonaJuridicaDAO pjRepository,
-                              HuespedDAO hRepository,
-                              EstadiaDAO estadiaRepository,
-                              EstadiaServicioDAO estadiaServicioRepository) {
+    public FacturaServiceImpl(
+        FacturaDAO repository,
+
+        PersonaJuridicaDAO pjRepository,
+        HuespedDAO hRepository,
+        PersonaDAO pRepository,
+
+        EstadiaDAO estadiaRepository,
+        EstadiaServicioDAO estadiaServicioRepository
+    ) {
         this.repository = repository;
+
         this.pjRepository = pjRepository;
         this.hRepository = hRepository;
+        this.pRepository = pRepository;
+
         this.estadiaRepository = estadiaRepository;
         this.estadiaServicioRepository = estadiaServicioRepository;
     }
 
     @Override
-    public Factura createFactura(FacturaCreateDTO facturaDTO){
-        //TODO: Ojo sino encuentra PersonaJuridica
-        Persona responsableDePago = hRepository.findById(facturaDTO.getIdResponsableDePago()).orElseThrow();
+    public Factura createFactura(FacturaCreateDTO facturaDTO) {
+        try {
+            Persona responsableDePago = pRepository
+                    .findById(facturaDTO.getIdResponsableDePago())
+                    .orElseThrow(() ->
+                            new NoSuchElementException("Responsable de pago no encontrado"));
 
-        Estadia estadia = estadiaRepository.findById(facturaDTO.getIdEstadia()).orElseThrow();
+            Estadia estadia = estadiaRepository
+                    .findById(facturaDTO.getIdEstadia())
+                    .orElseThrow(() ->
+                            new NoSuchElementException("Estadia no encontrada"));
 
-        Factura facturaCreada = new Factura(facturaDTO, responsableDePago, estadia);
+            Factura facturaCreada = new Factura(facturaDTO, responsableDePago, estadia);
 
-        estadia.getFacturas().add(facturaCreada);
+            estadia.getFacturas().add(facturaCreada);
 
-        if (facturaDTO.getServicios() != null) {
-            for (EstadiaServicio item : facturaDTO.getServicios()) {
-                item.setEstadiaId(facturaDTO.getIdEstadia());
-                estadiaServicioRepository.save(item);
+            if (facturaDTO.getServicios() != null) {
+                for (EstadiaServicio item : facturaDTO.getServicios()) {
+                    item.setEstadiaId(facturaDTO.getIdEstadia());
+                    estadiaServicioRepository.save(item);
+                }
             }
+
+            estadiaRepository.save(estadia);
+            return repository.save(facturaCreada);
+
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
-
-        estadiaRepository.save(estadia);
-
-        return repository.save(facturaCreada);
     }
 
     @Override
