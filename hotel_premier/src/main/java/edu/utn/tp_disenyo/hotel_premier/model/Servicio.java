@@ -32,8 +32,10 @@ public class Servicio {
     //private float precio_unitario_producto;
     //private float costo_total;
 
-    
-    @OneToMany(mappedBy = "servicio")
+
+    //@JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "servicio_id")
     private List<EstadiaServicio> estadias = new ArrayList<>();
 
     public Servicio(String tipoServicio, Float costoTotal) {
