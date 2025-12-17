@@ -15,6 +15,7 @@ public interface FacturaService {
     public Factura getdById(Long id);
     public Factura asignarResponsablePago(long idResponsable, long idFactura);
     public PersonaJuridica getPersonaJuridicaByRazonSocial(String razonSocial);
+    public PersonaJuridica getPersonaJuridicaByCuit(String cuit);
     public PersonaJuridica createPersonaJuridica(PersonaJuridica personaJuridica);
     public EstadiaServicio pagarServicio(Long idEstadiaServicio);
 }
