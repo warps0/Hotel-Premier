@@ -56,29 +56,26 @@ public class Estadia {
     private List<Factura> facturas = new ArrayList<>();
 
     //@JsonBackReference
-    @OneToMany(
-        mappedBy = "estadia",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "estadia_id")
     private List<EstadiaServicio> servicios = new ArrayList<>();
 
     public void addServicio(Servicio servicio, boolean incluido) {
         boolean exists = servicios.stream()
-            .anyMatch(es -> es.getServicio().equals(servicio));
+                .anyMatch(es -> es.getServicioId() != null && es.getServicioId().equals(servicio.getId()));
 
         if (exists) return;
 
         EstadiaServicio es = new EstadiaServicio();
-        es.setEstadia(this);
-        es.setServicio(servicio);
+
+        es.setEstadiaId(this.id);
+        es.setServicioId(servicio.getId());
         es.setIncluido(incluido);
 
         servicios.add(es);
-        servicio.getEstadias().add(es);
     }
 
     public void removeServicio(Servicio servicio) {
-        servicios.removeIf(es -> es.getServicio().equals(servicio));
+        servicios.removeIf(es -> es.getServicioId() != null && es.getServicioId().equals(servicio.getId()));
     }
 }
