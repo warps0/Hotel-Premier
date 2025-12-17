@@ -50,7 +50,6 @@ public class Reserva {
     )
     private List<Huesped> huespedes = new ArrayList<>();
 
-    
     @ManyToMany
     @JsonBackReference
     @JoinTable(
@@ -70,6 +69,7 @@ public class Reserva {
     )
     private List<Estadia> estadias = new ArrayList<>();
 
+    
 
     public Reserva(EstadoReserva estado, ReservaCreateDTO dto, List<Habitacion> habitaciones, List<Huesped> huespedes) {
         this.fechaCreacion = LocalDateTime.now();

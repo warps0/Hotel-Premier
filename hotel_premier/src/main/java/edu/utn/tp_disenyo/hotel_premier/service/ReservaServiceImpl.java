@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +20,15 @@ import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.ReservaDAO;
+import edu.utn.tp_disenyo.hotel_premier.repository.ServicioDAO;
 import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import edu.utn.tp_disenyo.hotel_premier.util.ReservaSpecification;
 import io.micrometer.common.lang.NonNull;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReservaServiceImpl implements ReservaService {
@@ -32,52 +36,16 @@ public class ReservaServiceImpl implements ReservaService {
     private final EstadiaDAO estadiaRepository;
     private final HuespedService huespedService;
     private final HabitacionService habitacionService;
+    private final ServicioDAO servicioRepository;
 
-    public ReservaServiceImpl(ReservaDAO rRep, EstadiaDAO eRep, HuespedService hServ, HabitacionService habServ) {
+    public ReservaServiceImpl(ReservaDAO rRep, EstadiaDAO eRep, HuespedService hServ, HabitacionService habServ, ServicioDAO servicioRepository) {
         this.reservaRepository = rRep;
         this.estadiaRepository = eRep;
         this.huespedService = hServ;
         this.habitacionService = habServ;
+        this.servicioRepository = servicioRepository;
     }
 
-/* 
-    1. Hacer un getByRangoFecha con fechaInicio y fechaFin de ReservaCreateDTO (lista #1)
-    2. Obtener una lista de las habitaciones sabiendo el id (lista #2).
-    3. De la lista #1, me quedo solamente con las habitaciones cuyo id está en la lista #2.
-    4. Para que la reserva se pueda crear, TODAS las habitaciones de lista #3 deben tener la lista de EstadoHabitacion VACÍO.
- */
-/* 
-    @Override
-    public ReservaDTO create(@NonNull ReservaCreateDTO reservaDTO) throws Exception {
-        // Se buscan las instancias de habitaciones que pertenecen a la reserva para asociarlas
-        List<Habitacion> habitaciones = new ArrayList<>();
-        for(Long habitacionId: reservaDTO.getHabitacionesIds()){
-
-            HabitacionDTO h = habitacionService.getHabitacionByRangoFecha(habitacionId, reservaDTO.getFechaInicio(), reservaDTO.getFechaFin());
-
-            if(h.getHistorialEstado().isEmpty()) {
-                Habitacion hab = habitacionService.getById(habitacionId).get();
-                habitaciones.add(hab);
-                EstadoHabitacion e = new EstadoHabitacion(reservaDTO.getFechaInicio(), reservaDTO.getFechaFin(), Estado.RESERVADO);
-                habitacionService.agregarEstado(habitacionId, e);
-            }
-            // TODO: Che esto ojo ;)
-            else throw new Exception("");
-        }        
-
-        // LOGICA DE SI ES POSIBLE CREAR LA RESERVA:
-
-        Reserva reserva = new Reserva(
-            EstadoReserva.ACTIVA, // 1
-            reservaDTO,
-            habitaciones
-        );
-
-        reservaRepository.save(reserva);
-
-        return new ReservaDTO(reserva, reservaDTO.getHabitacionesIds());
-    }
- */
     @Override
     public ReservaDTO create(@NonNull ReservaCreateDTO reservaDTO) throws Exception {
 
@@ -116,7 +84,7 @@ public class ReservaServiceImpl implements ReservaService {
         // 2. Fetch guests (optional)
         // ============================
         List<Huesped> huespedes = reservaDTO.getHuespedesIds() == null || reservaDTO.getHuespedesIds().isEmpty() ? 
-            new ArrayList<>()
+            new ArrayList<>() 
             : huespedService.findAllByIds(reservaDTO.getHuespedesIds());
 
         List<HuespedDTO> huespedesDTO = new ArrayList<>();
@@ -196,6 +164,8 @@ public class ReservaServiceImpl implements ReservaService {
         List<Long> ids = huespedes.stream()
             .map(HuespedDTO::getId)
             .toList();
+        
+        System.out.println(ids);
 
         List<Huesped> lista = huespedService.findAllByIds(ids);
         Reserva actualizada = reservaRepository.findById(id).get();
@@ -228,10 +198,20 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
+    @Transactional
     public EstadiaDTO ocuparHabitacion(Long reservaId, Long habitacionId, List<Long> huespedesId) throws Exception {
         Reserva reserva = reservaRepository.findById(reservaId).get();
         Habitacion habitacion = habitacionService.getById(habitacionId).get();
         Estadia estadia = new Estadia();
+        
+        // CALCULOS DE LA ESTADIA
+        long days = ChronoUnit.DAYS.between(reserva.getFechaInicio(), reserva.getFechaFin());
+        float price = habitacion.getPrecio() * days;
+
+        Servicio servicio = new Servicio("NOCHES", price);
+        servicioRepository.save(servicio);
+        
+        estadia.addServicio(servicio, false);
 
         if(reserva.getHabitaciones().contains(habitacion)) {
             List<Huesped> huespedes = new ArrayList<>();
@@ -246,7 +226,6 @@ public class ReservaServiceImpl implements ReservaService {
             List<HuespedDTO> huespedesDTOS = new ArrayList<>();
 
             EstadoHabitacion estadoHabitacion = habitacion.getEstadoHabitacion(reserva.getFechaInicio(), reserva.getFechaFin());
-            System.out.println(estadoHabitacion);
 
             if(estadoHabitacion.getEstado() == Estado.RESERVADO){
                 estadoHabitacion.setEstado(Estado.OCUPADO);
@@ -284,17 +263,105 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public boolean huespedReservado(long huespedId) throws Exception {
-        List<ReservaDTO> reservasExistentes = this.getByEstado(EstadoReserva.EXISTENTE);
-        List<ReservaDTO> reservasActivas = this.getByEstado(EstadoReserva.ACTIVA);
-        List<ReservaDTO> reservas = Stream.concat(reservasExistentes.stream(), reservasActivas.stream()).collect(Collectors.toList());
+        List<ReservaDTO> reservas = this.getAll();
+        List<ReservaDTO> reservasActivasFinalizadas = reservas.stream()
+                                                              .filter(reserva -> reserva.getEstado() == EstadoReserva.FINALIZADA || reserva.getEstado() == EstadoReserva.ACTIVA)
+                                                              .collect(Collectors.toList());
+
+        if(reservasActivasFinalizadas.isEmpty()){
+            System.out.println("No hay reservas activas ni finalizadas");
+        }
+        else{
+            System.out.println(reservasActivasFinalizadas.get(0));
+            System.out.println(reservasActivasFinalizadas.get(0).getHuespedes());
+        }
 
         HuespedDTO huesped = new HuespedDTO(huespedService.getById(huespedId));
 
-        for (ReservaDTO reserva : reservas) {
-            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva EXISTENTE o ACTIVA
+
+        for (ReservaDTO reserva : reservasActivasFinalizadas) {
+            if (reserva.getHuespedes().contains(huesped)) { //si el huesped se encuentra en una reserva ACTIVA o FINALIZADA
                 return true;
             }
         }
         return false;
     }
+
+    @Override
+    public void cancelarReserva(List<Long> reservaIds) throws Exception {
+        for(Long id : reservaIds) {
+            Reserva r = reservaRepository.findById(id).get();
+
+            if(r.getEstado() == EstadoReserva.EXISTENTE){
+                for(Habitacion h : r.getHabitaciones()) {
+                    EstadoHabitacion e = h.getEstadoHabitacion(r.getFechaInicio(), r.getFechaFin());
+                    h.removeEstadoHabitacion(e);
+
+                    habitacionService.updateById(h.getId(), h);
+                }
+
+                r.setEstado(EstadoReserva.CANCELADA);
+
+                reservaRepository.save(r);
+            }
+        }
+    }
+
+    @Override
+    public List<Reserva> getByFechaFin(LocalDateTime fechaFin) throws Exception{
+        return reservaRepository.findByFechaFin(fechaFin);
+    }
+
+    public List<Huesped> getOcupantes(int numeroHabitacion, LocalDateTime fechaFin) throws Exception {
+        Habitacion h = habitacionService.getByNumeroHabitacion(numeroHabitacion);
+        List<Reserva> r = this.getByFechaFin(fechaFin);
+        List<Huesped> huespedesReserva = new ArrayList<>();
+
+        for(Reserva reserva: r){
+            huespedesReserva.addAll(reserva.getHuespedes());
+        }
+
+        return huespedesReserva;
+    }
 }
+
+/* 
+    LORE LOG:
+
+    1. Hacer un getByRangoFecha con fechaInicio y fechaFin de ReservaCreateDTO (lista #1)
+    2. Obtener una lista de las habitaciones sabiendo el id (lista #2).
+    3. De la lista #1, me quedo solamente con las habitaciones cuyo id está en la lista #2.
+    4. Para que la reserva se pueda crear, TODAS las habitaciones de lista #3 deben tener la lista de EstadoHabitacion VACÍO.
+ */
+/* 
+    @Override
+    public ReservaDTO create(@NonNull ReservaCreateDTO reservaDTO) throws Exception {
+        // Se buscan las instancias de habitaciones que pertenecen a la reserva para asociarlas
+        List<Habitacion> habitaciones = new ArrayList<>();
+        for(Long habitacionId: reservaDTO.getHabitacionesIds()){
+
+            HabitacionDTO h = habitacionService.getHabitacionByRangoFecha(habitacionId, reservaDTO.getFechaInicio(), reservaDTO.getFechaFin());
+
+            if(h.getHistorialEstado().isEmpty()) {
+                Habitacion hab = habitacionService.getById(habitacionId).get();
+                habitaciones.add(hab);
+                EstadoHabitacion e = new EstadoHabitacion(reservaDTO.getFechaInicio(), reservaDTO.getFechaFin(), Estado.RESERVADO);
+                habitacionService.agregarEstado(habitacionId, e);
+            }
+            // TODO: Che esto ojo ;)
+            else throw new Exception("");
+        }        
+
+        // LOGICA DE SI ES POSIBLE CREAR LA RESERVA:
+
+        Reserva reserva = new Reserva(
+            EstadoReserva.ACTIVA, // 1
+            reservaDTO,
+            habitaciones
+        );
+
+        reservaRepository.save(reserva);
+
+        return new ReservaDTO(reserva, reservaDTO.getHabitacionesIds());
+    }
+ */

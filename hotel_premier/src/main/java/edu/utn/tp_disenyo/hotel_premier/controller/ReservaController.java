@@ -59,7 +59,7 @@ public class ReservaController {
         return reservaService.create(reserva);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/agregarHuesped/{id}")
     public ResponseEntity<ReservaDTO> agregarHuesped(@PathVariable Long id, @RequestBody List<HuespedDTO> huespedes) throws Exception {
         return new ResponseEntity<>(reservaService.agregarHuesped(id, huespedes), HttpStatus.OK);
     }
@@ -74,12 +74,13 @@ public class ReservaController {
     }
 
     // Checkear que el huesped nunca se alojo en el hotel
-    @GetMapping("/{existeReserva}")
+    @GetMapping("/huesped/{id}")
     public ResponseEntity<Boolean> huespedReservado( @PathVariable Long id) throws Exception {
         return new ResponseEntity<>(reservaService.huespedReservado( id), HttpStatus.OK);
     }
     // TODO: LUEGO, OCUPAR HABITACIÓN
     // BOMBOCLAT
+
     @PutMapping("/cancelar")
     public void cancelarReserva(
         @RequestBody List<Long> reservaIds
@@ -88,7 +89,11 @@ public class ReservaController {
             throw new Exception("Ingrese los ID de las reservas a cancelar.");
         }
         
-
+        reservaService.cancelarReserva(reservaIds);
     }
-    
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservaDTO> getReservaById(@PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(new ReservaDTO(reservaService.getById(id).get()), HttpStatus.OK);
+    }
 }

@@ -9,6 +9,7 @@ import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 
 import java.util.List;
 
+import edu.utn.tp_disenyo.hotel_premier.model.Persona;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 
 public interface HuespedService {

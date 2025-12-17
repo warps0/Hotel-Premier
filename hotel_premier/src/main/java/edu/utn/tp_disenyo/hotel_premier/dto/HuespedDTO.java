@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -24,5 +26,17 @@ public class HuespedDTO {
         setApellido(h.getApellido());
         setDocIdentidad(h.getDocIdentidad());
         setTipoDoc(h.getTipoDoc());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        HuespedDTO that = (HuespedDTO) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

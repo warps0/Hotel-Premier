@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,7 +36,7 @@ public class Estadia {
     private LocalDateTime fechaIngreso;
     private LocalDateTime fechaEgreso;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "reserva_id")
     private Reserva reserva;
@@ -49,5 +51,31 @@ public class Estadia {
 
     private Long habitacionId;
 
-    //List<Servicios>
+    @JsonBackReference
+    @OneToMany(mappedBy = "estadia")
+    private List<Factura> facturas = new ArrayList<>();
+
+    //@JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "estadia_id")
+    private List<EstadiaServicio> servicios = new ArrayList<>();
+
+    public void addServicio(Servicio servicio, boolean incluido) {
+        boolean exists = servicios.stream()
+                .anyMatch(es -> es.getServicioId() != null && es.getServicioId().equals(servicio.getId()));
+
+        if (exists) return;
+
+        EstadiaServicio es = new EstadiaServicio();
+
+        es.setEstadiaId(this.id);
+        es.setServicioId(servicio.getId());
+        es.setIncluido(incluido);
+
+        servicios.add(es);
+    }
+
+    public void removeServicio(Servicio servicio) {
+        servicios.removeIf(es -> es.getServicioId() != null && es.getServicioId().equals(servicio.getId()));
+    }
 }
