@@ -5,7 +5,6 @@ import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
 import edu.utn.tp_disenyo.hotel_premier.model.Factura;
 import edu.utn.tp_disenyo.hotel_premier.model.PersonaJuridica;
 import edu.utn.tp_disenyo.hotel_premier.service.FacturaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +19,14 @@ public class FacturaController {
         this.facturaService = facturaService;
     }
 
-    @GetMapping("/personaJuridica/{razonSocial}")
+    @GetMapping("/personaJuridica/razonSocial/{razonSocial}")
     public ResponseEntity<PersonaJuridica>  getPersonaJuridicaByRazonSocial(@PathVariable("razonSocial") String razonSocial){
         return new ResponseEntity<>(facturaService.getPersonaJuridicaByRazonSocial(razonSocial), HttpStatus.OK);
+    }
+
+    @GetMapping("/personaJuridica/cuit/{cuit}")
+    public ResponseEntity<PersonaJuridica>  getPersonaJuridicaByCuit(@PathVariable("cuit") String cuit){
+        return new ResponseEntity<>(facturaService.getPersonaJuridicaByCuit(cuit), HttpStatus.OK);
     }
 
     @PostMapping("/personaJuridica")
