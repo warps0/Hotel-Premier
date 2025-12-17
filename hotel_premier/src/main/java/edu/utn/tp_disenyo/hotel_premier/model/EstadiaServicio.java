@@ -1,7 +1,5 @@
 package edu.utn.tp_disenyo.hotel_premier.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,15 +16,11 @@ public class EstadiaServicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "estadia_id", nullable = false)
-    private Estadia estadia;
+    @Column(name = "estadia_id")
+    private Long estadiaId;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "servicio_id", nullable = false)
-    private Servicio servicio;
+    @Column(name = "servicio_id")
+    private Long servicioId;
 
     @Column(nullable = false)
     private boolean incluido;
