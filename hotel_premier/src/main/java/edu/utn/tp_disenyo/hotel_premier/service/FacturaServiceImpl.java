@@ -104,6 +104,11 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     @Override
+    public PersonaJuridica getPersonaJuridicaByCuit(String cuit){
+        return pjRepository.findByCuit(cuit);
+    }
+
+    @Override
     public PersonaJuridica createPersonaJuridica(PersonaJuridica personaJuridica){
         return pjRepository.save(personaJuridica);
     }

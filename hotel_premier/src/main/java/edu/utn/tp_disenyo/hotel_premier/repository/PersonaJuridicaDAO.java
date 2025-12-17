@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonaJuridicaDAO extends CrudRepository<PersonaJuridica, Long> {
     PersonaJuridica findByRazonSocial(String razon);
-    PersonaJuridica getPersonaJuridicaById(Long id);
+    PersonaJuridica findByCuit(String cuit);
 }
