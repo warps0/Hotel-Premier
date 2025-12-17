@@ -23,5 +23,5 @@ public class EstadiaServicio {
     private Long servicioId;
 
     @Column(nullable = false)
-    private boolean incluido;
+    private Boolean incluido;
 }
