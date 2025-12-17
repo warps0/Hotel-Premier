@@ -1,6 +1,7 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.FacturaCreateDTO;
+import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
 import edu.utn.tp_disenyo.hotel_premier.model.Factura;
 import edu.utn.tp_disenyo.hotel_premier.model.PersonaJuridica;
 
@@ -15,5 +16,5 @@ public interface FacturaService {
     public Factura asignarResponsablePago(long idResponsable, long idFactura);
     public PersonaJuridica getPersonaJuridicaByRazonSocial(String razonSocial);
     public PersonaJuridica createPersonaJuridica(PersonaJuridica personaJuridica);
-
+    public EstadiaServicio pagarServicio(Long idEstadiaServicio);
 }
