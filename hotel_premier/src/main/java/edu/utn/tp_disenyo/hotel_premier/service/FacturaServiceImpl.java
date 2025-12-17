@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.Supplier;
 
 @Service
 public class FacturaServiceImpl implements FacturaService {
@@ -107,5 +106,12 @@ public class FacturaServiceImpl implements FacturaService {
     @Override
     public PersonaJuridica createPersonaJuridica(PersonaJuridica personaJuridica){
         return pjRepository.save(personaJuridica);
+    }
+
+    @Override
+    public EstadiaServicio pagarServicio(Long idEstadiaServicio){
+        EstadiaServicio estadiaServicio =  estadiaServicioRepository.findById(idEstadiaServicio).orElseThrow();
+        estadiaServicio.setIncluido(true);
+        return estadiaServicioRepository.save(estadiaServicio);
     }
 }
