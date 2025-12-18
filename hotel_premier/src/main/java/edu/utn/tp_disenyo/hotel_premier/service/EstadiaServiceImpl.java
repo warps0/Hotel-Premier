@@ -40,7 +40,7 @@ public class EstadiaServiceImpl implements EstadiaService {
         for(EstadiaServicio es : estadiasServicios) {
             Servicio tempServ = servicioDAO.findById(es.getServicioId()).orElseThrow();
 
-            EstadiaServicioDTO temp = new EstadiaServicioDTO(idEstadia, tempServ, es.getIncluido());
+            EstadiaServicioDTO temp = new EstadiaServicioDTO(es.getId(),idEstadia, tempServ, es.getIncluido());
 
             esDTO.add(temp);
         }

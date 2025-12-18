@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EstadiaServicioDTO {
+    private Long id;
     private Long estadiaId;
     private Servicio servicio;
     private boolean incluido;
