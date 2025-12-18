@@ -1,8 +1,5 @@
 package edu.utn.tp_disenyo.hotel_premier.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.jpa.domain.Specification;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
@@ -10,24 +7,46 @@ import jakarta.persistence.criteria.Predicate;
 
 public class ReservaSpecification {
 
-    public static Specification<Reserva> filterBy(String nombre, String apellido, String contacto) {
+    public static Specification<Reserva> filterBy(
+            String nombre,
+            String apellido,
+            String contacto
+    ) {
         return (root, query, cb) -> {
 
-            List<Predicate> predicates = new ArrayList<>();
+            Predicate predicate = cb.conjunction();
 
             if (nombre != null && !nombre.isBlank()) {
-                predicates.add(cb.equal(root.get("nombre"), nombre));
+                predicate = cb.and(
+                        predicate,
+                        cb.like(
+                                cb.upper(root.get("nombre")),
+                                "%" + nombre.toUpperCase() + "%"
+                        )
+                );
             }
 
             if (apellido != null && !apellido.isBlank()) {
-                predicates.add(cb.equal(root.get("apellido"), apellido));
+                predicate = cb.and(
+                        predicate,
+                        cb.like(
+                                cb.upper(root.get("apellido")),
+                                "%" + apellido.toUpperCase() + "%"
+                        )
+                );
             }
 
             if (contacto != null && !contacto.isBlank()) {
-                predicates.add(cb.equal(root.get("contacto"), contacto));
+                predicate = cb.and(
+                        predicate,
+                        cb.like(
+                                cb.upper(root.get("contacto")),
+                                "%" + contacto.toUpperCase() + "%"
+                        )
+                );
             }
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return predicate;
         };
     }
 }
