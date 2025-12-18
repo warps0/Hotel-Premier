@@ -1,6 +1,5 @@
 package edu.utn.tp_disenyo.hotel_premier.model;
 
-import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +8,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "servicio")
@@ -41,5 +38,13 @@ public class Servicio {
     public Servicio(String tipoServicio, Float costoTotal) {
         this.tipoServicio = tipoServicio;
         this.costoTotal = costoTotal;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void ensureUppercase() {
+        if (this.tipoServicio != null) {
+            this.tipoServicio = this.tipoServicio.toUpperCase();
+        }
     }
 }

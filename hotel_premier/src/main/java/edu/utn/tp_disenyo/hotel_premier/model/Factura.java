@@ -23,7 +23,7 @@ public class Factura {
     private Long id;
 
     private LocalDateTime fecha_emision;
-    private char tipo_factura = 'a';
+    private char tipo_factura = 'A';
 
     @OneToOne(cascade = CascadeType.ALL)
     private Persona responsableDePago;
@@ -50,7 +50,7 @@ public class Factura {
     public Factura (FacturaCreateDTO facturaCreateDTO, Persona responsable, Estadia estadia){
         this.fecha_emision = LocalDateTime.now();
         if(responsable instanceof PersonaJuridica){
-            this.tipo_factura = 'b';
+            this.tipo_factura = 'B';
         }
         this.responsableDePago = responsable;
 

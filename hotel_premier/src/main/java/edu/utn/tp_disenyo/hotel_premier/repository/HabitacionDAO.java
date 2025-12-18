@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 @Repository
 public interface HabitacionDAO extends JpaRepository<Habitacion, Long> {

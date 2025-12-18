@@ -1,16 +1,11 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
-import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HabitacionDTO;
-import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
-import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadoHabitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
-import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.repository.EstadiaDAO;
 import edu.utn.tp_disenyo.hotel_premier.repository.HabitacionDAO;
-import edu.utn.tp_disenyo.hotel_premier.util.Estado;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 import jakarta.transaction.Transactional;
 
@@ -39,7 +34,6 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public String initHabitaciones() throws Exception {
-        // TODO: Inicializar instancias con Spring inicializer
         for (int i = 0; i < 10; i++) {
             this.create(INDIVIDUAL_ESTANDAR);
         }
@@ -134,9 +128,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         habitacionActualizada.setCapacidad(habitacion.getCapacidad());
         habitacionActualizada.setPrecio(habitacion.getPrecio());
         habitacionActualizada.setTipoHabitacion(habitacion.getTipoHabitacion());
-        // habitacionActualizada.setPiso(habitacion.getPiso());
         habitacionActualizada.setHistorialEstado(habitacion.getHistorialEstado());
-
     }
 
     @Override

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReservaDAO extends JpaRepository<Reserva, Long>, JpaSpecificationExecutor<Reserva> {
-
     public List<Reserva> findByNombreOrApellidoOrContacto(String nombre, String apellido, String contacto);
     public List<Reserva> findByEstado(EstadoReserva estado) throws Exception;
     public List<Reserva> findByFechaFin(LocalDateTime fechaFin) throws Exception;

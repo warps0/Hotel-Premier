@@ -21,5 +21,11 @@ public class DetalleFactura {
     private float costo_total;
     //private int cantidad_producto;
     //private float precio_unitario_producto;
-    
+    @PrePersist
+    @PreUpdate
+    public void ensureUppercase() {
+        if (this.nombre_producto != null) {
+            this.nombre_producto = this.nombre_producto.toUpperCase();
+        }
+    }    
 }

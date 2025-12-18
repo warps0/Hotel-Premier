@@ -2,26 +2,28 @@ package edu.utn.tp_disenyo.hotel_premier.util;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
+import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
+
 import jakarta.persistence.criteria.Predicate;
 
-public class ReservaSpecification {
+public class HuespedSpecification {
 
-    public static Specification<Reserva> filterBy(
+    public static Specification<Huesped> filter(
             String nombre,
             String apellido,
-            String contacto
+            String documento,
+            TipoDoc tipoDoc
     ) {
         return (root, query, cb) -> {
 
-            Predicate predicate = cb.conjunction();
+            Predicate predicate = cb.conjunction(); // AND base
 
             if (nombre != null && !nombre.isBlank()) {
                 predicate = cb.and(
                         predicate,
                         cb.like(
-                                cb.upper(root.get("nombre")),
-                                "%" + nombre.toUpperCase() + "%"
+                                cb.lower(root.get("nombre")),
+                                "%" + nombre.toLowerCase() + "%"
                         )
                 );
             }
@@ -30,19 +32,26 @@ public class ReservaSpecification {
                 predicate = cb.and(
                         predicate,
                         cb.like(
-                                cb.upper(root.get("apellido")),
-                                "%" + apellido.toUpperCase() + "%"
+                                cb.lower(root.get("apellido")),
+                                "%" + apellido.toLowerCase() + "%"
                         )
                 );
             }
 
-            if (contacto != null && !contacto.isBlank()) {
+            if (documento != null && !documento.isBlank()) {
                 predicate = cb.and(
                         predicate,
                         cb.like(
-                                cb.upper(root.get("contacto")),
-                                "%" + contacto.toUpperCase() + "%"
+                                root.get("docIdentidad"),
+                                "%" + documento + "%"
                         )
+                );
+            }
+
+            if (tipoDoc != null) {
+                predicate = cb.and(
+                        predicate,
+                        cb.equal(root.get("tipoDoc"), tipoDoc)
                 );
             }
 

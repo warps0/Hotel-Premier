@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.stereotype.Service;
 
 import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
@@ -114,19 +112,15 @@ public class ReservaServiceImpl implements ReservaService {
         List<Reserva> reservas = Optional.ofNullable(reservaRepository.findAll()).orElseThrow(() -> new Exception());
         List<ReservaDTO> result = new ArrayList<>();
 
-        List<HuespedDTO> huespedes = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            List<Long> habitacionesIds = reserva.getHabitaciones().stream()
+                    .map(Habitacion::getId)
+                    .toList();
 
-        for(Reserva reserva : reservas){
-            List<Long> habitacionesIds = new ArrayList<>();
+            List<HuespedDTO> huespedes = reserva.getHuespedes().stream()
+                    .map(HuespedDTO::new)
+                    .toList();
 
-            for(Habitacion habitacionReservada : reserva.getHabitaciones()){
-                habitacionesIds.add(habitacionReservada.getId());
-            }
-
-            for(Huesped h : reserva.getHuespedes()) {
-                HuespedDTO dto = new HuespedDTO(h);
-                huespedes.add(dto);
-            }
             result.add(new ReservaDTO(reserva, habitacionesIds, huespedes));
         }
 
@@ -173,29 +167,40 @@ public class ReservaServiceImpl implements ReservaService {
 
         reservaRepository.save(actualizada);
 
-        return new ReservaDTO(actualizada, ids, huespedes);
+        List<Long> habitacionesIds = actualizada.getHabitaciones().stream()
+            .map(Habitacion::getId)
+            .toList();
+
+        return new ReservaDTO(actualizada, habitacionesIds, huespedes);
     }
 
     @Override
-    public List<ReservaDTO> getByResponsable(String nombre, String apellido, String contacto) throws Exception {
-        List<Reserva> reservas = reservaRepository.findAll(ReservaSpecification.filterBy(nombre, apellido, contacto));
-        List<ReservaDTO> reservasDTO = new ArrayList<>();
+    public List<ReservaDTO> getByResponsable(
+            String nombre,
+            String apellido,
+            String contacto
+    ) {
+        List<Reserva> reservas =
+            reservaRepository.findAll(
+                ReservaSpecification.filterBy(nombre, apellido, contacto)
+            );
 
+        return reservas.stream().map(r -> {
+                List<Long> idsHabitaciones = r.getHabitaciones()
+                    .stream()
+                    .map(Habitacion::getId)
+                    .toList();
 
-        List<Long> idsHabitaciones = reservas.stream()
-            .map(Reserva::getId)
-            .toList();
+                List<HuespedDTO> huespedes = r.getHuespedes()
+                    .stream()
+                    .map(HuespedDTO::new)
+                    .toList();
 
-        for(Reserva r: reservas){
-            List<HuespedDTO> huespedes = r.getHuespedes().stream()
-                .map(h -> new HuespedDTO(h))
-                .toList();
-            ReservaDTO dto = new ReservaDTO(r, idsHabitaciones, huespedes);
-            reservasDTO.add(dto);
-        }
-
-        return reservasDTO;
+                return new ReservaDTO(r, idsHabitaciones, huespedes);
+            }
+        ).toList();
     }
+
 
     @Override
     @Transactional

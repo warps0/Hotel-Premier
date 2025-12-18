@@ -4,7 +4,6 @@ import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
-import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;
 import edu.utn.tp_disenyo.hotel_premier.service.HuespedService;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;

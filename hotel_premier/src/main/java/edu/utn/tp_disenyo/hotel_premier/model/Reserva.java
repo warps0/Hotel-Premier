@@ -17,6 +17,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -84,5 +86,19 @@ public class Reserva {
         this.fechaFin = dto.getFechaFin();
         this.habitaciones = habitaciones;
         this.huespedes = huespedes;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void ensureUppercase() {
+        if (this.nombre != null) {
+            this.nombre = this.nombre.toUpperCase();
+        }
+        if (this.apellido != null) {
+            this.apellido = this.apellido.toUpperCase();
+        }
+        if (this.contacto != null) {
+            this.contacto = this.contacto.toUpperCase();
+        }
     }
 }
