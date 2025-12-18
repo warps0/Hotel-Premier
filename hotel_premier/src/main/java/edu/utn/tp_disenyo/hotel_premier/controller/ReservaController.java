@@ -77,7 +77,6 @@ public class ReservaController {
     public ResponseEntity<Boolean> huespedReservado( @PathVariable Long id) throws Exception {
         return new ResponseEntity<>(reservaService.huespedReservado( id), HttpStatus.OK);
     }
-    // TODO: LUEGO, OCUPAR HABITACIÓN
     // BOMBOCLAT
 
     @PutMapping("/cancelar")

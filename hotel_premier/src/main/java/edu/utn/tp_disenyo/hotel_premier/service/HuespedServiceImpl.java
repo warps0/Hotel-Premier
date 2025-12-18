@@ -24,7 +24,6 @@ public class HuespedServiceImpl implements HuespedService {
         this.repository = repository;
     }
 
-    // TODO: Manejar excepciones para el método create
     @Override
     public Huesped create(@NonNull Huesped huesped) throws EntityNotSavedException {
         return Optional.ofNullable(repository.save(huesped)).orElseThrow(
@@ -66,7 +65,6 @@ public class HuespedServiceImpl implements HuespedService {
         return repository.findById(id).orElseThrow(() -> new HuespedNotFoundException());
     }
 
-    // TODO: update Huesped buscando por nombre/apellido/docIdentidad? - Manejar ID
     @Override
     public Huesped update(Long id, @NonNull Huesped huesped) throws HuespedNotFoundException {
         Huesped actual = repository.findById(id).orElseThrow(() -> new HuespedNotFoundException());

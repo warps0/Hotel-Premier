@@ -26,7 +26,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "habitacion")
 public class Habitacion {
-    //TODO: Agregar número habitación EJ 101, 102, ..., etc
     //¿Implementar patrón factory?
 
     public static int cont_ind_estandar = 100;
@@ -43,7 +42,6 @@ public class Habitacion {
     private TipoHabitacion tipoHabitacion;
     // private Piso piso; erase una vez...
     private int numeroHabitacion;
-    //TODO: Ordenado por fechaInicio
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("fechaInicio ASC")
     private List<EstadoHabitacion> historialEstado = new ArrayList<>();
@@ -69,7 +67,6 @@ public class Habitacion {
     }
 
     public void removeEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
-        // TODO: ¿estadoHabitacion == historialEstado.at(X)? ;B
         this.historialEstado.remove(estadoHabitacion);
     }
 }

@@ -14,7 +14,6 @@ import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import io.micrometer.common.lang.NonNull;
 
 public interface ReservaService {
-    // TODO: ¿DTO?, Exception
     public ReservaDTO create(@NonNull ReservaCreateDTO reservaDTO) throws Exception;
     public List<ReservaDTO> getAll() throws Exception;
     public Optional<Reserva> getById(Long id) throws Exception;

@@ -11,7 +11,6 @@ import java.util.List;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
 
 public interface HuespedService {
-    // TODO: Manejar excepciones para el método create
     public Huesped create(Huesped huesped) throws EntityNotSavedException;
     public List<HuespedDTO> getAll(String nombre, String apellido, String documento, TipoDoc tipoDoc);
     public Huesped getById(Long id) throws EntityNotSavedException, HuespedNotFoundException;

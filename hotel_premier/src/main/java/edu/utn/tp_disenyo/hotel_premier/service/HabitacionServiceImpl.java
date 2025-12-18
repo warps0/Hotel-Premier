@@ -34,7 +34,6 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public String initHabitaciones() throws Exception {
-        // TODO: Inicializar instancias con Spring inicializer
         for (int i = 0; i < 10; i++) {
             this.create(INDIVIDUAL_ESTANDAR);
         }
@@ -129,9 +128,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         habitacionActualizada.setCapacidad(habitacion.getCapacidad());
         habitacionActualizada.setPrecio(habitacion.getPrecio());
         habitacionActualizada.setTipoHabitacion(habitacion.getTipoHabitacion());
-        // habitacionActualizada.setPiso(habitacion.getPiso());
         habitacionActualizada.setHistorialEstado(habitacion.getHistorialEstado());
-
     }
 
     @Override

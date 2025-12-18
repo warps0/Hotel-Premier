@@ -10,7 +10,6 @@ import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoHabitacion;
 
 public interface HabitacionService {
-    //TODO: Excepciones habitación
     public String initHabitaciones() throws Exception;
     public Habitacion create(TipoHabitacion tipo) throws Exception;
     public List<Habitacion> getAll();
@@ -20,7 +19,6 @@ public interface HabitacionService {
     public Habitacion agregarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception;
     public Habitacion borrarEstado(Long idHabitacion, EstadoHabitacion estadoHabitacion) throws Exception;
     public List<Habitacion> findByTipoHabitacion(TipoHabitacion tipoHabitacion);
-    //public List<Habitacion> findByPiso(Piso piso);
     public List<Habitacion> findByCapacidad(Integer capacidad);
 
     public List<HabitacionDTO> getHabitacionesByRangoFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin);
