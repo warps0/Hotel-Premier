@@ -42,4 +42,12 @@ public class Servicio {
         this.tipoServicio = tipoServicio;
         this.costoTotal = costoTotal;
     }
+
+    @PrePersist
+    @PreUpdate
+    public void ensureUppercase() {
+        if (this.tipoServicio != null) {
+            this.tipoServicio = this.tipoServicio.toUpperCase();
+        }
+    }
 }

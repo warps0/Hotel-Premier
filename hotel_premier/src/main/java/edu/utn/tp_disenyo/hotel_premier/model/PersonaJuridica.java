@@ -29,4 +29,15 @@ public class PersonaJuridica extends Persona {
     public int hashCode() {
         return Objects.hashCode(razonSocial);
     }
+
+    @PrePersist
+    @PreUpdate
+    public void ensureUppercase() {
+        if (this.razonSocial != null) {
+            this.razonSocial = this.razonSocial.toUpperCase();
+        }
+        if (this.cuit != null) {
+            this.cuit = this.cuit.toUpperCase();
+        }
+    }
 }

@@ -27,4 +27,17 @@ public abstract class Persona {
     @JoinColumn(name = "contactoId")
     private Contacto mediosDeContacto;
     
+    @PrePersist
+    @PreUpdate
+    public void ensureUppercase() {
+        if (this.posIva != null) {
+            this.posIva = this.posIva.toUpperCase();
+        }
+        if (this.nacionalidad != null) {
+            this.nacionalidad = this.nacionalidad.toUpperCase();
+        }
+        if (this.ocupacion != null) {
+            this.ocupacion = this.ocupacion.toUpperCase();
+        }
+    }
 }
