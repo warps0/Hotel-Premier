@@ -4,15 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.Habitacion;
 import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @Getter

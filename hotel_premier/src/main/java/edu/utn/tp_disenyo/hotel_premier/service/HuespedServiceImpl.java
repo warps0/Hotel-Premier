@@ -1,20 +1,13 @@
 package edu.utn.tp_disenyo.hotel_premier.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
-import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
 import edu.utn.tp_disenyo.hotel_premier.exception.EntityNotSavedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedDuplicatedException;
 import edu.utn.tp_disenyo.hotel_premier.exception.HuespedNotFoundException;
-import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 import edu.utn.tp_disenyo.hotel_premier.util.HuespedSpecification;
 import edu.utn.tp_disenyo.hotel_premier.util.TipoDoc;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.utn.tp_disenyo.hotel_premier.model.Huesped;

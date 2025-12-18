@@ -2,12 +2,8 @@ package edu.utn.tp_disenyo.hotel_premier.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-
 import edu.utn.tp_disenyo.hotel_premier.model.Estadia;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
-import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

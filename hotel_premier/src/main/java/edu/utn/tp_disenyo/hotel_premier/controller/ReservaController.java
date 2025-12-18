@@ -12,7 +12,6 @@ import edu.utn.tp_disenyo.hotel_premier.dto.EstadiaDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.HuespedDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaCreateDTO;
 import edu.utn.tp_disenyo.hotel_premier.dto.ReservaDTO;
-import edu.utn.tp_disenyo.hotel_premier.model.Reserva;
 import edu.utn.tp_disenyo.hotel_premier.service.ReservaService;
 import edu.utn.tp_disenyo.hotel_premier.util.EstadoReserva;
 

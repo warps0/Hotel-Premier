@@ -1,14 +1,11 @@
 package edu.utn.tp_disenyo.hotel_premier.dto;
 
-import edu.utn.tp_disenyo.hotel_premier.model.DetalleFactura;
 import edu.utn.tp_disenyo.hotel_premier.model.EstadiaServicio;
-import edu.utn.tp_disenyo.hotel_premier.model.Servicio;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
