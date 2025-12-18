@@ -11,7 +11,7 @@ import edu.utn.tp_disenyo.hotel_premier.service.EstadiaService;
 
 @RestController
 @RequestMapping("/api/estadia")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class EstadiaController {
     private final EstadiaService estadiaService;
 
