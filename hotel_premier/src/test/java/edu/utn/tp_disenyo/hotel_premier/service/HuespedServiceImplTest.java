@@ -119,8 +119,8 @@ class HuespedServiceImplTest {
         Huesped hPedroPerez = new Huesped(); hPedroPerez.setId(3L); hPedroPerez.setNombre("Pedro"); hPedroPerez.setApellido("Perez");
 
         // El repo devuelve listas mutables (ArrayList) porque el servicio usa retainAll (que modifica la lista in-place)
-        when(repository.findByNombre("Juan")).thenReturn(new ArrayList<>(List.of(hJuanPerez, hJuanLopez)));
-        when(repository.findByApellido("Perez")).thenReturn(new ArrayList<>(List.of(hPedroPerez, hJuanPerez)));
+        when(repository.findByNombreLike("Juan")).thenReturn(new ArrayList<>(List.of(hJuanPerez, hJuanLopez)));
+        when(repository.findByApellidoLike("Perez")).thenReturn(new ArrayList<>(List.of(hPedroPerez, hJuanPerez)));
 
         List<HuespedDTO> result = service.getAll("Juan", "Perez", null, null);
 
@@ -134,7 +134,7 @@ class HuespedServiceImplTest {
     void testGetAllSingleFilter() {
         Huesped h1 = new Huesped(); h1.setId(1L); h1.setNombre("Matias");
 
-        when(repository.findByNombre("Matias")).thenReturn(new ArrayList<>(List.of(h1)));
+        when(repository.findByNombreLike("Matias")).thenReturn(new ArrayList<>(List.of(h1)));
         // No hace falta mockear apellido, doc, etc., si son null en la llamada,
         // pero dentro del if grande, las listas se inicializan vacías.
 
